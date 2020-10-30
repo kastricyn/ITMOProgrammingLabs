@@ -15,8 +15,11 @@ public class OminousWind extends SpecialMove {
     @Override
     protected void applySelfEffects(Pokemon p) {
         Effect e = new Effect().chance(0.1);
-        for (Stat currentStat : Stat.values())
-            e.stat(currentStat, +1);
+        e.stat(Stat.ATTACK, +1);
+        e.stat(Stat.DEFENSE, +1);
+        e.stat(Stat.SPECIAL_ATTACK, +1);
+        e.stat(Stat.SPECIAL_DEFENSE, +1);
+        e.stat(Stat.SPEED, +1);
         p.addEffect(e);
     }
 
@@ -24,5 +27,4 @@ public class OminousWind extends SpecialMove {
     protected String describe() {
         return "СИЛЬНО ДУЕТ";
     }
-
 }
