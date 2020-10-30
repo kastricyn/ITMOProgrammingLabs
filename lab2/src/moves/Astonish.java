@@ -4,7 +4,7 @@ import ru.ifmo.se.pokemon.PhysicalMove;
 import ru.ifmo.se.pokemon.Type;
 
 public class Astonish extends PhysicalMove {
-    public Astonish(){
+    public Astonish() {
         super(Type.GHOST, 30, 100);
     }
 
