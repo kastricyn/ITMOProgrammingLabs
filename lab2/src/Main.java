@@ -1,18 +1,18 @@
-import pokemons.Rotom;
+import pokemons.*;
 import ru.ifmo.se.pokemon.Battle;
-import ru.ifmo.se.pokemon.Pokemon;
 
 public class Main {
 
     public static void main(String[] args) {
-        // write your code here
         Battle b = new Battle();
-        Pokemon p1 = new Pokemon("Чужой", 1);
-        Pokemon r = new Rotom();
-        Pokemon p2 = new Pokemon("Хищник", 1);
-        b.addFoe(r);
-//        b.addAlly(p1);
-        b.addAlly(r);
+        b.addFoe(new Bisharp("Бишарп1", 45+1));
+        b.addFoe(new Pawniard("Паун1",45+1));
+        b.addFoe(new Rotom("Ротом1", 25+1));
+
+        b.addAlly(new Slaking("Слакинг2", 1));
+        b.addAlly(new Slakoth("Слякоть2",1));
+        b.addAlly(new Vigoroth("Виджорот2", 14+1));
+
         b.go();
     }
 }

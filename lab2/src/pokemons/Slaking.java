@@ -6,8 +6,9 @@ import moves.IceBeam;
 import moves.Thunder;
 import ru.ifmo.se.pokemon.*;
 
-public class Slaking extends Pokemon {
-    private void setParametrs() {
+public class Slaking extends Vigoroth {
+    @Override
+    protected void setParametrs() {
         setType(Type.NORMAL);
         setStats(150, 160, 100, 95, 65, 100);
         setMove(new DoubleTeam(), new Thunder(), new FurySwipes(), new IceBeam());
@@ -15,11 +16,6 @@ public class Slaking extends Pokemon {
 
     public Slaking(String name, int level) {
         super(name, level);
-        setParametrs();
     }
 
-    public Slaking() {
-        super();
-        setParametrs();
-    }
 }

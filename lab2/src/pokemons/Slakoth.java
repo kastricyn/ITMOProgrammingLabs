@@ -5,7 +5,7 @@ import moves.Thunder;
 import ru.ifmo.se.pokemon.*;
 
 public class Slakoth extends Pokemon {
-    private void setParametrs() {
+    protected void setParametrs() {
         setType(Type.NORMAL);
         setStats(60, 60, 60, 35, 35, 30);
         setMove(new DoubleTeam(), new Thunder());
@@ -16,8 +16,4 @@ public class Slakoth extends Pokemon {
         setParametrs();
     }
 
-    public Slakoth() {
-        super();
-        setParametrs();
-    }
 }

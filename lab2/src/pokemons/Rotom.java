@@ -7,7 +7,7 @@ import moves.ThunderWave;
 import ru.ifmo.se.pokemon.*;
 
 public class Rotom extends Pokemon {
-    private void setParametrs() {
+    protected void setParametrs() {
         setType(Type.ELECTRIC, Type.GHOST);
         setStats(50, 50, 77, 95, 77, 91);
         setMove(new ThunderWave(), new OminousWind(), new ShadowBall(), new Astonish());
@@ -15,11 +15,6 @@ public class Rotom extends Pokemon {
 
     public Rotom(String name, int level) {
         super(name, level);
-        setParametrs();
-    }
-
-    public Rotom() {
-        super();
         setParametrs();
     }
 }
