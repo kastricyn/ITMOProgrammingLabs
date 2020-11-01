@@ -1,7 +1,7 @@
 import pokemons.*;
 import ru.ifmo.se.pokemon.Battle;
 
-public class Main {
+public class BattleSimulation {
 
     public static void main(String[] args) {
         Battle b = new Battle();
