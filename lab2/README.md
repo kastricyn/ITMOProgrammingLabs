@@ -1,5 +1,5 @@
 #### Building on Linux
-Run `./build.bash`
+Clone and run `./build.bash`
 
 #### Run the battle
 Use:
