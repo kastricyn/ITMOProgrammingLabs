@@ -1,30 +1,46 @@
 package ru.itmo.se.programming.p3114.s311734.humans;
 
-public class Human {
-    static int count;
+import ru.itmo.se.programming.p3114.s311734.thingOfMarket;
 
-    // -1 - unknown
-    private int age = -1;
-    //1 - isWoman, 0 - isMan, -1 - unknown
-    private int isWoman = -1;
+public abstract class Human implements IPeople {
+    private static int count;
+    private String name;
+    private boolean isWoman;
     private int money = 0;
+Object a = new Object();
 
-    boolean canPay(int among) {
-        return among <= money;
+    {
+        count++;
     }
 
-    boolean pay(int among) {
-        boolean paid;
-        if (paid = canPay(among))
-            money -= among;
+    public Human() {
+    }
+
+    public static int getCount() {
+        return count;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean canPay(int value) {
+        return value <= money;
+    }
+
+    public boolean pay(int value) {
+        boolean paid = canPay(value);
+        if (paid)
+            money -= value;
         return paid;
     }
 
-    public Human() { count++; }
-
-    public Human(boolean isWoman, int age) {
-        this.isWoman = isWoman ? 1 : 0;
-        this.age = age;
+    public final boolean buy(thingOfMarket thing, String verb) {
+        return thing.buy(verb);
     }
 
 

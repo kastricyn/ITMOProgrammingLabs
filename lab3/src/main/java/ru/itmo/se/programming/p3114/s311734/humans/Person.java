@@ -16,4 +16,5 @@ public class Person extends Human{
     void setCurrentCity(City currentCity){this.currentCity = currentCity;}
     void setBeauty(Size beauty){this.beauty = beauty;}
 
+
 }

@@ -4,15 +4,15 @@ public abstract class StockCompany implements IStockCompany{
     String name;
     private boolean isLive = true;
 
-    public void burst() throws Exception {
-        if (isLive) isLive = false;
-        else {
-            class StockCompanyException extends Exception{
+    public void burst(){
+//        if (isLive) isLive = false;
+//        else {
+//            class StockCompanyException extends Exception{
+//
+//            }
+////            StockCompanyException ex = new StockCompanyException();
+////            throw ex;
 
-            }
-            StockCompanyException ex = new StockCompanyException();
-            throw ex;
-
-        }
+//        }
     }
 }
