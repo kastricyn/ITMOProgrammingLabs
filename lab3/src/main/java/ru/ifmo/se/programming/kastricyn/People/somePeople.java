@@ -3,6 +3,9 @@ package ru.ifmo.se.programming.kastricyn.People;
 import ru.ifmo.se.programming.kastricyn.ActionStatus;
 import ru.ifmo.se.programming.kastricyn.Saleable;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class somePeople implements IPeople{
     private Human people[];
     private String name = "Какие-то люди";
@@ -56,5 +59,20 @@ public class somePeople implements IPeople{
         if(!thing.toString().isEmpty())
             answ += " за " + thing.toString(); //TODO: thing
         return answ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof somePeople)) return false;
+        somePeople that = (somePeople) o;
+        return Arrays.equals(getPeople(), that.getPeople()) && Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getName());
+        result = 31 * result + Arrays.hashCode(getPeople());
+        return result;
     }
 }

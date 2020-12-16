@@ -1,5 +1,7 @@
 package ru.ifmo.se.programming.kastricyn;
 
+import java.util.Objects;
+
 public class StockCompany {
     private String name = "обычное акционерное общество";
 
@@ -23,4 +25,16 @@ public class StockCompany {
         return name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StockCompany)) return false;
+        StockCompany that = (StockCompany) o;
+        return Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
+    }
 }

@@ -1,5 +1,7 @@
 package ru.ifmo.se.programming.kastricyn;
 
+import java.util.Objects;
+
 public final class AllStockCompany {
     private static int count = 0;
     public static void addStockCompany(){count++;}
@@ -28,5 +30,23 @@ public final class AllStockCompany {
             }
         };
 
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AllStockCompany)) return false;
+        AllStockCompany that = (AllStockCompany) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

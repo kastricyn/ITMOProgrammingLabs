@@ -1,5 +1,7 @@
 package ru.ifmo.se.programming.kastricyn;
 
+import java.util.Objects;
+
 public class Stock implements Saleable {
     private int price;
     private String name;
@@ -32,5 +34,16 @@ public class Stock implements Saleable {
     @Override
     public String toString(){return name;}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Stock)) return false;
+        Stock stock = (Stock) o;
+        return getPrice() == stock.getPrice() && Objects.equals(getName(), stock.getName()) && Objects.equals(getCompany(), stock.getCompany());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPrice(), getName(), getCompany());
+    }
 }
