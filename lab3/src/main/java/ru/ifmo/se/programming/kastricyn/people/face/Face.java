@@ -1,4 +1,4 @@
-package ru.ifmo.se.programming.kastricyn.People.Face;
+package ru.ifmo.se.programming.kastricyn.people.face;
 
 public class Face {
     private String weight = "";
@@ -40,7 +40,7 @@ public class Face {
                 replaceFirst("и, ", "ами, ") + " и " +
                 nose.getWeight().replaceFirst("ий", "им") + ", " + nose.clutch("зажатым ") +
                 "между " + cheeks.toString().replaceFirst("е ", "умя ").
-                replaceFirst("е ", "ми ").replaceFirst("и$","ами ") +
+                replaceFirst("е ", "ми ").replaceFirst("и$", "ами ") +
                 nose.toString() + "ом"
                 ;
     }

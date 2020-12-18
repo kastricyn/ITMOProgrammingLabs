@@ -16,7 +16,7 @@ public class View {
 
     @Override
     public String toString() {
-        if(whichView.equals(""))
+        if (whichView.equals(""))
             return "вид";
         else return whichView + " вид";
     }

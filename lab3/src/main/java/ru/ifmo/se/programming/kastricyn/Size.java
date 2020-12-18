@@ -11,6 +11,12 @@ public enum Size {
     HUGE("огромный");
 
     private String title;
-    Size(String title){this.title = title;}
-    public String toString(){return title;}
+
+    Size(String title) {
+        this.title = title;
+    }
+
+    public String toString() {
+        return title;
+    }
 }

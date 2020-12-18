@@ -1,4 +1,4 @@
-package ru.ifmo.se.programming.kastricyn.People;
+package ru.ifmo.se.programming.kastricyn.people;
 
 public enum TypeAll {
     ALL("все"),
@@ -8,12 +8,13 @@ public enum TypeAll {
 
 
     private String name;
-    TypeAll (String name){
+
+    TypeAll(String name) {
         this.name = name;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 

@@ -1,4 +1,4 @@
-package ru.ifmo.se.programming.kastricyn.People.Face;
+package ru.ifmo.se.programming.kastricyn.people.face;
 
 import ru.ifmo.se.programming.kastricyn.Size;
 
@@ -38,8 +38,8 @@ public class Eyes {
     @Override
     public String toString() {
         String answ = size.toString() + " " + name;
-        if(similar!=null)
-            answ +=", словно " + similar.toString().replaceFirst("а$", "и") + ",";
+        if (similar != null)
+            answ += ", словно " + similar.toString().replaceFirst("а$", "и") + ",";
         return answ;
     }
 }

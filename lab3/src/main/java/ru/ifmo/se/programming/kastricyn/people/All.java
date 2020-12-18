@@ -1,6 +1,4 @@
-package ru.ifmo.se.programming.kastricyn.People;
-
-import javax.lang.model.element.TypeParameterElement;
+package ru.ifmo.se.programming.kastricyn.people;
 
 public class All extends Human {
     public String toString(TypeAll typeAll) {
@@ -8,9 +6,10 @@ public class All extends Human {
     }
 
     public String seem(String verb, Object thing, Object reason) {
-        return "благодаря " + reason.toString() + (toString() + "м") +
+        return "благодаря " + reason.toString() + " " + (toString() + "м") +
                 " " + verb + ", будто " + thing.toString();
     }
+
     @Override
     public String toString() {
         return TypeAll.ALL.toString();

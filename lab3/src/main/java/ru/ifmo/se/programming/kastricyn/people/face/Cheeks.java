@@ -1,4 +1,4 @@
-package ru.ifmo.se.programming.kastricyn.People.Face;
+package ru.ifmo.se.programming.kastricyn.people.face;
 
 public class Cheeks {
     private String name;
@@ -35,9 +35,8 @@ public class Cheeks {
     }
 
 
-
     @Override
     public String toString() {
-        return count + " " +bulk + " " + name;
+        return count + " " + bulk + " " + name;
     }
 }

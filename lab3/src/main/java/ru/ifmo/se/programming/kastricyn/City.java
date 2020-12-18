@@ -7,11 +7,13 @@ public enum City {
 
     private String title;
 
-    City(String title){
+    City(String title) {
         this.title = title;
     }
 
     @Override
-    public String toString() {return title;}
+    public String toString() {
+        return title;
+    }
 
 }

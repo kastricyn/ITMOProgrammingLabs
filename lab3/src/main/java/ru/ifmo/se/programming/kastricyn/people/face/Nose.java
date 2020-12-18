@@ -1,4 +1,4 @@
-package ru.ifmo.se.programming.kastricyn.People.Face;
+package ru.ifmo.se.programming.kastricyn.people.face;
 
 public class Nose {
     String weight = "";

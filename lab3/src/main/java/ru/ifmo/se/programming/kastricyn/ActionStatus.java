@@ -8,12 +8,13 @@ public enum ActionStatus {
     SOON("вскорости");
 
     private String name;
-    ActionStatus (String name){
+
+    ActionStatus(String name) {
         this.name = name;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 

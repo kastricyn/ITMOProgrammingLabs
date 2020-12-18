@@ -7,7 +7,9 @@ public class Stock implements Saleable {
     private String name;
     private StockCompany company;
 
-    public StockCompany getCompany(){return company;}
+    public StockCompany getCompany() {
+        return company;
+    }
 
     @Override
     public void setPrice(int price) {
@@ -28,11 +30,17 @@ public class Stock implements Saleable {
         this.name = name;
     }
 
-    public Stock(){}
-    public Stock(StockCompany company){this.company= company;}
+    public Stock() {
+    }
+
+    public Stock(StockCompany company) {
+        this.company = company;
+    }
 
     @Override
-    public String toString(){return name;}
+    public String toString() {
+        return name;
+    }
 
     @Override
     public boolean equals(Object o) {
