@@ -1,4 +1,4 @@
-package dontKnowsSpace.exсeptions;
+package exceptions;
 
 public class CantPokeException extends Exception{
     private Reason reason;
@@ -18,7 +18,7 @@ public class CantPokeException extends Exception{
 
     public enum Reason {
         STRONG_OPPONENT("соперник слишком сильный"),
-        BAD_MOOD_OPPONENT("у соперника плохой настроение"),
+        BAD_MOOD_OPPONENT("у соперника плохое настроение"),
         TODAY_LAZY("сегодня тыкать лениво, тыкнет завтра, может быть");
 
         String str;

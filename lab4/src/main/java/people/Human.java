@@ -1,8 +1,8 @@
-package dontKnowsSpace.people;
+package people;
 
 import java.util.Objects;
 
-public abstract class Human implements Moveable, Lookable {
+public abstract class Human implements IPeople{
     private static int count;
     {
         count++;
@@ -17,9 +17,8 @@ public abstract class Human implements Moveable, Lookable {
         return name;
     }
 
-    public Human setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public String sit(Object when){return "сидит на(в)" + when;}

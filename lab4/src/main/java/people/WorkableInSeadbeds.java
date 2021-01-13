@@ -1,7 +1,7 @@
-package dontKnowsSpace.people;
+package people;
 
 
-import dontKnowsSpace.place.GrowPlace;
+
 
 public interface WorkableInSeadbeds {
     default void getToWork() {
@@ -11,7 +11,4 @@ public interface WorkableInSeadbeds {
         System.out.println(this + " ползаю в(среди) " + when);
     }
 
-    default void collect(GrowPlace.GrowObj obj){
-
-    }
 }

@@ -1,8 +1,9 @@
-package dontKnowsSpace;
+package space;
 
 public enum Location {
-    //todo: delete this enum
-    SOON("скоро"),
+    HILL("холм"),
+    VERANDA("веранда"),
+    TABLE("столом")
     ;
 
     private String name;

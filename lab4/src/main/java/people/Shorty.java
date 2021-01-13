@@ -1,6 +1,7 @@
-package dontKnowsSpace.people;
+package people;
 
-import dontKnowsSpace.exсeptions.CantPokeException;
+
+import exceptions.CantPokeException;
 
 public class Shorty extends Human implements WorkableInSeadbeds{
     public void poke(Human human, Object by) throws CantPokeException {

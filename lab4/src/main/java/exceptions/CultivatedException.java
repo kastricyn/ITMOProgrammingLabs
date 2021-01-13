@@ -1,4 +1,4 @@
-package dontKnowsSpace.exсeptions;
+package exceptions;
 
 public class CultivatedException extends Throwable {
 }
