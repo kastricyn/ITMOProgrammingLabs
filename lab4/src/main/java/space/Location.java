@@ -3,7 +3,8 @@ package space;
 public enum Location {
     HILL("холм"),
     VERANDA("веранда"),
-    TABLE("столом")
+    TABLE("столом"),
+    SEEDBEDS("грядки"),
     ;
 
     private String name;

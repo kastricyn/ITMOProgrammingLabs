@@ -1,7 +1,6 @@
 package people;
 
 import space.Location;
-import space.View;
 
 public interface IPeople {
     String getName();
@@ -12,23 +11,32 @@ public interface IPeople {
         return (verb + " " + thing);
     }
 
-    default void see(View view) {
-        System.out.println(this.getName() + " увидел " + view);
-    }
-
-    default void sit(Location where) {
-        System.out.println(this.getName() + " сидит на(в)" + where);
-    }
-//todo переделать для s.asList
-    default void see(View view, ActionStatus s) {
-        System.out.println(this.getName() + " " + s + " увидел " + view);
-    }
-
-    default void doing(String thing, ActionStatus ... ss){
+    default void see(Object view, ActionStatus... ss) {
         String str = " ";
-        for (ActionStatus s:ss)
-            str+=s+" ";
-        System.out.println(this.getName() + str + "делает "+ thing);
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println(this.getName() + str + "увидел " + view);
+    }
+
+    default void sit(Location where, ActionStatus... ss) {
+        String str = " ";
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println(this.getName() + str + "сидит на(в) " + where);
+    }
+
+    default void doing(String thing, ActionStatus... ss) {
+        String str = " ";
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println(this.getName() + str + "делает " + thing);
+    }
+
+    default void shout(String phrase, ActionStatus... ss) {
+        String str = " ";
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println(this.getName() + str + "кричит " + phrase);
     }
 //  move abilities
 
@@ -36,12 +44,11 @@ public interface IPeople {
         return verb;
     }
 
-    default void go(Location where) {
-        System.out.println(this.getName() + " идёт на(в) " + where);
-    }
-//todo  переделать для s.asList
-    default void go(Location where, ActionStatus s) {
-        System.out.println(this.getName() + " " + s + " идёт " + where);
+    default void go(Location where, ActionStatus... ss) {
+        String str = " ";
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println(this.getName() + str + "идёт в(на) " + where);
     }
 
     //mind abilities
@@ -65,6 +72,7 @@ public interface IPeople {
     default String adapt(String verb, Object thing) {
         return (verb + ", что " + thing);
     }
+
     default String surprise(String verb, Object thing) {
         return (verb + ", что " + thing);
     }

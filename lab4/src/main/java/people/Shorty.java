@@ -4,6 +4,7 @@ package people;
 import exceptions.CantPokeException;
 
 public class Shorty extends Human implements WorkableInSeadbeds{
+
     public void poke(Human human, Object by) throws CantPokeException {
         if(Math.random()<0.5)
             throw new CantPokeException(CantPokeException.Reason.values()[
@@ -13,6 +14,9 @@ public class Shorty extends Human implements WorkableInSeadbeds{
         System.out.println(this + " ткнул " + human +" используя объект "+ by);
     }
 
+    public Shorty() {
+
+    }
     public Shorty(String name){
         super();
         super.setName(name);
