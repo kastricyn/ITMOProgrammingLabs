@@ -1,6 +1,5 @@
 package space;
 
-import java.util.Arrays;
 
 public class House {
     String name;
@@ -48,7 +47,7 @@ public class House {
 
         @Override
         public String toString() {
-            return name + " от " + House.this;
+            return name + " от " + House.this.getName();
         }
     }
 
@@ -61,7 +60,7 @@ public class House {
 
         @Override
         public String toString() {
-            String ans =  "Окрeжение " + House.this  +":\n ";
+            String ans =  "Окружение " + House.this.getName()  +":\n ";
             for (int i = 0; i < objects.length-1; i++) {
                 ans += "\t" + objects[i] + ",\n";
             }

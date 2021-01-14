@@ -2,6 +2,8 @@ package space.grow;
 
 import exceptions.MinMoreThenMaxException;
 
+import java.util.Arrays;
+
 public class Flowerbed {
     private static int count;
 
@@ -9,24 +11,23 @@ public class Flowerbed {
         count++;
     }
 
-    private boolean isCultivated;
     private String name;
-    private CollectedPlant.Type cropType;
-    private CollectedPlant[] crop;
+    private Flower.Type flowerType;
+    private Flower[] flowers;
 
-    public Flowerbed(int minCropNumber, int maxCropNumber) throws MinMoreThenMaxException {
-        if (minCropNumber > maxCropNumber)
-            throw new MinMoreThenMaxException(minCropNumber, maxCropNumber);
+    public Flowerbed(int minNumber, int maxNumber) throws MinMoreThenMaxException {
+        if (minNumber > maxNumber)
+            throw new MinMoreThenMaxException(minNumber, maxNumber);
         name = "клумба " + count;
-        cropType = CollectedPlant.Type.values()[(int) (Math.random() * CollectedPlant.Type.values().length)];
-        int number = minCropNumber + (int) (Math.random() * (maxCropNumber - minCropNumber));
-        crop = new CollectedPlant[number];
+        flowerType = Flower.Type.values()[(int) (Math.random() * Flower.Type.values().length)];
+        int number = minNumber + (int) (Math.random() * (maxNumber - minNumber));
+        flowers = new Flower[number];
         for (int i = 0; i < number; i++) {
-            crop[i] = new CollectedPlant(cropType, this);
+            flowers[i] = new Flower(flowerType, this);
         }
     }
 
-    public static Flowerbed[] getRandomArraySeedbeds(int min, int max, int minCropNumber, int maxCropNumber) throws MinMoreThenMaxException {
+    public static Flowerbed[] getRandomArrayFlowerbeds(int min, int max, int minCropNumber, int maxCropNumber) throws MinMoreThenMaxException {
         if (min > max)
             throw new MinMoreThenMaxException(min, max);
         int n = min + (int) (Math.random() * (max - min));
@@ -35,10 +36,6 @@ public class Flowerbed {
             ans[i] = new Flowerbed(minCropNumber, maxCropNumber);
         }
         return ans;
-    }
-
-    public boolean canCultivate() {
-        return !isCultivated;
     }
 
     public String getName() {
@@ -53,15 +50,20 @@ public class Flowerbed {
         return count;
     }
 
-    public CollectedPlant.Type getCropType() {
-        return cropType;
+    public Flower.Type getFlowerType() {
+        return flowerType;
     }
 
-    public CollectedPlant[] getCrop() {
-        return crop;
+    public Flower[] getFlowers() {
+        return flowers;
     }
 
-    public void setCropType(CollectedPlant.Type cropType) {
-        this.cropType = cropType;
+    @Override
+    public String toString() {
+        return "Flowerbed{" +
+                "name='" + name + '\'' +
+                ", flowerType=" + flowerType +
+                ", flowers=" + Arrays.toString(flowers) +
+                '}';
     }
 }

@@ -6,17 +6,21 @@ import space.House;
 import space.Location;
 import space.View;
 import space.grow.CollectedPlant;
+import space.grow.Flowerbed;
 import space.grow.Seedbed;
 
 public class Main {
     static final int MIN_OBJ_ON_SEEDBED_NUMBER = 5, MAX_OBJ_ON_SEEDBED_NUMBER = 11,
+            MIN_SEEDBEDS_NUMBER = 4, MAX_SEEDBEDS_NUMBER = 10,
+            MIN_FLOWERBEDS_NUMBER = 6, MAX_FLOWERBEDS_NUMBER = 10,
+            MIN_FLOWERS_ON_FLOWERBED_NUMBER = 3, MAX_FLOWERS_ON_FLOWERBED_NUMBER = 5,
             MIN_SHORTY_NUMBER = 2, MAX_SHORTY_NUMBER = 5;
 
     public static void main(String[] args) {
 
 //грядки с огурцами и помидорами
         try {
-            Seedbed[] seedbeds = Seedbed.getRandomArraySeedbeds(4, 10, MIN_OBJ_ON_SEEDBED_NUMBER, MAX_OBJ_ON_SEEDBED_NUMBER);
+            Seedbed[] seedbeds = Seedbed.getRandomArraySeedbeds(MIN_SEEDBEDS_NUMBER, MAX_SEEDBEDS_NUMBER, MIN_OBJ_ON_SEEDBED_NUMBER, MAX_OBJ_ON_SEEDBED_NUMBER);
             for (int i = 0; i < seedbeds.length; i++) {
                 if (seedbeds[i].getCropType().equals(CollectedPlant.Type.CUCUMBERS) ||
                         seedbeds[i].getCropType().equals(CollectedPlant.Type.TOMATOES))
@@ -45,9 +49,7 @@ public class Main {
             }
 
         } catch (MinMoreThenMaxException e) {
-            System.err.println("Возникла ошибка типа min > max.\n" +
-                    "Проверьте правильность использования констант. \n" +
-                    "До исправления полноценность работы программы не гарантируется.");
+            System.err.println(e);
         }
 
 
@@ -81,6 +83,15 @@ public class Main {
         House.Veranda veranda = house.new Veranda("большая открытая веранда");
         dontKnow.see(house);
         dontKnow.see(veranda);
+
+        try{
+            Flowerbed[] flowerbeds = Flowerbed.getRandomArrayFlowerbeds(MIN_FLOWERBEDS_NUMBER, MAX_FLOWERBEDS_NUMBER, MIN_FLOWERS_ON_FLOWERBED_NUMBER, MAX_FLOWERS_ON_FLOWERBED_NUMBER);
+            for(Flowerbed f: flowerbeds){
+                System.out.println(f);
+            }
+        } catch(MinMoreThenMaxException e){
+            System.out.println(e);
+        }
 
         dontKnow.see(new View() {        //Todo: заменить на вид принадлежащий Location.HILL со всеми обектами
             @Override

@@ -15,4 +15,14 @@ public class MinMoreThenMaxException extends RuntimeException {
     public int getMin() {
         return min;
     }
+
+    @Override
+    public String toString() {
+        return "Возникла ошибка типа min > max.\n" +
+                "Проверьте правильность использования констант. \n" +
+                "До исправления полноценность работы программы не гарантируется. " +
+                "(min=" + min +
+                ", max=" + max +
+                ')';
+    }
 }
