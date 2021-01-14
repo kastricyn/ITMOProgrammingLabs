@@ -1,19 +1,17 @@
 package people;
 
 
-import space.Locationable;
+import space.Location;
 import space.grow.CollectedPlant;
 
 public interface WorkableInSeadbeds {
-    default void getToWork() {
-        System.out.println(this + " принялся за работу");}
 
-    default void crawl(Locationable when){
+    default void crawl(Location when){
         System.out.println(this + " ползает в(среди) " + when.getName());
     }
 
     default void collected(CollectedPlant plant) {
-        plant.setDeleted();
+        plant.delete();
         System.out.println(this + " собрал " + plant);
     }
 }

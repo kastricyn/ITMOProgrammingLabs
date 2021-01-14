@@ -1,12 +1,11 @@
 import exceptions.CantPokeException;
 import exceptions.MinMoreThenMaxException;
+import general.Color;
 import general.Size;
 import people.ActionStatus;
-import people.Color;
 import people.Shorty;
 import space.House;
-import space.Locationable;
-import space.View;
+import space.Location;
 import space.grow.*;
 
 import java.util.Arrays;
@@ -21,14 +20,14 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            Seedbed[] seedbeds = Seedbed.getRandomArraySeedbeds(MIN_SEEDBEDS_NUMBER, MAX_SEEDBEDS_NUMBER, MIN_OBJ_ON_SEEDBED_NUMBER, MAX_OBJ_ON_SEEDBED_NUMBER);
+            Seedbed[] seedbeds = Seedbed.getRandomSeedbeds(MIN_SEEDBEDS_NUMBER, MAX_SEEDBEDS_NUMBER, MIN_OBJ_ON_SEEDBED_NUMBER, MAX_OBJ_ON_SEEDBED_NUMBER);
             for (int i = 0; i < seedbeds.length; i++) {
                 if (seedbeds[i].getCropType().equals(CollectedPlant.Type.CUCUMBERS) ||
                         seedbeds[i].getCropType().equals(CollectedPlant.Type.TOMATOES))
                     seedbeds[i].cultivate();
             }
-            System.out.println("грядки с огурцами и помидорами закончились");
-            System.out.println("начало обработки грядок с лунной клубникой");
+            System.out.println("грядки с" + CollectedPlant.Type.CUCUMBERS + " и " + CollectedPlant.Type.TOMATOES + " закончились");
+            System.out.println("начало обработки грядок с " + CollectedPlant.Type.MOON_STRAWBERRY);
             //        Несколько коротышек
             int workerNumber = (int) (MIN_SHORTY_NUMBER + Math.random() * (MAX_SHORTY_NUMBER - MIN_SHORTY_NUMBER));
             Shorty[] workers = new Shorty[workerNumber];
@@ -45,7 +44,7 @@ public class Main {
                             workers[workerIdx].collected(p);
                         }
         } catch (MinMoreThenMaxException e) {
-            System.err.println(e);
+            System.out.println(e);
         }
 
 
@@ -55,14 +54,14 @@ public class Main {
         Shorty someShorty = new Shorty("worker-some");
         someShorty.see(fix);
         someShorty.see(dontKnow);
-        someShorty.shout("");
+        someShorty.shout("что-то");
 
         try {
             fix.poke(dontKnow, "метла");
         } catch (CantPokeException cpe) {
             System.out.println(cpe);
         }
-        Locationable hill = () -> "холм";
+        Location hill = () -> "холм";
         fix.go(hill);
         dontKnow.go(hill);
 
@@ -72,31 +71,28 @@ public class Main {
         dontKnow.see(veranda);
 
         try {
-            Flowerbed[] flowerbeds = Flowerbed.getRandomArrayFlowerbeds(MIN_FLOWERBEDS_NUMBER, MAX_FLOWERBEDS_NUMBER, MIN_FLOWERS_ON_FLOWERBED_NUMBER, MAX_FLOWERS_ON_FLOWERBED_NUMBER);
+            Flowerbed[] flowerbeds = Flowerbed.getRandomFlowerbeds(MIN_FLOWERBEDS_NUMBER, MAX_FLOWERBEDS_NUMBER, MIN_FLOWERS_ON_FLOWERBED_NUMBER, MAX_FLOWERS_ON_FLOWERBED_NUMBER);
             House.Environment environment = house.new Environment(Arrays.asList(flowerbeds));
             System.out.println(environment);
         } catch (MinMoreThenMaxException e) {
             System.out.println(e);
         }
-        Growable lilac = () -> "кусты лунной сирени";
+        Growing lilac = () -> "кусты лунной сирени";
         lilac.grow(() -> "под окнами");
         Flower justFlower = new Flower("любое растение на Луне");
-        System.out.println("Размер " + justFlower + " " + justFlower.getSizeRelativeEarth() + " относительно размера растений на Земле");
+        System.out.println(justFlower);
 
-        dontKnow.adapt("размер растений на Луне маленький по сравнению с растениями на Земле", ActionStatus.START);
-        dontKnow.surprise("размер растений на Луне маленький по сравнению с растениями на Земле", ActionStatus.NOT);
+        dontKnow.adapt("размер растений на Луне " + justFlower.getSizeRelativeEarth() + " по сравнению с растениями на Земле", ActionStatus.START);
+        dontKnow.surprise("размер растений на Луне " + justFlower.getSizeRelativeEarth() + " по сравнению с растениями на Земле", ActionStatus.NOT);
 
         Shorty klops = new Shorty("господин Клопс").setWeight(Size.LARGE);
         klops.setFace(klops.new Face().setBaldHead(Size.BIG).setColorCheeks(Color.RED)
-        .setColorHair(Color.PINK).setWeightEyes(Size.TINY));
+                .setColorHair(Color.PINK).setWeightEyes(Size.TINY).setEyebrows(Size.TINY));
         klops.sit(veranda);
-        klops.getFullDescription();
+        klops.printFullDescription();
 
         klops.sit(() -> "стол");
         klops.doing("4 дела", ActionStatus.IMMEDIATELY);
 
-
-        //todo: удалить неиспользуемое
-        //todo: заново переопределить hashCode() and equals()
     }
 }

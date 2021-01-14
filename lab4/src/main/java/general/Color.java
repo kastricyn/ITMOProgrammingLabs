@@ -1,4 +1,4 @@
-package people;
+package general;
 
 public enum Color {
     PINK("розовый"),

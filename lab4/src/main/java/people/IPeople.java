@@ -1,85 +1,43 @@
 package people;
 
-import space.Locationable;
+import space.Location;
 
 public interface IPeople {
     String getName();
 
-    void setName(String name);
-
-    default String have(String verb, Object thing) {
-        return (verb + " " + thing);
-    }
-
-    default void see(Object view, ActionStatus... ss) {
-        String str = " ";
+    default String getStr(ActionStatus ... ss){
+        String str = this.getName() + " ";
         for (ActionStatus s : ss)
             str += s + " ";
-        System.out.println(this.getName() + str + "увидел " + view);
-    }
-
-    default void sit(Locationable where, ActionStatus... ss) {
-        String str = " ";
-        for (ActionStatus s : ss)
-            str += s + " ";
-        System.out.println(this.getName() + str + "сидит на(за) " + where.getName());
-    }
-
-    default void doing(String thing, ActionStatus... ss) {
-        String str = " ";
-        for (ActionStatus s : ss)
-            str += s + " ";
-        System.out.println(this.getName() + str + "делает " + thing);
-    }
-
-    default void shout(String phrase, ActionStatus... ss) {
-        String str = " ";
-        for (ActionStatus s : ss)
-            str += s + " ";
-        System.out.println(this.getName() + str + "кричит " + phrase);
-    }
-//  move abilities
-
-    default String appear(String verb) {
-        return verb;
-    }
-
-    default void go(Locationable where, ActionStatus... ss) {
-        String str = " ";
-        for (ActionStatus s : ss)
-            str += s + " ";
-        System.out.println(this.getName() + str + "идёт в(на) " + where.getName());
-    }
-
-    //mind abilities
-    default String think(String verb, Object thing) {
-        return (verb + " " + thing);
-    }
-
-    default String know(String verb, Object thing) {
-        return (verb + ", что " + thing);
-    }
-
-    default String interested(String verb, Object thing) {
-        return (verb + " " + thing);
-    }
-
-    default String sure(String verb, Object thing) {
-        return (verb + ", что " + thing);
+        return str;
     }
 
     default void adapt(String fact, ActionStatus... ss) {
-        String str = " ";
-        for (ActionStatus s : ss)
-            str += s + " ";
-        System.out.println(this.getName() + str + "привыкать, что " + fact);
+        System.out.println(getStr(ss) + "привыкать, что " + fact);
+    }
+
+    default void doing(String thing, ActionStatus... ss) {
+        System.out.println(getStr(ss) + "делает " + thing);
+    }
+
+    default void go(Location where, ActionStatus... ss) {
+        System.out.println(getStr(ss) + "идёт в(на) " + where.getName());
+    }
+
+    default void see(Object view, ActionStatus... ss) {
+        System.out.println(getStr(ss) + "увидел " + view);
+    }
+
+    default void sit(Location where, ActionStatus... ss) {
+        System.out.println(getStr(ss) + "сидит на(за) " + where.getName());
+    }
+
+    default void shout(String phrase, ActionStatus... ss) {
+        System.out.println(getStr(ss) + "кричит " + phrase);
     }
 
     default void surprise(String fact, ActionStatus... ss) {
-        String str = " ";
-        for (ActionStatus s : ss)
-            str += s + " ";
-        System.out.println("для " + this.getName() + str + "сюрприз, что " + fact);
+        System.out.println("для " + getStr(ss) + "сюрприз, что " + fact);
     }
 
 }
