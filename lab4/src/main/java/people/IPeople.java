@@ -1,6 +1,6 @@
 package people;
 
-import space.Location;
+import space.Locationable;
 
 public interface IPeople {
     String getName();
@@ -18,11 +18,11 @@ public interface IPeople {
         System.out.println(this.getName() + str + "увидел " + view);
     }
 
-    default void sit(Location where, ActionStatus... ss) {
+    default void sit(Locationable where, ActionStatus... ss) {
         String str = " ";
         for (ActionStatus s : ss)
             str += s + " ";
-        System.out.println(this.getName() + str + "сидит на(в) " + where);
+        System.out.println(this.getName() + str + "сидит на(за) " + where.getName());
     }
 
     default void doing(String thing, ActionStatus... ss) {
@@ -44,11 +44,11 @@ public interface IPeople {
         return verb;
     }
 
-    default void go(Location where, ActionStatus... ss) {
+    default void go(Locationable where, ActionStatus... ss) {
         String str = " ";
         for (ActionStatus s : ss)
             str += s + " ";
-        System.out.println(this.getName() + str + "идёт в(на) " + where);
+        System.out.println(this.getName() + str + "идёт в(на) " + where.getName());
     }
 
     //mind abilities
@@ -68,13 +68,18 @@ public interface IPeople {
         return (verb + ", что " + thing);
     }
 
-    //todo  переделать для s.asList
-    default String adapt(String verb, Object thing) {
-        return (verb + ", что " + thing);
+    default void adapt(String fact, ActionStatus... ss) {
+        String str = " ";
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println(this.getName() + str + "привыкать, что " + fact);
     }
 
-    default String surprise(String verb, Object thing) {
-        return (verb + ", что " + thing);
+    default void surprise(String fact, ActionStatus... ss) {
+        String str = " ";
+        for (ActionStatus s : ss)
+            str += s + " ";
+        System.out.println("для " + this.getName() + str + "сюрприз, что " + fact);
     }
 
 }

@@ -2,7 +2,7 @@ package space.grow;
 
 import exceptions.CollectDelletedException;
 
-public class CollectedPlant {
+public class CollectedPlant implements Growable {
     private static int count;
     {count++;}
     private String name;

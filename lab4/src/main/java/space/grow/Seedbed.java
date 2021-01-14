@@ -1,8 +1,11 @@
 package space.grow;
 
 import exceptions.MinMoreThenMaxException;
+import space.Locationable;
 
-public class Seedbed {
+import java.util.Arrays;
+
+public class Seedbed implements Locationable {
     private static int count;
 
     {
@@ -71,5 +74,15 @@ public class Seedbed {
 
     public void setCropType(CollectedPlant.Type cropType) {
         this.cropType = cropType;
+    }
+
+    @Override
+    public String toString() {
+        return "Seedbed{" +
+                "isCultivated=" + isCultivated +
+                ", name='" + name + '\'' +
+                ", cropType=" + cropType +
+                ", crop=" + Arrays.toString(crop) +
+                '}';
     }
 }

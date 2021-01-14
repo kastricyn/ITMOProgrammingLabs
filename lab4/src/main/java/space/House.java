@@ -1,7 +1,7 @@
 package space;
 
 
-public class House {
+public class House implements Locationable {
     String name;
     int floorNumber = 1;
 
@@ -30,7 +30,7 @@ public class House {
         return this;
     }
 
-    public class Veranda{
+    public class Veranda implements Locationable {
         private String name;
 
         public Veranda(String name){
@@ -51,7 +51,7 @@ public class House {
         }
     }
 
-    public class Environment {
+    public class Environment implements Locationable {
         Object[] objects;
 
         public Environment(Object ... objs){
@@ -66,6 +66,11 @@ public class House {
             }
             ans+="\t" +objects[objects.length-1];
             return ans;
+        }
+
+        @Override
+        public String getName() {
+            return "Окружение " + House.this.getName();
         }
     }
 

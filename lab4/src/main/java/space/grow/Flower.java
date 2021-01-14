@@ -1,22 +1,26 @@
 package space.grow;
 
-public class Flower {
+import general.Size;
+
+public class Flower implements Growable{
     private static int count;
-    {count++;}
-    private String name;
+    private String name = "цветок ";
     private Type type;
     private Flowerbed flowerbed;
+    private Size sizeRelativeEarth;
 
-    public Flower() {
-        name = "цветок " + count;
+    {count++;
+        name +=" "+ count;
         type = Type.values()[(int)(Math.random()* Type.values().length)];
+        sizeRelativeEarth = Size.TINY;
     }
+
+
+    public Flower() {}
     public Flower(String name) {
         this.name = name;
-        type = Type.values()[(int)(Math.random()* Type.values().length)];
     }
     public Flower(Type type, Flowerbed flowerbed) {
-        name = "цветок " + count;
         this.type = type;
         this.flowerbed = flowerbed;
     }
@@ -37,6 +41,10 @@ public class Flower {
         return type;
     }
 
+    public Size getSizeRelativeEarth() {
+        return sizeRelativeEarth;
+    }
+
     public static int getCount() {
         return count;
     }
@@ -45,8 +53,10 @@ public class Flower {
     public String toString() {
         return "Объект цветок: \n" +
                 "\t тип: " + type + "\n" +
-                "\t имя: " + name + "\n";
+                "\t имя: " + name + "\n" +
+                "\t размер относительно землянных растений: " + sizeRelativeEarth;
     }
+
     public enum Type {
         MOON_DAISY("маргаритка"),
         PANSIES("анютины глазки"),
@@ -65,4 +75,6 @@ public class Flower {
             return name;
         }
     }
+
+
 }

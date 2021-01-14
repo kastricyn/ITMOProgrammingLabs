@@ -4,13 +4,12 @@ import exceptions.MinMoreThenMaxException;
 
 import java.util.Arrays;
 
-public class Flowerbed {
+public class Flowerbed{
     private static int count;
 
     {
         count++;
     }
-
     private String name;
     private Flower.Type flowerType;
     private Flower[] flowers;
@@ -61,9 +60,9 @@ public class Flowerbed {
     @Override
     public String toString() {
         return "Flowerbed{" +
-                "name='" + name + '\'' +
-                ", flowerType=" + flowerType +
-                ", flowers=" + Arrays.toString(flowers) +
+                "имя='" + name + '\'' +
+                ", тип цветов=" + flowerType +
+                ", кол-во цветов=" + flowers.length +
                 '}';
     }
 }
