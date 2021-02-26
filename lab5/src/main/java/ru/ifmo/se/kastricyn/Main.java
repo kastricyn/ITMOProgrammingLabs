@@ -1,7 +1,6 @@
-import ticket.Address;
+package ru.ifmo.se.kastricyn;
 
-import java.util.Comparator;
-import java.util.function.Function;
+import ru.ifmo.se.kastricyn.ticket.Address;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,6 +9,8 @@ public class Main {
         System.out.println(new Address("dgf").toString());
         System.out.println(new Address(null).toString());
         System.out.println(new Address("").toString());
+
+
 
     }
 }

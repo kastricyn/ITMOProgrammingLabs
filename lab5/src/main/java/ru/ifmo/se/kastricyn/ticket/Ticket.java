@@ -1,4 +1,4 @@
-package ticket;
+package ru.ifmo.se.kastricyn.ticket;
 
 
 import java.time.LocalDate;
@@ -11,6 +11,10 @@ public class Ticket implements Comparable<Ticket> {
     private static final long ID_MIN = 1;
 
     static private long nextId = ID_MIN;
+
+    static public long getNextId(){
+        return nextId;
+    }
 
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -58,6 +62,11 @@ public class Ticket implements Comparable<Ticket> {
         this.id = id;
         nextId = id + 1;
     }
+
+    public long getId(){
+        return id;
+    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,4 @@
-package ticket;
+package ru.ifmo.se.kastricyn.ticket;
 
 import java.util.Objects;
 
