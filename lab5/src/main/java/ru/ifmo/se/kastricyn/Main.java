@@ -1,14 +1,11 @@
 package ru.ifmo.se.kastricyn;
 
-import ru.ifmo.se.kastricyn.ticket.Address;
+import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.ticket.Venue;
 
 public class Main {
     public static void main(String[] args) {
-//        int a;
-//        System.out.println(a);
-        System.out.println(new Address("dgf").toString());
-        System.out.println(new Address(null).toString());
-        System.out.println(new Address("").toString());
+
 
 
 

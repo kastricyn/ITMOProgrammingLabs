@@ -6,7 +6,7 @@ public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
     private Float y; //Поле не может быть null
 
-    private static final long X_MIN = -502;
+    public static final long X_MIN = -502;
 
     public Coordinates(Long x, Float y) {
         if (x == null || y == null)
@@ -36,5 +36,33 @@ public class Coordinates {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    //All gets
+
+    public Float getY() {
+        return y;
+    }
+
+    public Long getX() {
+        return x;
+    }
+
+    //All sets
+
+    public Coordinates setX(Long x) {
+        if (x == null)
+            throw new NullPointerException("x не может быть null");
+        if (x < X_MIN)
+            throw new IllegalArgumentException("Значение поля x должно быть больше " + (X_MIN - 1));
+        this.x = x;
+        return this;
+    }
+
+    public Coordinates setY(Float y) {
+        if (y == null)
+            throw new NullPointerException("y не может быть null");
+        this.y = y;
+        return this;
     }
 }

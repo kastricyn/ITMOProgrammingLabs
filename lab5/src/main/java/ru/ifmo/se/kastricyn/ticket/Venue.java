@@ -2,29 +2,18 @@ package ru.ifmo.se.kastricyn.ticket;
 
 import java.util.Objects;
 
-public class Venue implements Comparable<Venue>{
+public class Venue implements Comparable<Venue> {
     public static final int CAPACITY_MIN = 1;
-    private static final long ID_MIN = 1;
+    private static long nextId = 1; //id не может быть меньше 1
 
-    private static long nextId = ID_MIN;
-
-    private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private final long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private int capacity; //Значение поля должно быть больше 0
     private VenueType type; //Поле не может быть null
     private Address address; //Поле не может быть null
 
     private void initial(String name, int capacity, VenueType type, Address address) {
-        if (name == null || type == null || address == null)
-            throw new NullPointerException("Ни одно поле не может быть равно null");
-        if (name.equals(""))
-            throw new IllegalArgumentException("поле name не может быть пустым");
-        if (capacity < CAPACITY_MIN)
-            throw new IllegalArgumentException("Значение поля capacity должно быть больше " + (CAPACITY_MIN - 1));
-        this.name = name;
-        this.capacity = capacity;
-        this.type = type;
-        this.address = address;
+        setName(name).setCapacity(capacity).setType(type).setAddress(address);
     }
 
     public Venue(String name, int capacity, VenueType type, Address address) {
@@ -34,17 +23,11 @@ public class Venue implements Comparable<Venue>{
 
     public Venue(long id, String name, int capacity, VenueType type, Address address) {
         initial(name, capacity, type, address);
-        if (id < ID_MIN)
-            throw new IllegalArgumentException("Значение поля id должно быть больше " + (ID_MIN - 1));
         if (id < nextId)
-            throw new IllegalArgumentException("Значение поля id должно быть больше id предыдущего объекта этого типа ("
+            throw new IllegalArgumentException("Значение поля id должно быть больше id предыдущего объекта этого типа/минимально возможного значения ("
                     + (nextId - 1) + ")");
         this.id = id;
         nextId = id + 1;
-    }
-
-    public long getNextMinID(){
-        return nextId;
     }
 
     @Override
@@ -73,9 +56,67 @@ public class Venue implements Comparable<Venue>{
 
     @Override
     public int compareTo(Venue o) {
-        if(equals(o))
+        if (equals(o))
             return 0;
         else
-            return capacity-o.capacity;
+            return capacity - o.capacity;
     }
+
+
+    // All gets
+    public static long getNextAvailableId() {
+        return nextId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public VenueType getType() {
+        return type;
+    }
+
+    //All sets
+
+    public Venue setAddress(Address address) {
+        if (address == null)
+            throw new NullPointerException("Поле не может быть null");
+        this.address = address;
+        return this;
+    }
+
+    public Venue setCapacity(int capacity) {
+        if (capacity < CAPACITY_MIN)
+            throw new IllegalArgumentException("Значение поля capacity должно быть больше " + (CAPACITY_MIN - 1));
+        return this;
+    }
+
+    public Venue setName(String name) {
+        if (name == null)
+            throw new NullPointerException("Поле name не может быть null");
+        if (name.equals(""))
+            throw new IllegalArgumentException("name не может быть пустым");
+        this.name = name;
+        return this;
+    }
+
+    public Venue setType(VenueType type) {
+        if (name == null)
+            throw new NullPointerException("Поле не может быть null");
+        this.type = type;
+        return this;
+    }
+
 }

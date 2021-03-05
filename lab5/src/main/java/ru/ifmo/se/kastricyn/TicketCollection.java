@@ -71,7 +71,7 @@ public class TicketCollection {
 //        sort((t1, t2) -> {
 //            if (t1.getId() - t2.getId() > 0)
 //                return 1;
-//            else if (t1.getId() - t2.getId() < 0)
+//             else if (t1.getId() - t2.getId() < 0)
 //                return -1;
 //            else return 0;
 //        });

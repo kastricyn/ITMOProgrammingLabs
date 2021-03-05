@@ -8,39 +8,20 @@ public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;
     public static final double DISCOUNT_MIN_HARD = 0;
     public static final double DISCOUNT_MAX = 100;
-    private static final long ID_MIN = 1;
 
-    static private long nextId = ID_MIN;
+    private static long nextId = 1;
 
-    static public long getNextId(){
-        return nextId;
-    }
-
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private final Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
-    private LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    private final LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Integer price; //Поле может быть null, Значение поля должно быть больше 0
     private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
     private TicketType type; //Поле может быть null
     private Venue venue; //Поле не может быть null
 
     private void initial(String name, Coordinates coordinates, int price, double discount, TicketType type, Venue venue) {
-        if (name == null || coordinates == null || type == null || venue == null)
-            throw new NullPointerException("Ни одно поле не может быть равно null");
-        if (name.equals(""))
-            throw new IllegalArgumentException("поле name не может быть пустым");
-        if (price < PRICE_MIN)
-            throw new IllegalArgumentException("Значение поля price должно быть больше" + (PRICE_MIN - 1));
-        if (discount <= DISCOUNT_MIN_HARD || discount > DISCOUNT_MAX)
-            throw new IllegalArgumentException("Значение поля discount должно быть больше " + DISCOUNT_MIN_HARD + ", Максимальное значение поля: " + DISCOUNT_MAX);
-
-        this.name = name;
-        this.coordinates = coordinates;
-        this.price = price;
-        this.discount = discount;
-        this.type = type;
-        this.venue = venue;
+        setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
     }
 
     public Ticket(String name, Coordinates coordinates, int price, double discount, TicketType type, Venue venue) {
@@ -54,19 +35,12 @@ public class Ticket implements Comparable<Ticket> {
         if (creationDate == null)
             throw new NullPointerException("Поле creationDate не может быть null");
         this.creationDate = creationDate;
-        if (id < ID_MIN)
-            throw new IllegalArgumentException("Значение поля id должно быть больше " + (ID_MIN - 1));
         if (id < nextId)
-            throw new IllegalArgumentException("Значение поля id должно быть больше id предыдущего объекта этого типа ("
+            throw new IllegalArgumentException("Значение поля id должно быть больше id предыдущего объекта этого типа/минимально возможного значения ("
                     + (nextId - 1) + ")");
         this.id = id;
         nextId = id + 1;
     }
-
-    public long getId(){
-        return id;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -83,10 +57,10 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket o) {
-        if(equals(o))
+        if (equals(o))
             return 0;
         else
-            return (int) (venue.compareTo(o.getVenue())*(100-discount));
+            return (int) (venue.compareTo(o.getVenue()) * (100 - discount));
     }
 
     @Override
@@ -103,8 +77,91 @@ public class Ticket implements Comparable<Ticket> {
                 '}';
     }
 
+
+//All gets
+
+    public static long getNextAvailableId() {
+        return nextId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public TicketType getType() {
+        return type;
+    }
+
     public Venue getVenue() {
         return venue;
+    }
+
+    //All sets
+
+    public Ticket setName(String name) {
+        if (name == null)
+            throw new NullPointerException("Поле name не может быть null");
+        if (name.equals(""))
+            throw new IllegalArgumentException("name не может быть пустым");
+        this.name = name;
+        return this;
+    }
+
+    public Ticket setCoordinates(Coordinates coordinates) {
+        if (coordinates == null)
+            throw new NullPointerException("поле coordinates не может быть null");
+        this.coordinates = coordinates;
+        return this;
+    }
+
+    public Ticket setDiscount(double discount) {
+        if (discount <= DISCOUNT_MIN_HARD || discount > DISCOUNT_MAX)
+            throw new IllegalArgumentException("Значение поля discount должно быть больше " + DISCOUNT_MIN_HARD + ", Максимальное значение поля: " + DISCOUNT_MAX);
+        this.discount = discount;
+        return this;
+    }
+
+    public Ticket setPrice(Integer price) {
+        if (price == null)
+            throw new NullPointerException("поле price не может быть null");
+        if (price < PRICE_MIN)
+            throw new IllegalArgumentException("Значение поля price должно быть больше" + (PRICE_MIN - 1));
+        this.price = price;
+        return this;
+    }
+
+    public Ticket setType(TicketType type) {
+        if (type == null)
+            throw new NullPointerException("поле type не может быть null");
+        this.type = type;
+        return this;
+    }
+
+    public Ticket setVenue(Venue venue) {
+        if (venue == null)
+            throw new NullPointerException("поле venue не может быть null");
+        this.venue = venue;
+        return this;
     }
 }
 
