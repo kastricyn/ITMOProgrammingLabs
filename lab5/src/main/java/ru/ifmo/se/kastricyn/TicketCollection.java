@@ -2,10 +2,7 @@ package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.ticket.Ticket;
 
-import java.lang.reflect.Field;
 import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 
 public class TicketCollection {
@@ -23,36 +20,45 @@ public class TicketCollection {
         return tickets.add(e);
     }
 
-    public void update(long id, Ticket t) throws NoSuchFieldException, IllegalAccessException {
-        setTicketId(removeById(id), -1);
-        setTicketId(t, id);
-        tickets.add(t);
-// delete
-
-//      sortById();
+    public void updateElement(long id, Ticket t) {
+        if (t == null)
+            throw new NullPointerException();
+        Ticket tmp = getElement(id);
+        tmp.setName(t.getName());
+        tmp.setVenue(t.getVenue());
+        tmp.setType(t.getType());
+        tmp.setDiscount(t.getDiscount());
+        tmp.setPrice(t.getPrice());
+        tmp.setCoordinates(t.getCoordinates());
     }
 
-    public Ticket removeById(long id) {
+    public Ticket removeElement(long id) {
         Iterator<Ticket> iterator = tickets.iterator();
+        Ticket t;
         while (iterator.hasNext()) {
-            Ticket t = iterator.next();
+            t = iterator.next();
             if (t.getId() == id) {
                 iterator.remove();
                 return t;
             }
-// delete
-//             else if (t.getId() > Ticket.getNextId())
-//                throw new IllegalArgumentException("В коллекции нет элемента с таким id");
         }
-        return null;
+        throw new IllegalArgumentException("В коллекции нет элемента с таким индексом");
     }
 
     public void clear() {
         tickets.clear();
     }
 
-    public Iterator<Ticket> iterator(){
+    public Iterator<Ticket> iterator() {
         return tickets.iterator();
+    }
+
+    public Ticket getElement(long id) {
+        for (Ticket t : tickets) {
+            if (t.getId() == id)
+                return t;
+        }
+        throw new IllegalArgumentException("В коллекции нет элемента с таким индексом");
     }
 
     public Ticket peekFirst() {
@@ -77,10 +83,5 @@ public class TicketCollection {
 //        });
 //    }
 
-    private void setTicketId(Ticket t, long id) throws NoSuchFieldException, IllegalAccessException {
-        Field fieldId = t.getClass().getDeclaredField("id");
-        fieldId.setAccessible(true);
-        fieldId.set(t, id);
-    }
 
 }
