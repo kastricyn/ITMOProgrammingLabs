@@ -1,29 +1,38 @@
 package ru.ifmo.se.kastricyn.ticket;
 
+import ru.ifmo.se.kastricyn.TryAgain;
+
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Address {
     private String street; //Строка не может быть пустой, Поле может быть null
 
     public Address(String street) {
-        if (street == null)
-            throw new NullPointerException("Поле не может быть null");
-        if (street.equals(""))
-            throw new IllegalArgumentException("street не может быть пустым");
-        this.street = street;
+        setStreet(street);
     }
 
-    public String getStreet() {
-        return street;
+    private Address() {
     }
 
-    public Address setStreet(String street) {
-        if (street == null)
-            throw new NullPointerException("Поле не может быть null");
-        if (street.equals(""))
-            throw new IllegalArgumentException("street не может быть пустым");
-        this.street = street;
-        return this;
+    public static Address getAddress(Scanner in, boolean shouldPrintHints) {
+        Address address = new Address();
+        if (shouldPrintHints) {
+            System.out.println("Создаём объект типа \"Address\":");
+            System.out.println("Введите пожалуйста улицу:");
+        }
+        while (true)
+            try {
+                address.setStreet(in.nextLine());
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints)
+            System.out.println("Создан объект: " + address);
+
+        return address;
     }
 
     @Override
@@ -45,4 +54,18 @@ public class Address {
                 "street='" + street + '\'' +
                 '}';
     }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public Address setStreet(String street) {
+        if (street == null)
+            throw new NullPointerException("Поле не может быть null");
+        if (street.equals(""))
+            throw new IllegalArgumentException("street не может быть пустым");
+        this.street = street;
+        return this;
+    }
+
 }

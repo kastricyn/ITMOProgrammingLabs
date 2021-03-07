@@ -1,6 +1,11 @@
 package ru.ifmo.se.kastricyn.ticket;
 
+import ru.ifmo.se.kastricyn.TryAgain;
+
+import java.util.IllegalFormatException;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
@@ -9,12 +14,40 @@ public class Coordinates {
     public static final long X_MIN = -502;
 
     public Coordinates(Long x, Float y) {
-        if (x == null || y == null)
-            throw new NullPointerException("x и y не могут быть null");
-        if (x < X_MIN)
-            throw new IllegalArgumentException("Значение поля x должно быть больше " + (X_MIN - 1));
-        this.x = x;
-        this.y = y;
+        setX(x).setY(y);
+    }
+
+    private Coordinates() {
+    }
+
+    public static Coordinates getCoordinates(Scanner in, boolean shouldPrintHints) {
+        Coordinates coordinates = new Coordinates();
+        if (shouldPrintHints) {
+            System.out.println("Создаём объект типа \"Coordinates\":");
+            System.out.println("Введите пожалуйста поле x:");
+        }
+        long x = 0;
+        while (true)
+            try {
+                coordinates.setX(Long.parseLong(in.nextLine()));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints)
+            System.out.println("Введите число y с плавающей точкой:");
+        while (true)
+            try {
+                coordinates.setY(Float.parseFloat(in.nextLine()));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints)
+            System.out.println("Создан объект: " + coordinates);
+        return coordinates;
     }
 
     @Override

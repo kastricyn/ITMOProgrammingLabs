@@ -1,8 +1,12 @@
 package ru.ifmo.se.kastricyn.ticket;
 
+import ru.ifmo.se.kastricyn.TryAgain;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;
@@ -20,17 +24,17 @@ public class Ticket implements Comparable<Ticket> {
     private TicketType type; //Поле может быть null
     private Venue venue; //Поле не может быть null
 
-    private void initial(String name, Coordinates coordinates, int price, double discount, TicketType type, Venue venue) {
+    private void initial(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
         setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
     }
 
-    public Ticket(String name, Coordinates coordinates, int price, double discount, TicketType type, Venue venue) {
+    public Ticket(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
         initial(name, coordinates, price, discount, type, venue);
         id = nextId++;
         creationDate = LocalDate.now();
     }
 
-    public Ticket(long id, String name, Coordinates coordinates, LocalDate creationDate, int price, double discount, TicketType type, Venue venue) {
+    public Ticket(long id, String name, Coordinates coordinates, LocalDate creationDate, Integer price, double discount, TicketType type, Venue venue) {
         initial(name, coordinates, price, discount, type, venue);
         if (creationDate == null)
             throw new NullPointerException("Поле creationDate не может быть null");
@@ -41,6 +45,73 @@ public class Ticket implements Comparable<Ticket> {
         this.id = id;
         nextId = id + 1;
     }
+
+    private Ticket() {
+        id = nextId++;
+        creationDate = LocalDate.now();
+    }
+
+    public static Ticket getTicket(Scanner in, boolean shouldPrintHints) {
+        Ticket ticket = new Ticket();
+        if (shouldPrintHints) {
+            System.out.println("Создаём объект типа \"Ticket\":");
+            System.out.println("Введите пожалуйста имя:");
+        }
+        while (true)
+            try {
+                ticket.setName(in.nextLine());
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+       ticket.setCoordinates(Coordinates.getCoordinates(in, shouldPrintHints));
+
+        if (shouldPrintHints)
+            System.out.println("Возвращаемся к объекту типа \"Ticket\":\n Введите поле price:");
+        while (true)
+            try {
+                String t = in.nextLine();
+                ticket.setPrice(t.equals("") ? null : Integer.parseInt(t));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints)
+            System.out.println("Введите поле discount:");
+
+        while (true)
+            try {
+                ticket.setDiscount(Double.parseDouble(in.nextLine()));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints) {
+            String str = Arrays.toString(TicketType.values());
+            str = str.substring(1, str.length() - 1);
+            System.out.println("Введите поле type (возможны следующие варианты: " + str + " ):\n");
+        }
+        while (true)
+            try {
+                String t = in.nextLine();
+                ticket.setType(t.equals("") ? null : TicketType.valueOf(t));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        ticket.setVenue(Venue.getVenue(in, shouldPrintHints));
+
+        if (shouldPrintHints) {
+            System.out.println("Возвращаемся к объекту типа \"Ticket\":\n создан объект: " + ticket);
+        }
+
+        return ticket;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -142,8 +213,6 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public Ticket setPrice(Integer price) {
-        if (price == null)
-            throw new NullPointerException("поле price не может быть null");
         if (price < PRICE_MIN)
             throw new IllegalArgumentException("Значение поля price должно быть больше" + (PRICE_MIN - 1));
         this.price = price;
@@ -151,8 +220,6 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public Ticket setType(TicketType type) {
-        if (type == null)
-            throw new NullPointerException("поле type не может быть null");
         this.type = type;
         return this;
     }

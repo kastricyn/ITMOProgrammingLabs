@@ -1,6 +1,11 @@
 package ru.ifmo.se.kastricyn.ticket;
 
+import org.graalvm.compiler.lir.amd64.vector.AMD64VectorUnary;
+import ru.ifmo.se.kastricyn.TryAgain;
+
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Venue implements Comparable<Venue> {
     public static final int CAPACITY_MIN = 1;
@@ -28,6 +33,55 @@ public class Venue implements Comparable<Venue> {
                     + (nextId - 1) + ")");
         this.id = id;
         nextId = id + 1;
+    }
+
+    private Venue() {
+        id = nextId++;
+    }
+
+    public static Venue getVenue(Scanner in, boolean shouldPrintHints) {
+        Venue venue = new Venue();
+        if (shouldPrintHints) {
+            System.out.println("Создаём объект типа \"Venue\":");
+            System.out.println("Введите пожалуйста имя:");
+        }
+        while (true)
+            try {
+                venue.setName(in.nextLine());
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints)
+            System.out.println("Введите поле capacity:");
+        while (true)
+            try {
+                venue.setCapacity(Integer.parseInt(in.nextLine()));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        if (shouldPrintHints) {
+            String str = Arrays.toString(VenueType.values());
+            str = str.substring(1, str.length() - 1);
+            System.out.println("Введите поле type (возможны следующие варианты: " + str + " ):\n");
+        }
+        while (true)
+            try {
+                venue.setType(VenueType.valueOf(in.nextLine()));
+                break;
+            } catch (RuntimeException e) {
+                TryAgain.printErrors(shouldPrintHints, e);
+            }
+
+        venue.setAddress(Address.getAddress(in, shouldPrintHints));
+
+        if (shouldPrintHints)
+            System.out.println("Создан объект: " + venue);
+
+        return venue;
     }
 
     @Override
@@ -100,6 +154,7 @@ public class Venue implements Comparable<Venue> {
     public Venue setCapacity(int capacity) {
         if (capacity < CAPACITY_MIN)
             throw new IllegalArgumentException("Значение поля capacity должно быть больше " + (CAPACITY_MIN - 1));
+        this.capacity = capacity;
         return this;
     }
 
