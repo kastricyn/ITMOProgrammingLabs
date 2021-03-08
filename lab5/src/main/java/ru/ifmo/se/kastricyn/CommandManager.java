@@ -24,6 +24,10 @@ public class CommandManager {
         cm.addIfAbsent(new Add(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new AddIfMax(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Clear(ticketCollection));
+        cm.addIfAbsent(new ExecuteScript(ticketCollection));
+        cm.addIfAbsent(new Exit());
+        cm.addIfAbsent(new FilterByVenue(ticketCollection, in, shouldPrintHints));
+        cm.addIfAbsent(new Head(ticketCollection));
         cm.addIfAbsent(new Help(cm));
 
 
@@ -48,4 +52,9 @@ public class CommandManager {
         command.execute(r[1]);
     }
 
+    public void run() {
+        while (in.hasNext()) {
+            execute(in.nextLine());
+        }
+    }
 }

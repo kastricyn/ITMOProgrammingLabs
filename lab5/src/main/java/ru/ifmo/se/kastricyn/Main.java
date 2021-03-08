@@ -9,7 +9,7 @@ public class Main {
         TicketCollection tickets = new TicketCollection();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager =CommandManager.getStandartCommandManager(tickets, in, true);
-
+        CommandManager consoleCommandManager = CommandManager.getStandartCommandManager(tickets, in, true);
+        consoleCommandManager.run();
     }
 }

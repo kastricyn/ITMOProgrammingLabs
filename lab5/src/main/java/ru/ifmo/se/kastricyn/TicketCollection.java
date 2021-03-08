@@ -8,6 +8,8 @@ import java.util.Iterator;
 public class TicketCollection {
     private ArrayDeque<Ticket> tickets;
 
+
+
     public TicketCollection() {
         tickets = new ArrayDeque<>();
     }
@@ -72,6 +74,8 @@ public class TicketCollection {
     public boolean isEmpty(){
         return tickets.isEmpty();
     }
+
+
 
 //  delete
 

@@ -5,7 +5,7 @@ import ru.ifmo.se.kastricyn.TryAgain;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Address {
+public class Address implements Comparable<Address>{
     private String street; //Строка не может быть пустой, Поле может быть null
 
     public Address(String street) {
@@ -68,4 +68,8 @@ public class Address {
         return this;
     }
 
+    @Override
+    public int compareTo(Address o) {
+        return street.compareTo(o.getStreet());
+    }
 }

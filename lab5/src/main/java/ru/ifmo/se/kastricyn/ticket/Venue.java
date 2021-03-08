@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.ticket;
 
-import org.graalvm.compiler.lir.amd64.vector.AMD64VectorUnary;
 import ru.ifmo.se.kastricyn.TryAgain;
 
 import java.util.Arrays;
@@ -89,7 +88,7 @@ public class Venue implements Comparable<Venue> {
         if (this == o) return true;
         if (!(o instanceof Venue)) return false;
         Venue venue = (Venue) o;
-        return id == venue.id && capacity == venue.capacity && name.equals(venue.name) && type == venue.type && address.equals(venue.address);
+        return capacity == venue.capacity && name.equals(venue.name) && type == venue.type && address.equals(venue.address);
     }
 
     @Override
@@ -113,7 +112,7 @@ public class Venue implements Comparable<Venue> {
         if (equals(o))
             return 0;
         else
-            return capacity - o.capacity;
+            return (capacity - o.getCapacity())*type.compareTo(o.getType())*address.compareTo(o.getAddress())*name.compareTo(o.getName());
     }
 
 
