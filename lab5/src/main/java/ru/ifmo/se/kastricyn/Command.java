@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn;
 
-@FunctionalInterface
 public interface Command {
-    void execute();
+    void execute(String ... args);
 }

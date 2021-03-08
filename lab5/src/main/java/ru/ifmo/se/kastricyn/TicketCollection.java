@@ -20,19 +20,19 @@ public class TicketCollection {
         return tickets.add(e);
     }
 
-    public void updateElement(long id, Ticket t) {
-        if (t == null)
+    public void update(long id, Ticket newTicket) {
+        if (newTicket == null)
             throw new NullPointerException();
         Ticket tmp = getElement(id);
-        tmp.setName(t.getName());
-        tmp.setVenue(t.getVenue());
-        tmp.setType(t.getType());
-        tmp.setDiscount(t.getDiscount());
-        tmp.setPrice(t.getPrice());
-        tmp.setCoordinates(t.getCoordinates());
+        tmp.setName(newTicket.getName());
+        tmp.setVenue(newTicket.getVenue());
+        tmp.setType(newTicket.getType());
+        tmp.setDiscount(newTicket.getDiscount());
+        tmp.setPrice(newTicket.getPrice());
+        tmp.setCoordinates(newTicket.getCoordinates());
     }
 
-    public Ticket removeElement(long id) {
+    public Ticket remove(long id) {
         Iterator<Ticket> iterator = tickets.iterator();
         Ticket t;
         while (iterator.hasNext()) {
@@ -63,6 +63,14 @@ public class TicketCollection {
 
     public Ticket peekFirst() {
         return tickets.peekFirst();
+    }
+
+    public int size(){
+        return tickets.size();
+    }
+
+    public boolean isEmpty(){
+        return tickets.isEmpty();
     }
 
 //  delete
