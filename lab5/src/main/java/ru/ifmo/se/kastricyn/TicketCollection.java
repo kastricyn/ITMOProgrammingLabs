@@ -2,8 +2,8 @@ package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.ticket.Ticket;
 
-import java.util.ArrayDeque;
-import java.util.Iterator;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class TicketCollection {
     private ArrayDeque<Ticket> tickets;
@@ -75,15 +75,22 @@ public class TicketCollection {
         return tickets.isEmpty();
     }
 
+    public void forEach(Consumer<? super Ticket> action){
+        tickets.forEach(action);
+    }
+
 
 
 //  delete
 
-//    private void sort(Comparator<Ticket> cmp) {
-//        Ticket[] sortedTickets = tickets.toArray(new Ticket[0]);
-//        Arrays.sort(sortedTickets, cmp);
-//        tickets = new ArrayDeque<>(Arrays.asList(sortedTickets));
-//    }
+    public void sort() {
+        sort(Ticket::compareTo);
+    }
+    public void sort(Comparator<Ticket> cmp) {
+        LinkedList<Ticket> list = new LinkedList<>(tickets);
+        Collections.sort(list, cmp);
+        tickets = new ArrayDeque<>(list);
+    }
 
 //    private void sortById() {
 //        sort((t1, t2) -> {

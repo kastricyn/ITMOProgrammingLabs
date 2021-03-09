@@ -29,8 +29,14 @@ public class CommandManager {
         cm.addIfAbsent(new FilterByVenue(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Head(ticketCollection));
         cm.addIfAbsent(new Help(cm));
-
-
+        //todo: Info
+        cm.addIfAbsent(new PrintAscending(ticketCollection));
+        cm.addIfAbsent(new PrintFieldDescendingVenue(ticketCollection));
+        cm.addIfAbsent(new RemoveById(ticketCollection));
+        cm.addIfAbsent(new RemoveLower(ticketCollection, in, shouldPrintHints));
+        //todo: save
+        cm.addIfAbsent(new Show(ticketCollection));
+        cm.addIfAbsent(new Update(ticketCollection, in, shouldPrintHints));
         return cm;
     }
 
