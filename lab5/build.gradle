@@ -1,7 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+    //id "org.openrepose.gradle.plugins.jaxb" version "2.5.0"
 }
+
 mainClassName = "ru.ifmo.se.kastricyn.Main"
 
 sourceCompatibility = JavaVersion.VERSION_1_8

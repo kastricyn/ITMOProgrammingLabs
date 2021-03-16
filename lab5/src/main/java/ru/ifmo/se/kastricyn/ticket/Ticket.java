@@ -2,12 +2,13 @@ package ru.ifmo.se.kastricyn.ticket;
 
 import ru.ifmo.se.kastricyn.TryAgain;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 
+@XmlRootElement(name = "Ticket")
 public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;
     public static final double DISCOUNT_MIN_HARD = 0;
