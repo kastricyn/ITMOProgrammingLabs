@@ -19,7 +19,7 @@ public class CommandManager {
         this.shouldPrintHints = shouldPrintHints;
     }
 
-    public static CommandManager getStandartCommandManager(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
+    public static CommandManager createCommandManager(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
         CommandManager cm = new CommandManager(ticketCollection, in, shouldPrintHints);
         cm.addIfAbsent(new Add(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new AddIfMax(ticketCollection, in, shouldPrintHints));
@@ -29,12 +29,12 @@ public class CommandManager {
         cm.addIfAbsent(new FilterByVenue(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Head(ticketCollection));
         cm.addIfAbsent(new Help(cm));
-        //todo: Info
+        cm.addIfAbsent(new Info(ticketCollection));
         cm.addIfAbsent(new PrintAscending(ticketCollection));
         cm.addIfAbsent(new PrintFieldDescendingVenue(ticketCollection));
         cm.addIfAbsent(new RemoveById(ticketCollection));
         cm.addIfAbsent(new RemoveLower(ticketCollection, in, shouldPrintHints));
-        //todo: save
+        cm.addIfAbsent(new Save(ticketCollection));
         cm.addIfAbsent(new Show(ticketCollection));
         cm.addIfAbsent(new Update(ticketCollection, in, shouldPrintHints));
         return cm;

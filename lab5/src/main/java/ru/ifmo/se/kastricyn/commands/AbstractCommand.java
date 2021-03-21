@@ -19,4 +19,5 @@ public abstract class AbstractCommand implements Command {
     public String getDescription() {
         return description;
     }
+    // todo: description is only description; toString = name + description
 }

@@ -2,13 +2,20 @@ package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.ticket.Ticket;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.File;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Consumer;
 
+@XmlRootElement
 public class TicketCollection {
     private ArrayDeque<Ticket> tickets;
-
-
+    private File file;
+    private LocalDate initDate;
+    {
+        initDate = LocalDate.now();
+    }
 
     public TicketCollection() {
         tickets = new ArrayDeque<>();
@@ -67,18 +74,17 @@ public class TicketCollection {
         return tickets.peekFirst();
     }
 
-    public int size(){
+    public int size() {
         return tickets.size();
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return tickets.isEmpty();
     }
 
-    public void forEach(Consumer<? super Ticket> action){
+    public void forEach(Consumer<? super Ticket> action) {
         tickets.forEach(action);
     }
-
 
 
 //  delete
@@ -86,21 +92,26 @@ public class TicketCollection {
     public void sort() {
         sort(Ticket::compareTo);
     }
+
+    //todo: why is it working
     public void sort(Comparator<Ticket> cmp) {
         LinkedList<Ticket> list = new LinkedList<>(tickets);
         Collections.sort(list, cmp);
         tickets = new ArrayDeque<>(list);
     }
 
-//    private void sortById() {
-//        sort((t1, t2) -> {
-//            if (t1.getId() - t2.getId() > 0)
-//                return 1;
-//             else if (t1.getId() - t2.getId() < 0)
-//                return -1;
-//            else return 0;
-//        });
-//    }
 
+    public File getFile() {
+        return file;
+    }
+
+    public TicketCollection setFile(File file) {
+        this.file = file;
+        return this;
+    }
+
+    public LocalDate getInitDate() {
+        return initDate;
+    }
 
 }

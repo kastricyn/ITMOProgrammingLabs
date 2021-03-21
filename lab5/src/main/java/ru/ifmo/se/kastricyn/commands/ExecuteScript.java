@@ -35,7 +35,7 @@ public class ExecuteScript extends AbstractCommand {
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
 //            Scanner scriptIn = new Scanner(path);
-            CommandManager cm = CommandManager.getStandartCommandManager(ticketCollection, scriptIn, false);
+            CommandManager cm = CommandManager.createCommandManager(ticketCollection, scriptIn, false);
             cm.run();
             openedScripts.pop();
         } catch (IOException e) {

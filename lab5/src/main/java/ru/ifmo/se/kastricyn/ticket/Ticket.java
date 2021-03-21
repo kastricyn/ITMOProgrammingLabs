@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
-
 @XmlRootElement
 public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;
