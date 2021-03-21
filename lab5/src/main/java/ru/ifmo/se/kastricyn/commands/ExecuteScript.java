@@ -3,7 +3,6 @@ package ru.ifmo.se.kastricyn.commands;
 import ru.ifmo.se.kastricyn.CommandManager;
 import ru.ifmo.se.kastricyn.TicketCollection;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;

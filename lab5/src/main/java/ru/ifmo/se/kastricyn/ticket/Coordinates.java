@@ -2,10 +2,14 @@ package ru.ifmo.se.kastricyn.ticket;
 
 import ru.ifmo.se.kastricyn.TryAgain;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.IllegalFormatException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
+
 
 public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
@@ -72,11 +76,9 @@ public class Coordinates {
     }
 
     //All gets
-
     public Float getY() {
         return y;
     }
-
     public Long getX() {
         return x;
     }

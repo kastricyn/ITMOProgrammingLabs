@@ -2,9 +2,10 @@ package ru.ifmo.se.kastricyn.ticket;
 
 import ru.ifmo.se.kastricyn.TryAgain;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.Scanner;
-
 public class Address implements Comparable<Address>{
     private String street; //Строка не может быть пустой, Поле может быть null
 
@@ -54,7 +55,6 @@ public class Address implements Comparable<Address>{
                 "street='" + street + '\'' +
                 '}';
     }
-
     public String getStreet() {
         return street;
     }

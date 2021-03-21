@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.ticket;
 
 import ru.ifmo.se.kastricyn.TryAgain;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
@@ -120,23 +123,19 @@ public class Venue implements Comparable<Venue> {
     public static long getNextAvailableId() {
         return nextId;
     }
-
+@XmlAttribute
     public long getId() {
         return id;
     }
-
     public Address getAddress() {
         return address;
     }
-
     public int getCapacity() {
         return capacity;
     }
-
     public String getName() {
         return name;
     }
-
     public VenueType getType() {
         return type;
     }
