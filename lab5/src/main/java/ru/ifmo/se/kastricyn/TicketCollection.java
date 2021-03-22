@@ -2,8 +2,14 @@ package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.ticket.Ticket;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Consumer;
@@ -13,6 +19,7 @@ public class TicketCollection {
     private ArrayDeque<Ticket> tickets;
     private File file;
     private LocalDate initDate;
+
     {
         initDate = LocalDate.now();
     }
@@ -23,6 +30,17 @@ public class TicketCollection {
 
     public TicketCollection(int numElements) {
         tickets = new ArrayDeque<>(numElements);
+    }
+
+    public static TicketCollection createTicketCollection(Path p) throws NoSuchFieldException, JAXBException, AccessDeniedException {
+        if (Files.exists(p)) {
+            if(!Files.isReadable(p))
+                throw new AccessDeniedException(p.toString());
+            JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            return (TicketCollection) unmarshaller.unmarshal(p.toFile());
+
+        } else throw new NoSuchFieldException();
     }
 
     public boolean add(Ticket e) {
