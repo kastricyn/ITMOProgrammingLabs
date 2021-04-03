@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
-@XmlRootElement
+
 public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;
     public static final double DISCOUNT_MIN_HARD = 0;
@@ -60,7 +60,7 @@ public class Ticket implements Comparable<Ticket> {
         }
         while (true)
             try {
-                ticket.setName(in.nextLine());
+                ticket.setName(in.nextLine().trim());
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);
@@ -72,7 +72,7 @@ public class Ticket implements Comparable<Ticket> {
             System.out.println("Возвращаемся к объекту типа \"Ticket\":\n Введите поле price:");
         while (true)
             try {
-                String t = in.nextLine();
+                String t = in.nextLine().trim();
                 ticket.setPrice(t.equals("") ? null : Integer.parseInt(t));
                 break;
             } catch (RuntimeException e) {
@@ -84,7 +84,7 @@ public class Ticket implements Comparable<Ticket> {
 
         while (true)
             try {
-                ticket.setDiscount(Double.parseDouble(in.nextLine()));
+                ticket.setDiscount(Double.parseDouble(in.nextLine().trim()));
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);
@@ -97,7 +97,7 @@ public class Ticket implements Comparable<Ticket> {
         }
         while (true)
             try {
-                String t = in.nextLine();
+                String t = in.nextLine().trim();
                 ticket.setType(t.equals("") ? null : TicketType.valueOf(t));
                 break;
             } catch (RuntimeException e) {

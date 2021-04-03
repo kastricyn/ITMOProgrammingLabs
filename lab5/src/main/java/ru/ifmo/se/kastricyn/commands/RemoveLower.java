@@ -3,6 +3,7 @@ package ru.ifmo.se.kastricyn.commands;
 import ru.ifmo.se.kastricyn.TicketCollection;
 import ru.ifmo.se.kastricyn.ticket.Ticket;
 
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class RemoveLower extends  AbstractCommand{
@@ -20,10 +21,16 @@ public class RemoveLower extends  AbstractCommand{
     @Override
     public void execute(String... args) {
         Ticket minTicket = Ticket.getTicket(in, shouldPrintHints);
-        ticketCollection.forEach(t ->{
-            if(t.compareTo(minTicket)<0)
-                ticketCollection.remove(t.getId());
-                //todo change remove by link
-        });
+        Iterator<Ticket> iterator = ticketCollection.iterator();
+        Ticket t;
+        int i = 0;
+        while (iterator.hasNext()) {
+            t = iterator.next();
+            if (t.compareTo(minTicket)<0) {
+                iterator.remove();
+                i++;
+            }
+        }
+        System.out.println("ИЗ коллекции удалено " + i + " объектов.");
     }
 }

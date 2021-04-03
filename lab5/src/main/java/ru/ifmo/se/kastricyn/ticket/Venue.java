@@ -49,7 +49,7 @@ public class Venue implements Comparable<Venue> {
         }
         while (true)
             try {
-                venue.setName(in.nextLine());
+                venue.setName(in.nextLine().trim());
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);
@@ -59,7 +59,7 @@ public class Venue implements Comparable<Venue> {
             System.out.println("Введите поле capacity:");
         while (true)
             try {
-                venue.setCapacity(Integer.parseInt(in.nextLine()));
+                venue.setCapacity(Integer.parseInt(in.nextLine().trim()));
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);
@@ -72,7 +72,7 @@ public class Venue implements Comparable<Venue> {
         }
         while (true)
             try {
-                venue.setType(VenueType.valueOf(in.nextLine()));
+                venue.setType(VenueType.valueOf(in.nextLine().trim()));
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);

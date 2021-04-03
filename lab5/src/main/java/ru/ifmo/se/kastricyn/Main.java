@@ -4,31 +4,52 @@ import ru.ifmo.se.kastricyn.ticket.*;
 
 import javax.xml.bind.JAXBException;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        TicketCollection tickets = null;
-        try {
-            tickets = TicketCollection.createTicketCollection(Paths.get(args[0]));
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (AccessDeniedException e) {
-            e.printStackTrace();
+
+        if (args.length != 1) {
+            System.out.println("Программа принимает на вход ровно один аргумент - путь до файла.\n" +
+                    " Пожалйста проверьте верность аргументов и повторите запуск.");
+            return;
         }
-        Scanner in = new Scanner(System.in);
+
+        Path p = Paths.get(args[0]);
+        TicketCollection tickets;
+
+        try {
+            if (Files.exists(p))
+                tickets = TicketCollection.getTicketCollection(p);
+            else if(Files.notExists(p))
+                tickets = TicketCollection.createTicketCollection(p);
+            if(!Files.isWritable(p))
+                System.out.println("Файл не доступен для записи.");
+        } catch (JAXBException e) {
+            System.out.println("Нарушена структура файла, для работоспособности программы верните правильную структуру" +
+                    "\n или удалите файл и мы создадим новый с пустой структурой по указанному пути. " +
+                    "\n После исправления повторите попытку.");
+        } catch (AccessDeniedException e) {
+            System.out.println("Недостаточно прав на чтение файла, повторите попыку позже.");
+            return;
+        }
 
 
-
-        Ticket t = new Ticket("name", new Coordinates(2l, 2.0f), 5, 2., TicketType.CHEAP,
-                new Venue("ven", 45, VenueType.CINEMA, new Address("dfs")));
-
-        tickets.add(t);
-        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, in, true);
-        consoleCommandManager.run();
+//        if(!Files.isWritable(Paths.get(args[0])))
+//            System.out.println("Файл доступен только на чтение.");
+//
+//        Scanner in = new Scanner(System.in);
+//
+//
+//
+//        Ticket t = new Ticket("name", new Coordinates(2l, 2.0f), 5, 2., TicketType.CHEAP,
+//                new Venue("ven", 45, VenueType.CINEMA, new Address("dfs")));
+//
+//        tickets.add(t);
+//        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, in, true);
+//        consoleCommandManager.run();
     }
 }

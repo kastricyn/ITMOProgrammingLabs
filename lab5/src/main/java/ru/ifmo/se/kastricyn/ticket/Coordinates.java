@@ -33,7 +33,7 @@ public class Coordinates {
         long x = 0;
         while (true)
             try {
-                coordinates.setX(Long.parseLong(in.nextLine()));
+                coordinates.setX(Long.parseLong(in.nextLine().trim()));
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);
@@ -43,7 +43,7 @@ public class Coordinates {
             System.out.println("Введите число y с плавающей точкой:");
         while (true)
             try {
-                coordinates.setY(Float.parseFloat(in.nextLine()));
+                coordinates.setY(Float.parseFloat(in.nextLine().trim()));
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);

@@ -24,7 +24,7 @@ public class Address implements Comparable<Address>{
         }
         while (true)
             try {
-                address.setStreet(in.nextLine());
+                address.setStreet(in.nextLine().trim());
                 break;
             } catch (RuntimeException e) {
                 TryAgain.printErrors(shouldPrintHints, e);
