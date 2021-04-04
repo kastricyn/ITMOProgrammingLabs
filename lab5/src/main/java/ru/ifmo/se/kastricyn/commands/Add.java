@@ -1,7 +1,8 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.data.Ticket;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class Add extends AbstractCommand {
 
     @Override
     public void execute(String ... args) {
-        Ticket t = Ticket.getTicket(in, shouldPrintHints);
+        Ticket t = new Ticket(new Console(in, shouldPrintHints));
         ticketCollection.add(t);
         System.out.println("В коллекцю добавлен объект " + t);
     }

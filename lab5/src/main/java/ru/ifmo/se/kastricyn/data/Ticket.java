@@ -1,24 +1,29 @@
-package ru.ifmo.se.kastricyn.ticket;
+package ru.ifmo.se.kastricyn.data;
 
-import ru.ifmo.se.kastricyn.TryAgain;
+import ru.ifmo.se.kastricyn.LocalDateAdapter;
+import ru.ifmo.se.kastricyn.utility.Console;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.Scanner;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;
-    public static final double DISCOUNT_MIN_HARD = 0;
+    public static final double DISCOUNT_MIN = 0;
     public static final double DISCOUNT_MAX = 100;
 
     private static long nextId = 1;
 
+    @XmlAttribute
     private final Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
+
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private final LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Integer price; //Поле может быть null, Значение поля должно быть больше 0
     private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
@@ -52,65 +57,37 @@ public class Ticket implements Comparable<Ticket> {
         creationDate = LocalDate.now();
     }
 
-    public static Ticket getTicket(Scanner in, boolean shouldPrintHints) {
-        Ticket ticket = new Ticket();
-        if (shouldPrintHints) {
+    public Ticket(Console console) {
+        id = nextId++;
+        creationDate = LocalDate.now();
+        if (console.isShouldPrintHints()) {
             System.out.println("Создаём объект типа \"Ticket\":");
-            System.out.println("Введите пожалуйста имя:");
+            System.out.println("Поле имя:");
         }
-        while (true)
-            try {
-                ticket.setName(in.nextLine().trim());
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        setName(console.getString());
 
-       ticket.setCoordinates(Coordinates.getCoordinates(in, shouldPrintHints));
+        setCoordinates(new Coordinates(console));
 
-        if (shouldPrintHints)
-            System.out.println("Возвращаемся к объекту типа \"Ticket\":\n Введите поле price:");
-        while (true)
-            try {
-                String t = in.nextLine().trim();
-                ticket.setPrice(t.equals("") ? null : Integer.parseInt(t));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        if (console.isShouldPrintHints())
+            System.out.println("Возвращаемся к объекту типа \"Ticket\":\n Поле price:");
+        setPrice(console.getInt(PRICE_MIN, Integer.MAX_VALUE, true));
 
-        if (shouldPrintHints)
-            System.out.println("Введите поле discount:");
+        if (console.isShouldPrintHints())
+            System.out.println("Поле discount:");
 
-        while (true)
-            try {
-                ticket.setDiscount(Double.parseDouble(in.nextLine().trim()));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        setDiscount(console.getDouble(DISCOUNT_MIN, DISCOUNT_MAX));
 
-        if (shouldPrintHints) {
-            String str = Arrays.toString(TicketType.values());
-            str = str.substring(1, str.length() - 1);
-            System.out.println("Введите поле type (возможны следующие варианты: " + str + " ):\n");
-        }
-        while (true)
-            try {
-                String t = in.nextLine().trim();
-                ticket.setType(t.equals("") ? null : TicketType.valueOf(t));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        if (console.isShouldPrintHints())
+            System.out.println("Поле type:");
 
-        ticket.setVenue(Venue.getVenue(in, shouldPrintHints));
+        setType(console.getEnumConstant(TicketType.class, true));
 
-        if (shouldPrintHints) {
-            System.out.println("Возвращаемся к объекту типа \"Ticket\":\n создан объект: " + ticket);
+        setVenue(new Venue(console));
+
+        if (console.isShouldPrintHints()) {
+            System.out.println("Возвращаемся к объекту типа \"Ticket\":\n создан объект: " + this);
         }
 
-        return ticket;
     }
 
 
@@ -156,13 +133,14 @@ public class Ticket implements Comparable<Ticket> {
         return nextId;
     }
 
-    @XmlAttribute
     public long getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }
@@ -206,8 +184,8 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public Ticket setDiscount(double discount) {
-        if (discount <= DISCOUNT_MIN_HARD || discount > DISCOUNT_MAX)
-            throw new IllegalArgumentException("Значение поля discount должно быть больше " + DISCOUNT_MIN_HARD + ", Максимальное значение поля: " + DISCOUNT_MAX);
+        if (discount < DISCOUNT_MIN || discount > DISCOUNT_MAX)
+            throw new IllegalArgumentException("Значение поля discount должно быть больше " + DISCOUNT_MIN + ", Максимальное значение поля: " + DISCOUNT_MAX);
         this.discount = discount;
         return this;
     }

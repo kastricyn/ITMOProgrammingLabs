@@ -1,7 +1,8 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.data.Ticket;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class Update extends AbstractCommand{
         //todo more information exceptions
         try {
             long id = Long.parseLong(args[0]);
-            Ticket t = Ticket.getTicket(in, shouldPrintHints);
+            Ticket t = new Ticket(new Console(in, shouldPrintHints));
             ticketCollection.update(id, t);
         } catch (Exception e){
             System.out.println("Команда не удалась");

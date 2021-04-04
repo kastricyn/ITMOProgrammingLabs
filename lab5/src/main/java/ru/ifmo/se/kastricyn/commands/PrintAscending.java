@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.data.Ticket;
 
 import java.util.Iterator;
 

@@ -1,7 +1,6 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.Command;
-import ru.ifmo.se.kastricyn.CommandManager;
 
 public abstract class AbstractCommand implements Command {
     final String name;

@@ -1,7 +1,6 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
 
 public class RemoveById extends AbstractCommand {
     private TicketCollection ticketCollection;

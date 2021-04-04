@@ -5,7 +5,6 @@ import ru.ifmo.se.kastricyn.TicketCollection;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import java.io.File;
 
 public class Save extends AbstractCommand{
     TicketCollection ticketCollection;

@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.commands;
 
-import ru.ifmo.se.kastricyn.Command;
 import ru.ifmo.se.kastricyn.TicketCollection;
 
 public class Info extends AbstractCommand {

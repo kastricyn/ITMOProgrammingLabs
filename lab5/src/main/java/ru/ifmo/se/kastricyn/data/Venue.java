@@ -1,18 +1,16 @@
-package ru.ifmo.se.kastricyn.ticket;
+package ru.ifmo.se.kastricyn.data;
 
-import ru.ifmo.se.kastricyn.TryAgain;
+import ru.ifmo.se.kastricyn.utility.Console;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Arrays;
+import javax.xml.bind.annotation.*;
 import java.util.Objects;
-import java.util.Scanner;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Venue implements Comparable<Venue> {
     public static final int CAPACITY_MIN = 1;
     private static long nextId = 1; //id не может быть меньше 1
 
+    @XmlAttribute
     private final long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private int capacity; //Значение поля должно быть больше 0
@@ -41,49 +39,26 @@ public class Venue implements Comparable<Venue> {
         id = nextId++;
     }
 
-    public static Venue getVenue(Scanner in, boolean shouldPrintHints) {
-        Venue venue = new Venue();
-        if (shouldPrintHints) {
+    public Venue(Console console) {
+        id = nextId++;
+        if (console.isShouldPrintHints()) {
             System.out.println("Создаём объект типа \"Venue\":");
-            System.out.println("Введите пожалуйста имя:");
+            System.out.println("Поле имя:");
         }
-        while (true)
-            try {
-                venue.setName(in.nextLine().trim());
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        setName(console.getString());
 
-        if (shouldPrintHints)
-            System.out.println("Введите поле capacity:");
-        while (true)
-            try {
-                venue.setCapacity(Integer.parseInt(in.nextLine().trim()));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        if (console.isShouldPrintHints())
+            System.out.println("Поле capacity:");
+        setCapacity(console.getInt(CAPACITY_MIN));
 
-        if (shouldPrintHints) {
-            String str = Arrays.toString(VenueType.values());
-            str = str.substring(1, str.length() - 1);
-            System.out.println("Введите поле type (возможны следующие варианты: " + str + " ):\n");
-        }
-        while (true)
-            try {
-                venue.setType(VenueType.valueOf(in.nextLine().trim()));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        if (console.isShouldPrintHints())
+            System.out.println("Поле type:");
 
-        venue.setAddress(Address.getAddress(in, shouldPrintHints));
+        setType(console.getEnumConstant(VenueType.class, false));
+        setAddress(new Address(console));
 
-        if (shouldPrintHints)
-            System.out.println("Создан объект: " + venue);
-
-        return venue;
+        if (console.isShouldPrintHints())
+            System.out.println("Создан объект: " + this);
     }
 
     @Override
@@ -115,7 +90,7 @@ public class Venue implements Comparable<Venue> {
         if (equals(o))
             return 0;
         else
-            return (capacity - o.getCapacity())*type.compareTo(o.getType())*address.compareTo(o.getAddress())*name.compareTo(o.getName());
+            return (capacity - o.getCapacity()) * type.compareTo(o.getType()) * address.compareTo(o.getAddress()) * name.compareTo(o.getName());
     }
 
 
@@ -123,19 +98,23 @@ public class Venue implements Comparable<Venue> {
     public static long getNextAvailableId() {
         return nextId;
     }
-@XmlAttribute
+
     public long getId() {
         return id;
     }
+
     public Address getAddress() {
         return address;
     }
+
     public int getCapacity() {
         return capacity;
     }
+
     public String getName() {
         return name;
     }
+
     public VenueType getType() {
         return type;
     }

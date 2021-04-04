@@ -1,15 +1,8 @@
-package ru.ifmo.se.kastricyn.ticket;
+package ru.ifmo.se.kastricyn.data;
 
-import ru.ifmo.se.kastricyn.TryAgain;
+import ru.ifmo.se.kastricyn.utility.Console;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.IllegalFormatException;
-import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Scanner;
-
 
 public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
@@ -21,37 +14,18 @@ public class Coordinates {
         setX(x).setY(y);
     }
 
-    private Coordinates() {
-    }
-
-    public static Coordinates getCoordinates(Scanner in, boolean shouldPrintHints) {
-        Coordinates coordinates = new Coordinates();
-        if (shouldPrintHints) {
+    public Coordinates(Console console) {
+        if (console.isShouldPrintHints()) {
             System.out.println("Создаём объект типа \"Coordinates\":");
-            System.out.println("Введите пожалуйста поле x:");
+            System.out.println("Поле x:");
         }
-        long x = 0;
-        while (true)
-            try {
-                coordinates.setX(Long.parseLong(in.nextLine().trim()));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
+        setX(console.getLong(X_MIN));
+        if (console.isShouldPrintHints())
+            System.out.println("Поле y:");
+        setY(console.getFloat());
 
-        if (shouldPrintHints)
-            System.out.println("Введите число y с плавающей точкой:");
-        while (true)
-            try {
-                coordinates.setY(Float.parseFloat(in.nextLine().trim()));
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
-
-        if (shouldPrintHints)
-            System.out.println("Создан объект: " + coordinates);
-        return coordinates;
+        if (console.isShouldPrintHints())
+            System.out.println("Создан объект: " + this);
     }
 
     @Override
@@ -79,6 +53,7 @@ public class Coordinates {
     public Float getY() {
         return y;
     }
+
     public Long getX() {
         return x;
     }
@@ -87,7 +62,7 @@ public class Coordinates {
 
     public Coordinates setX(Long x) {
         if (x == null)
-            throw new NullPointerException("x не может быть null");
+            throw new NullPointerException();
         if (x < X_MIN)
             throw new IllegalArgumentException("Значение поля x должно быть больше " + (X_MIN - 1));
         this.x = x;

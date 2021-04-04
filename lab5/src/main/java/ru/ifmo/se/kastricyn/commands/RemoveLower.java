@@ -1,7 +1,8 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.data.Ticket;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Iterator;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class RemoveLower extends  AbstractCommand{
 
     @Override
     public void execute(String... args) {
-        Ticket minTicket = Ticket.getTicket(in, shouldPrintHints);
+        Ticket minTicket = new Ticket(new Console(in, shouldPrintHints));
         Iterator<Ticket> iterator = ticketCollection.iterator();
         Ticket t;
         int i = 0;

@@ -1,39 +1,35 @@
-package ru.ifmo.se.kastricyn.ticket;
+package ru.ifmo.se.kastricyn.data;
 
-import ru.ifmo.se.kastricyn.TryAgain;
+import ru.ifmo.se.kastricyn.exceptions.EmptyStringException;
+import ru.ifmo.se.kastricyn.utility.Console;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
-import java.util.Scanner;
-public class Address implements Comparable<Address>{
+
+public class Address implements Comparable<Address> {
     private String street; //Строка не может быть пустой, Поле может быть null
 
+    /**
+     * Конструктор Address
+     *
+     * @param street строка содержащая улицу
+     */
     public Address(String street) {
         setStreet(street);
     }
 
-    private Address() {
-    }
-
-    public static Address getAddress(Scanner in, boolean shouldPrintHints) {
-        Address address = new Address();
-        if (shouldPrintHints) {
+    /**
+     * Конструктор Address
+     *
+     * @param console объект типа Console, методами которго будут получены данные от пользователя с учётом ограничений
+     */
+    public Address(Console console) {
+        if (console.isShouldPrintHints()) {
             System.out.println("Создаём объект типа \"Address\":");
             System.out.println("Введите пожалуйста улицу:");
         }
-        while (true)
-            try {
-                address.setStreet(in.nextLine().trim());
-                break;
-            } catch (RuntimeException e) {
-                TryAgain.printErrors(shouldPrintHints, e);
-            }
-
-        if (shouldPrintHints)
-            System.out.println("Создан объект: " + address);
-
-        return address;
+        street = console.getString(true);
+        if (console.isShouldPrintHints())
+            System.out.println("Создан объект: " + this);
     }
 
     @Override
@@ -55,15 +51,14 @@ public class Address implements Comparable<Address>{
                 "street='" + street + '\'' +
                 '}';
     }
+
     public String getStreet() {
         return street;
     }
 
     public Address setStreet(String street) {
-        if (street == null)
-            throw new NullPointerException("Поле не может быть null");
-        if (street.equals(""))
-            throw new IllegalArgumentException("street не может быть пустым");
+        if (street != null && street.isEmpty())
+            throw new EmptyStringException();
         this.street = street;
         return this;
     }

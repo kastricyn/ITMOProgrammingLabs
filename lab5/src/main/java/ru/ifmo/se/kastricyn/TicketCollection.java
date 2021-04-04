@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.commands.Save;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.data.Ticket;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -22,20 +23,18 @@ import java.util.function.Consumer;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TicketCollection {
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
+    private LocalDate initDate;
+    private CollectionState state;
     private ArrayDeque<Ticket> tickets;
 
     @XmlTransient
     private File file;
-    private LocalDate initDate;
-    private CollectionState state;
-
-    {
-        state = CollectionState.JUST_CREATED;
-        initDate = LocalDate.now();
-    }
 
     private TicketCollection() {
         tickets = new ArrayDeque<>();
+        state = CollectionState.JUST_CREATED;
+        initDate = LocalDate.now();
     }
 
     public static TicketCollection getTicketCollection(Path p) throws JAXBException, AccessDeniedException {
@@ -43,7 +42,7 @@ public class TicketCollection {
                 throw new AccessDeniedException(p.toString());
             JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            TicketCollection ticketCollection =  (TicketCollection) unmarshaller.unmarshal(p.toFile());
+            TicketCollection ticketCollection = (TicketCollection) unmarshaller.unmarshal(p.toFile());
             ticketCollection.file = p.toFile();
             return ticketCollection;
     }

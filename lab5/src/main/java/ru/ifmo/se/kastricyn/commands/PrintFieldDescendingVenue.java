@@ -1,12 +1,10 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Venue;
+import ru.ifmo.se.kastricyn.data.Venue;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 
 public class PrintFieldDescendingVenue extends AbstractCommand{
     private  TicketCollection ticketCollection;

@@ -1,6 +1,4 @@
-package ru.ifmo.se.kastricyn.ticket;
-
-import javax.xml.bind.annotation.XmlRootElement;
+package ru.ifmo.se.kastricyn.data;
 
 
 public enum VenueType {

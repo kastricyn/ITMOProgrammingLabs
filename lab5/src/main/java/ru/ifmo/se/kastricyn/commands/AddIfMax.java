@@ -1,7 +1,8 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
+import ru.ifmo.se.kastricyn.data.Ticket;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Iterator;
 import java.util.Scanner;
@@ -26,7 +27,7 @@ public class AddIfMax extends AbstractCommand {
         //получим наибольший ticket
         Iterator<Ticket> iterator = ticketCollection.iterator();
         Ticket t;
-        Ticket maxTicket = Ticket.getTicket(in, shouldPrintHints);
+        Ticket maxTicket = new Ticket(new Console(in, shouldPrintHints));
         do {
             t = iterator.next();
             if (t.compareTo(maxTicket) >= 0){

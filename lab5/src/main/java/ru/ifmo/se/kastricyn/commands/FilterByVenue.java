@@ -1,8 +1,9 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-import ru.ifmo.se.kastricyn.ticket.Ticket;
-import ru.ifmo.se.kastricyn.ticket.Venue;
+import ru.ifmo.se.kastricyn.data.Ticket;
+import ru.ifmo.se.kastricyn.data.Venue;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Iterator;
 import java.util.Scanner;
@@ -21,7 +22,7 @@ public class FilterByVenue extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        Venue venue = Venue.getVenue(in, shouldPrintHints);
+        Venue venue = new Venue(new Console(in, shouldPrintHints)); //todo change all commands in, shouldPrintHints -> CONSOLE
         Iterator<Ticket> iterator = ticketCollection.iterator();
         while(iterator.hasNext()){
             Ticket ticket = iterator.next();

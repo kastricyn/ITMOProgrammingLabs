@@ -1,7 +1,5 @@
 package ru.ifmo.se.kastricyn;
 
-import ru.ifmo.se.kastricyn.ticket.*;
-
 import javax.xml.bind.JAXBException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -19,7 +17,7 @@ public class Main {
         }
 
         Path p = Paths.get(args[0]);
-        TicketCollection tickets;
+        TicketCollection tickets = null;
 
         try {
             if (Files.exists(p))
@@ -34,14 +32,9 @@ public class Main {
                     "\n После исправления повторите попытку.");
         } catch (AccessDeniedException e) {
             System.out.println("Недостаточно прав на чтение файла, повторите попыку позже.");
-            return;
         }
 
-
-//        if(!Files.isWritable(Paths.get(args[0])))
-//            System.out.println("Файл доступен только на чтение.");
-//
-//        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
 //
 //
 //
@@ -49,7 +42,7 @@ public class Main {
 //                new Venue("ven", 45, VenueType.CINEMA, new Address("dfs")));
 //
 //        tickets.add(t);
-//        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, in, true);
-//        consoleCommandManager.run();
+        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, in, true);
+        consoleCommandManager.run();
     }
 }

@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.ticket;
+package ru.ifmo.se.kastricyn.data;
 
 public enum TicketType {
     USUAL,

@@ -40,8 +40,8 @@ public class CommandManager {
         return cm;
     }
 
-    public AbstractCommand addIfAbsent(AbstractCommand cmd) {
-        return commands.putIfAbsent(cmd.getName(), cmd);
+    public void addIfAbsent(AbstractCommand cmd) {
+        commands.putIfAbsent(cmd.getName(), cmd);
     }
 
     public HashMap<String, AbstractCommand> getCommands() {
@@ -55,7 +55,7 @@ public class CommandManager {
         AbstractCommand command = commands.get(r[0].toLowerCase());
         if (command == null)
             throw new IllegalArgumentException("Такой команды не существует");
-        command.execute(r[1]);
+        command.execute(r.length > 1 ? r[1] : "");
     }
 
     public void run() {
