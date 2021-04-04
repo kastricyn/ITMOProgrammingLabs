@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class Address implements Comparable<Address> {
     private String street; //Строка не может быть пустой, Поле может быть null
+    private Address(){} //for working JAXB
 
     /**
      * Конструктор Address

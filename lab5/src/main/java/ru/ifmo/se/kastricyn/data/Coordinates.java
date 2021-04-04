@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.data;
 
 import ru.ifmo.se.kastricyn.utility.Console;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import java.util.Objects;
 
 public class Coordinates {
@@ -9,6 +10,7 @@ public class Coordinates {
     private Float y; //Поле не может быть null
 
     public static final long X_MIN = -502;
+    private Coordinates(){}//for working JAXB
 
     public Coordinates(Long x, Float y) {
         setX(x).setY(y);

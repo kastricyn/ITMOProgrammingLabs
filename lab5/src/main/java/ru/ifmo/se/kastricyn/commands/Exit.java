@@ -16,25 +16,16 @@ public class Exit extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        switch (ticketCollection.getState()) {
-            case JUST_CREATED:
-                System.out.println("Коллекция была только что создана, но не сохранена в файл, вы уверены, что хотите выйти?");
-                exitWithConfirmation();
-                break;
-            case EDITED:
-                System.out.println("Коллекция была изменена после последнего сохранения, вы уверены, что хотите выйти?");
-                exitWithConfirmation();
-                break;
-            case SAVED:
-                System.exit(0);
-        }
-
-
+        if (ticketCollection.isSaved()) {
+            System.out.println("Коллекция была изменена, вы уверены, что хотите выйти без сохранения?");
+            exitWithConfirmation();
+        } else
+            System.exit(0);
     }
 
     private void exitWithConfirmation() {
-        char answ = in.nextLine().trim().charAt(0);
-        if (answ == 'y' || answ == 'Y')
+        System.out.println("Для подтверждения введите y, для ");
+        if (in.nextLine().trim().toUpperCase().charAt(0) == 'Y')
             System.exit(0);
     }
 }

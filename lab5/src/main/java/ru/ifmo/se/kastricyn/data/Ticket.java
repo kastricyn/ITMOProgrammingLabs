@@ -106,10 +106,11 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket o) {
-        if (equals(o))
-            return 0;
-        else
-            return (int) (venue.compareTo(o.getVenue()) * (100 - discount));
+//        if (equals(o))
+//            return 0;
+//        else
+//            return (int) (venue.compareTo(o.getVenue()) * (100 - discount));
+        return name.compareTo(o.getName());
     }
 
     @Override
@@ -191,6 +192,8 @@ public class Ticket implements Comparable<Ticket> {
     }
 
     public Ticket setPrice(Integer price) {
+        if (price == null)
+            this.price = null;
         if (price < PRICE_MIN)
             throw new IllegalArgumentException("Значение поля price должно быть больше" + (PRICE_MIN - 1));
         this.price = price;

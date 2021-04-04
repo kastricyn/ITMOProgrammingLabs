@@ -7,7 +7,7 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class RemoveLower extends  AbstractCommand{
+public class RemoveLower extends AbstractCommand {
     private Scanner in;
     private boolean shouldPrintHints;
     private TicketCollection ticketCollection;
@@ -27,11 +27,13 @@ public class RemoveLower extends  AbstractCommand{
         int i = 0;
         while (iterator.hasNext()) {
             t = iterator.next();
-            if (t.compareTo(minTicket)<0) {
+            if (t.compareTo(minTicket) < 0) {
                 iterator.remove();
                 i++;
             }
         }
         System.out.println("ИЗ коллекции удалено " + i + " объектов.");
+        if (i > 0)
+            ticketCollection.setSaved(false);
     }
 }

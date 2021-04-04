@@ -49,12 +49,14 @@ public class CommandManager {
     }
 
     public void execute(String commandNameWithArgs) {
-        if (commandNameWithArgs == null)
-            throw new NullPointerException();
-        String[] r = commandNameWithArgs.split("\\s", 2);
+        if (commandNameWithArgs == null || commandNameWithArgs.isEmpty())
+            return;
+        String[] r = commandNameWithArgs.trim().split("\\s", 2);
         AbstractCommand command = commands.get(r[0].toLowerCase());
-        if (command == null)
-            throw new IllegalArgumentException("Такой команды не существует");
+        if (command == null) {
+            System.out.println("Такой команды не существует. Для вызова справки введите: help");
+            return;
+        }
         command.execute(r.length > 1 ? r[1] : "");
     }
 

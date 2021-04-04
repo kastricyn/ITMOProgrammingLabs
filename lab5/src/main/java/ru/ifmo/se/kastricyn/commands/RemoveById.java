@@ -4,6 +4,7 @@ import ru.ifmo.se.kastricyn.TicketCollection;
 
 public class RemoveById extends AbstractCommand {
     private TicketCollection ticketCollection;
+
     public RemoveById(TicketCollection ticketCollection) {
         super("remove_by_id", "remove_by_id id \n - удалить элемент из коллекции по его id");
         this.ticketCollection = ticketCollection;
@@ -14,7 +15,8 @@ public class RemoveById extends AbstractCommand {
         //todo write more information exceptions:не правильный формат аргумента, нет эллемента,
         try {
             ticketCollection.remove(Long.parseLong(args[0]));
-        } catch (Exception e){
+            ticketCollection.setSaved(false);
+        } catch (Exception e) {
             System.out.println("Команда не выполнена, проверьте правильность аргументов.");
         }
     }

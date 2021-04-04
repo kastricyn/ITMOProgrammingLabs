@@ -25,7 +25,8 @@ import java.util.function.Consumer;
 public class TicketCollection {
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate initDate;
-    private CollectionState state;
+    @XmlTransient
+    private boolean saved;
     private ArrayDeque<Ticket> tickets;
 
     @XmlTransient
@@ -33,7 +34,7 @@ public class TicketCollection {
 
     private TicketCollection() {
         tickets = new ArrayDeque<>();
-        state = CollectionState.JUST_CREATED;
+        saved = false;
         initDate = LocalDate.now();
     }
 
@@ -44,6 +45,7 @@ public class TicketCollection {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             TicketCollection ticketCollection = (TicketCollection) unmarshaller.unmarshal(p.toFile());
             ticketCollection.file = p.toFile();
+            ticketCollection.saved = false;
             return ticketCollection;
     }
 
@@ -145,12 +147,11 @@ public class TicketCollection {
         return initDate;
     }
 
-
-    public CollectionState getState() {
-        return state;
+    public boolean isSaved() {
+        return saved;
     }
 
-    public void setState(CollectionState state) {
-        this.state = state;
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 }

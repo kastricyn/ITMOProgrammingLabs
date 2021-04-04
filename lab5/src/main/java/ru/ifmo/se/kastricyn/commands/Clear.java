@@ -12,6 +12,8 @@ public class Clear extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(!ticketCollection.isEmpty())
+            ticketCollection.setSaved(false);
         ticketCollection.clear();
     }
 }

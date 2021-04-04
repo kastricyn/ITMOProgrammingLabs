@@ -24,9 +24,10 @@ public class Update extends AbstractCommand{
             long id = Long.parseLong(args[0]);
             Ticket t = new Ticket(new Console(in, shouldPrintHints));
             ticketCollection.update(id, t);
+            System.out.println("Объект обновлён");
+            ticketCollection.setSaved(false);
         } catch (Exception e){
             System.out.println("Команда не удалась");
         }
-        System.out.println("Объект обнавлён");
     }
 }

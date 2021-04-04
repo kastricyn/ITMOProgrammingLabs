@@ -15,7 +15,7 @@ public class Help extends AbstractCommand {
     @Override
     public void execute(String... args) {
         LinkedList<AbstractCommand> commands = new LinkedList<>(commandManager.getCommands().values());
-        Collections.sort(commands, (x1, x2) -> x1.getName().compareTo(x2.getName()));
+        Collections.sort(commands, Comparator.comparing(AbstractCommand::getName));
         commands.forEach((v) -> System.out.println(v.getDescription()));
     }
 }

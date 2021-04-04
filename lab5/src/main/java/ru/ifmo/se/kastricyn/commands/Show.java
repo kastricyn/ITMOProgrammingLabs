@@ -12,6 +12,8 @@ public class Show extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(ticketCollection.isEmpty())
+            System.out.println("Коллекция пуста");
         ticketCollection.forEach(System.out::println);
     }
 }

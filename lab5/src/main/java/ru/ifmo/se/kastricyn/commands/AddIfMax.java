@@ -13,7 +13,7 @@ public class AddIfMax extends AbstractCommand {
     private TicketCollection ticketCollection;
 
     public AddIfMax(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
-        super("add", "add {element} \n - добавить новый элемент в коллекцию");
+        super("add_if_max", "add_if_max {element} \n - добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции");
         this.in = in;
         this.shouldPrintHints = shouldPrintHints;
         this.ticketCollection = ticketCollection;
@@ -21,8 +21,10 @@ public class AddIfMax extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        if (ticketCollection.isEmpty())
-            throw new RuntimeException("Коллекция пуста (наибольшего эллемента нет), используйте команду add.");
+        if (ticketCollection.isEmpty()) {
+            System.out.println("Коллекция пуста (=> наибольшего эллемента нет), используйте команду add.");
+            return;
+        }
 
         //получим наибольший ticket
         Iterator<Ticket> iterator = ticketCollection.iterator();
@@ -30,12 +32,13 @@ public class AddIfMax extends AbstractCommand {
         Ticket maxTicket = new Ticket(new Console(in, shouldPrintHints));
         do {
             t = iterator.next();
-            if (t.compareTo(maxTicket) >= 0){
+            if (t.compareTo(maxTicket) <= 0) {
                 System.out.println("Коллекция не изменена (данный элемент не больше наибольшего).");
                 return;
             }
         } while (iterator.hasNext());
         ticketCollection.add(t);
         System.out.println("В коллекцю добавлен объект " + t);
+        ticketCollection.setSaved(false);
     }
 }
