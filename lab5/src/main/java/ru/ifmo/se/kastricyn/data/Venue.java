@@ -41,23 +41,23 @@ public class Venue implements Comparable<Venue> {
 
     public Venue(Console console) {
         id = nextId++;
-        if (console.isShouldPrintHints()) {
+        if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Venue\":");
             System.out.println("Поле имя:");
         }
         setName(console.getString());
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Поле capacity:");
         setCapacity(console.getInt(CAPACITY_MIN));
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Поле type:");
 
         setType(console.getEnumConstant(VenueType.class, false));
         setAddress(new Address(console));
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Создан объект: " + this);
     }
 

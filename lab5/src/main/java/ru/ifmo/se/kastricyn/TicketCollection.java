@@ -6,10 +6,7 @@ import ru.ifmo.se.kastricyn.data.Ticket;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +21,7 @@ import java.util.function.Consumer;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TicketCollection {
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
+    @XmlAttribute
     private LocalDate initDate;
     @XmlTransient
     private boolean saved;
@@ -34,7 +32,7 @@ public class TicketCollection {
 
     private TicketCollection() {
         tickets = new ArrayDeque<>();
-        saved = false;
+        saved = true;
         initDate = LocalDate.now();
     }
 
@@ -106,6 +104,14 @@ public class TicketCollection {
                 return t;
         }
         throw new IllegalArgumentException("В коллекции нет элемента с таким индексом");
+    }
+
+    public boolean hasElement(long id){
+        for (Ticket t : tickets) {
+            if (t.getId() == id)
+                return true;
+        }
+        return false;
     }
 
     public Ticket peekFirst() {

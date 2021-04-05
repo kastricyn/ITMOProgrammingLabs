@@ -24,12 +24,12 @@ public class Address implements Comparable<Address> {
      * @param console объект типа Console, методами которго будут получены данные от пользователя с учётом ограничений
      */
     public Address(Console console) {
-        if (console.isShouldPrintHints()) {
+        if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Address\":");
             System.out.println("Введите пожалуйста улицу:");
         }
         street = console.getString(true);
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Создан объект: " + this);
     }
 

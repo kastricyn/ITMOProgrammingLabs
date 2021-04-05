@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn;
 
+import ru.ifmo.se.kastricyn.utility.Console;
+
 import javax.xml.bind.JAXBException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -42,7 +44,7 @@ public class Main {
 //                new Venue("ven", 45, VenueType.CINEMA, new Address("dfs")));
 //
 //        tickets.add(t);
-        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, in, true);
+        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets,new Console(in));
         consoleCommandManager.run();
     }
 }

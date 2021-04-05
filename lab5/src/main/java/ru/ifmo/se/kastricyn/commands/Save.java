@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.commands;
 
-import ru.ifmo.se.kastricyn.CollectionState;
 import ru.ifmo.se.kastricyn.TicketCollection;
 
 import javax.xml.bind.JAXBContext;

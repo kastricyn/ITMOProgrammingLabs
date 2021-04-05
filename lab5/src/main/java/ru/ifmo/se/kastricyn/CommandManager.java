@@ -1,6 +1,7 @@
 package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.commands.*;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -9,23 +10,24 @@ public class CommandManager {
     private HashMap<String, AbstractCommand> commands;
 
     public final TicketCollection ticketCollection;
-    public final Scanner in;
-    public final boolean shouldPrintHints;
+    public final Console console;
 
-    public CommandManager(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
+    public CommandManager(TicketCollection ticketCollection, Console console) {
         commands = new HashMap<>();
         this.ticketCollection = ticketCollection;
-        this.in = in;
-        this.shouldPrintHints = shouldPrintHints;
+        this.console = console;
     }
 
-    public static CommandManager createCommandManager(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
-        CommandManager cm = new CommandManager(ticketCollection, in, shouldPrintHints);
+    public static CommandManager createCommandManager(TicketCollection ticketCollection, Console console) {
+        Scanner in = console.getIn();
+        boolean shouldPrintHints = console.isInteractiveMode();
+
+        CommandManager cm = new CommandManager(ticketCollection, console);
         cm.addIfAbsent(new Add(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new AddIfMax(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Clear(ticketCollection));
         cm.addIfAbsent(new ExecuteScript(ticketCollection));
-        cm.addIfAbsent(new Exit(ticketCollection, in));
+        cm.addIfAbsent(new Exit(ticketCollection, console));
         cm.addIfAbsent(new FilterByVenue(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Head(ticketCollection));
         cm.addIfAbsent(new Help(cm));
@@ -36,7 +38,7 @@ public class CommandManager {
         cm.addIfAbsent(new RemoveLower(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Save(ticketCollection));
         cm.addIfAbsent(new Show(ticketCollection));
-        cm.addIfAbsent(new Update(ticketCollection, in, shouldPrintHints));
+        cm.addIfAbsent(new Update(ticketCollection, console));
         return cm;
     }
 
@@ -49,8 +51,6 @@ public class CommandManager {
     }
 
     public void execute(String commandNameWithArgs) {
-        if (commandNameWithArgs == null || commandNameWithArgs.isEmpty())
-            return;
         String[] r = commandNameWithArgs.trim().split("\\s", 2);
         AbstractCommand command = commands.get(r[0].toLowerCase());
         if (command == null) {
@@ -61,8 +61,11 @@ public class CommandManager {
     }
 
     public void run() {
-        while (in.hasNext()) {
-            execute(in.nextLine());
+        while (console.hasNext()) {
+            String t = console.nextLine().trim();
+            if (t.isEmpty())
+                continue;
+            execute(t);
         }
     }
 }

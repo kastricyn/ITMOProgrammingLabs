@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.CommandManager;
 import ru.ifmo.se.kastricyn.TicketCollection;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,31 +24,33 @@ public class ExecuteScript extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        if(args.length!=1){
-            System.out.println("Данная команда должна принимать один аргумет - путь до файла.");return;}
+        if (args.length != 1) {
+            System.out.println("Данная команда должна принимать один аргумет - путь до файла.");
+            return;
+        }
 
         Path path = Paths.get(args[0]);
-        if(Files.notExists(path)) {
+        if (Files.notExists(path)) {
             System.out.println("Файл не найден.");
             return;
         }
-        if(!Files.isReadable(path)) {
+        if (!Files.isReadable(path)) {
             System.out.println("Недостаточно прав для чтения");
             return;
         }
 
-        try (Scanner scriptIn = new Scanner(path)){
+        try (Scanner scriptIn = new Scanner(path)) {
             if (openedScripts.search(path) > -1) {
                 System.out.println("Рекурсивное выполнение " + args[0] + " не поддерживается");
                 return;
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
-            CommandManager cm = CommandManager.createCommandManager(ticketCollection, scriptIn, false);
+            CommandManager cm = CommandManager.createCommandManager(ticketCollection, new Console(scriptIn, false));
             cm.run();
             openedScripts.pop();
         } catch (IOException e) {
             System.out.println("Что-то пошло не так. Не удалось прочитать файл.");
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             System.err.println("Выполнение скрипта не удалось завершить правильно.");
         }
     }

@@ -1,31 +1,24 @@
 package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
-
-import java.util.Scanner;
+import ru.ifmo.se.kastricyn.utility.Console;
 
 public class Exit extends AbstractCommand {
     TicketCollection ticketCollection;
-    Scanner in;
+    Console console;
 
-    public Exit(TicketCollection ticketCollection, Scanner in) {
+    public Exit(TicketCollection ticketCollection, Console console) {
         super("exit", "exit \n - завершить программу (без сохранения в файл)");
         this.ticketCollection = ticketCollection;
-        this.in = in;
+        this.console = console;
     }
 
     @Override
     public void execute(String... args) {
-        if (ticketCollection.isSaved()) {
-            System.out.println("Коллекция была изменена, вы уверены, что хотите выйти без сохранения?");
-            exitWithConfirmation();
+        if (console.isInteractiveMode() && !ticketCollection.isSaved()) {
+            if (console.requestConfirmation("Вы действительно хотите выйти без сохранения")) System.exit(0);
         } else
             System.exit(0);
     }
 
-    private void exitWithConfirmation() {
-        System.out.println("Для подтверждения введите y, для ");
-        if (in.nextLine().trim().toUpperCase().charAt(0) == 'Y')
-            System.exit(0);
-    }
 }

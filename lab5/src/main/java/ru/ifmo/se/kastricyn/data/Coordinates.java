@@ -2,7 +2,6 @@ package ru.ifmo.se.kastricyn.data;
 
 import ru.ifmo.se.kastricyn.utility.Console;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import java.util.Objects;
 
 public class Coordinates {
@@ -17,16 +16,16 @@ public class Coordinates {
     }
 
     public Coordinates(Console console) {
-        if (console.isShouldPrintHints()) {
+        if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Coordinates\":");
             System.out.println("Поле x:");
         }
         setX(console.getLong(X_MIN));
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Поле y:");
         setY(console.getFloat());
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Создан объект: " + this);
     }
 

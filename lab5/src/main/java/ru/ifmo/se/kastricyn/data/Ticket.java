@@ -60,7 +60,7 @@ public class Ticket implements Comparable<Ticket> {
     public Ticket(Console console) {
         id = nextId++;
         creationDate = LocalDate.now();
-        if (console.isShouldPrintHints()) {
+        if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Ticket\":");
             System.out.println("Поле имя:");
         }
@@ -68,23 +68,23 @@ public class Ticket implements Comparable<Ticket> {
 
         setCoordinates(new Coordinates(console));
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Возвращаемся к объекту типа \"Ticket\":\n Поле price:");
         setPrice(console.getInt(PRICE_MIN, Integer.MAX_VALUE, true));
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Поле discount:");
 
         setDiscount(console.getDouble(DISCOUNT_MIN, DISCOUNT_MAX));
 
-        if (console.isShouldPrintHints())
+        if (console.isInteractiveMode())
             System.out.println("Поле type:");
 
         setType(console.getEnumConstant(TicketType.class, true));
 
         setVenue(new Venue(console));
 
-        if (console.isShouldPrintHints()) {
+        if (console.isInteractiveMode()) {
             System.out.println("Возвращаемся к объекту типа \"Ticket\":\n создан объект: " + this);
         }
 

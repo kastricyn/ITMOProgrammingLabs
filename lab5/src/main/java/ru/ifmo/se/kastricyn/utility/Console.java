@@ -1,11 +1,12 @@
 package ru.ifmo.se.kastricyn.utility;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Console {
     private Scanner in;
-    private boolean shouldPrintHints;
+    private boolean interactiveMode;
 
 
     /**
@@ -16,7 +17,7 @@ public class Console {
      */
     public Console(Scanner in, boolean shouldPrintHints) {
         this.in = in;
-        this.shouldPrintHints = shouldPrintHints;
+        this.interactiveMode = shouldPrintHints;
     }
 
     /**
@@ -27,7 +28,7 @@ public class Console {
      */
     public Console(Scanner in) {
         this.in = in;
-        shouldPrintHints = true;
+        interactiveMode = true;
     }
 
     /**
@@ -38,19 +39,24 @@ public class Console {
      * @return строку полученную от пользователя необходимого формата
      */
     public String getString(boolean possibleNull, boolean possibleEmpty) {
-        while (true) {
-            if (shouldPrintHints) {
-                System.out.println("Введите строку");
-                System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+        try {
+            while (true) {
+                if (interactiveMode) {
+                    System.out.println("Введите строку");
+                    System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                }
+                String t = in.nextLine().trim();
+                if (t.isEmpty() && possibleEmpty)
+                    return t;
+                if (t.isEmpty() && possibleNull)
+                    return null;
+                if (!t.isEmpty())
+                    return t;
             }
-            String t = in.nextLine().trim();
-            if (t.isEmpty() && possibleEmpty)
-                return t;
-            if (t.isEmpty() && possibleNull)
-                return null;
-            if (!t.isEmpty())
-                return t;
+        } catch (NoSuchElementException e) {
+            System.exit(0);
         }
+        return null;
     }
 
     /**
@@ -81,23 +87,28 @@ public class Console {
      * @return null <code>null||</code> объект типа Long
      */
     public Long getLong(long min, long max, boolean possibleNull) {
-        while (true) {
-            if (shouldPrintHints) {
-                System.out.println("Введите целое число в границах [" + min + "; " + max + "]");
-                System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
-            }
-            String t = in.nextLine().trim();
-            if (t.isEmpty() && possibleNull)
-                return null;
-            try {
-                Long l = Long.parseLong(t);
-                if (l < min || l > max)
+        try {
+            while (true) {
+                if (interactiveMode) {
+                    System.out.println("Введите целое число в границах [" + min + "; " + max + "]");
+                    System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                }
+                String t = in.nextLine().trim();
+                if (t.isEmpty() && possibleNull)
+                    return null;
+                try {
+                    Long l = Long.parseLong(t);
+                    if (l < min || l > max)
+                        System.out.println("Введённые данные не корректны");
+                    else return l;
+                } catch (NumberFormatException e) {
                     System.out.println("Введённые данные не корректны");
-                else return l;
-            } catch (NumberFormatException e) {
-                System.out.println("Введённые данные не корректны");
+                }
             }
+        } catch (NoSuchElementException e) {
+            System.exit(0);
         }
+        return null;
     }
 
     /**
@@ -130,7 +141,9 @@ public class Console {
     /**
      * @return примитив типа long
      */
-    public long getLong() { return getLong(Long.MIN_VALUE, Long.MAX_VALUE, false); }
+    public long getLong() {
+        return getLong(Long.MIN_VALUE, Long.MAX_VALUE, false);
+    }
 
 
     /**
@@ -142,23 +155,28 @@ public class Console {
      * @return null <code>null||</code> объект типа Integer
      */
     public Integer getInt(int min, int max, boolean possibleNull) {
-        while (true) {
-            if (shouldPrintHints) {
-                System.out.println("Введите целое число в границах [" + min + "; " + max + "]");
-                System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
-            }
-            String t = in.nextLine().trim();
-            if (t.isEmpty() && possibleNull)
-                return null;
-            try {
-                Integer l = Integer.parseInt(t);
-                if (l < min || l > max)
+        try {
+            while (true) {
+                if (interactiveMode) {
+                    System.out.println("Введите целое число в границах [" + min + "; " + max + "]");
+                    System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                }
+                String t = in.nextLine().trim();
+                if (t.isEmpty() && possibleNull)
+                    return null;
+                try {
+                    Integer l = Integer.parseInt(t);
+                    if (l < min || l > max)
+                        System.out.println("Введённые данные не корректны");
+                    else return l;
+                } catch (NumberFormatException e) {
                     System.out.println("Введённые данные не корректны");
-                else return l;
-            } catch (NumberFormatException e) {
-                System.out.println("Введённые данные не корректны");
+                }
             }
+        } catch (NoSuchElementException e) {
+            System.exit(0);
         }
+        return null;
     }
 
     /**
@@ -167,7 +185,9 @@ public class Console {
      * @param possibleNull можно ли вернуть null
      * @return null <code>null||</code> объект типа Integer
      */
-    public Integer getInt(boolean possibleNull) { return getInt(Integer.MIN_VALUE, Integer.MAX_VALUE, possibleNull); }
+    public Integer getInt(boolean possibleNull) {
+        return getInt(Integer.MIN_VALUE, Integer.MAX_VALUE, possibleNull);
+    }
 
     /**
      * @param min минимальное допустимое значение
@@ -203,31 +223,37 @@ public class Console {
      * @return null <code>null||</code> объект типа Float
      */
     public Float getFloat(float min, float max, boolean possibleNull) {
-        while (true) {
-            if (shouldPrintHints) {
-                System.out.println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
-                System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
-            }
-            String t = in.nextLine().trim();
-            if (t.isEmpty() && possibleNull)
-                return null;
-            try {
-                Float f = Float.parseFloat(t);
-                if (f < min || f > max)
+        try {
+            while (true) {
+                if (interactiveMode) {
+                    System.out.println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
+                    System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                }
+                String t = in.nextLine().trim();
+                if (t.isEmpty() && possibleNull)
+                    return null;
+                try {
+                    Float f = Float.parseFloat(t);
+                    if (f < min || f > max)
+                        System.out.println("Введённые данные не корректны");
+                    else return f;
+                } catch (NumberFormatException e) {
                     System.out.println("Введённые данные не корректны");
-                else return f;
-            } catch (NumberFormatException e) {
-                System.out.println("Введённые данные не корректны");
+                }
             }
+        } catch (NoSuchElementException e) {
+            System.exit(0);
         }
+        return null;
 
     }
 
     /**
-     *
      * @return примитив типа float
      */
-    public float getFloat(){return getFloat(Float.MIN_VALUE, Float.MAX_VALUE, false);}
+    public float getFloat() {
+        return getFloat(Float.MIN_VALUE, Float.MAX_VALUE, false);
+    }
 
 
     /**
@@ -239,53 +265,84 @@ public class Console {
      * @return null <code>null||</code> объект типа Double
      */
     public Double getDouble(double min, double max, boolean possibleNull) {
-        while (true) {
-            if (shouldPrintHints) {
-                System.out.println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
-                System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
-            }
-            String t = in.nextLine().trim();
-            if (t.isEmpty() && possibleNull)
-                return null;
-            try {
-                Double f = Double.parseDouble(t);
-                if (f < min || f > max)
+        try {
+            while (true) {
+                if (interactiveMode) {
+                    System.out.println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
+                    System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                }
+                String t = in.nextLine().trim();
+                if (t.isEmpty() && possibleNull)
+                    return null;
+                try {
+                    Double f = Double.parseDouble(t);
+                    if (f < min || f > max)
+                        System.out.println("Введённые данные не корректны");
+                    else return f;
+                } catch (NumberFormatException e) {
                     System.out.println("Введённые данные не корректны");
-                else return f;
-            } catch (NumberFormatException e) {
-                System.out.println("Введённые данные не корректны");
+                }
             }
+        } catch (NoSuchElementException e) {
+            System.exit(0);
         }
+        return null;
 
     }
 
     /**
-     *
      * @return примитив типа double
      */
-    public double getDouble(double min, double max){return getDouble(min, max, false);}
+    public double getDouble(double min, double max) {
+        return getDouble(min, max, false);
+    }
 
-    public <T extends Enum<T>> T getEnumConstant(Class<T> eClass, boolean possibleNull){
-        if (shouldPrintHints) {
+    public <T extends Enum<T>> T getEnumConstant(Class<T> eClass, boolean possibleNull) {
+        if (interactiveMode) {
             String str = Arrays.toString(eClass.getEnumConstants());
             str = str.substring(1, str.length() - 1);
             System.out.println("Введите одно из: " + str);
             System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
         }
-        while(true){
-            String t = in.nextLine().trim().toUpperCase();
-            if(t.isEmpty()&&possibleNull)
-                return null;
-            try{
-                T answ = Enum.valueOf(eClass, t);
-                return answ;
-            } catch (RuntimeException e) {
-                System.out.println("Данные не корректны");
+        try {
+            while (true) {
+                String t = in.nextLine().trim().toUpperCase();
+                if (t.isEmpty() && possibleNull)
+                    return null;
+                try {
+                    T answ = Enum.valueOf(eClass, t);
+                    return answ;
+                } catch (RuntimeException e) {
+                    System.out.println("Данные не корректны");
+                }
             }
+        } catch (NoSuchElementException e) {
+            System.exit(0);
         }
+        return null;
     }
 
-    public boolean isShouldPrintHints() {
-        return shouldPrintHints;
+
+    public boolean requestConfirmation(String message) {
+        System.out.println(message);
+        System.out.println("Для подтверждения введите y, для отмены любую другую клавишу");
+        String t = in.nextLine().trim().toUpperCase();
+        return !t.isEmpty()&&t.charAt(0) == 'Y';
+    }
+
+    public boolean isInteractiveMode() {
+        return interactiveMode;
+    }
+
+    public Scanner getIn() {
+        return in;
+    }
+
+    public boolean hasNext() {
+        return in.hasNext();
+    }
+
+    public String nextLine(){
+        return in.nextLine();
     }
 }

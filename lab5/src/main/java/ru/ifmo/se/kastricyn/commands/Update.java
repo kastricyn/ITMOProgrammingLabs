@@ -6,28 +6,33 @@ import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Scanner;
 
-public class Update extends AbstractCommand{
-    private Scanner in;
-    private boolean shouldPrintHints;
+public class Update extends AbstractCommand {
     private TicketCollection ticketCollection;
-    public Update(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
+    private Console console;
+
+    public Update(TicketCollection ticketCollection, Console console) {
         super("update", "update id {element} \n - обновить значение элемента коллекции, id которого равен заданному");
-        this.in = in;
-        this.shouldPrintHints = shouldPrintHints;
         this.ticketCollection = ticketCollection;
+        this.console = console;
     }
 
     @Override
     public void execute(String... args) {
         //todo more information exceptions
+        long id = -1;
         try {
-            long id = Long.parseLong(args[0]);
-            Ticket t = new Ticket(new Console(in, shouldPrintHints));
-            ticketCollection.update(id, t);
-            System.out.println("Объект обновлён");
-            ticketCollection.setSaved(false);
-        } catch (Exception e){
-            System.out.println("Команда не удалась");
+            id = Long.parseLong(console.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Неправильная конфигурация параметров, для справки вызовите help");
+            return;
         }
+        if (!ticketCollection.hasElement(id)) {
+            System.out.println("В коллекции нет элемента с таким id");
+            return;
+        }
+        Ticket t = new Ticket(console);
+        ticketCollection.update(id, t);
+        System.out.println("Объект обновлён");
+        ticketCollection.setSaved(false);
     }
 }
