@@ -15,6 +15,7 @@ public class Save extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
+        boolean flag = ticketCollection.isSaved();
         try {
             ticketCollection.setSaved(true);
             JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
@@ -24,7 +25,7 @@ public class Save extends AbstractCommand {
             System.out.println("Сохранено.");
         } catch (Exception e) {
             System.out.println("Сохранить не удалось.");
-            ticketCollection.setSaved(false);
+            ticketCollection.setSaved(flag);
         }
     }
 }

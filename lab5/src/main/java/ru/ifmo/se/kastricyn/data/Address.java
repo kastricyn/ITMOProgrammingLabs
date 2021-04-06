@@ -7,8 +7,11 @@ import java.util.Objects;
 public class Address implements Comparable<Address> {
     private String street; //Строка не может быть пустой, Поле может быть null
 
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
     private Address() {
-    } //for working JAXB
+    }
 
     /**
      * Конструктор Address
@@ -34,6 +37,11 @@ public class Address implements Comparable<Address> {
             System.out.println("Создан объект: " + this);
     }
 
+    /**
+     * сравниваются по полю street типа String
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,10 +62,20 @@ public class Address implements Comparable<Address> {
                 '}';
     }
 
+    /**
+     *
+     * @return поле street
+     */
     public String getStreet() {
         return street;
     }
 
+    /**
+     * Устанавливает sreet
+     * @param street
+     * @return обновлённый объект типа Address
+     * @exception IllegalArgumentException если street.isEmpty() возвращает true
+     */
     public Address setStreet(String street) {
         if (street != null && street.isEmpty())
             throw new IllegalArgumentException();
@@ -65,8 +83,15 @@ public class Address implements Comparable<Address> {
         return this;
     }
 
+    /**
+     * Сравниваются как строки, содержащие street (null всегда меньше, оба null - равны)
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Address o) {
+        if(o.getStreet()==null && street==null)
+            return 0;
         if (o.getStreet() == null)
             return 1;
         if (street == null) return -1;

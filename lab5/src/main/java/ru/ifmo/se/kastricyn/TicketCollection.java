@@ -30,7 +30,7 @@ public class TicketCollection {
     @XmlTransient
     private File file;
 
-    private TicketCollection() {
+    public TicketCollection() {
         tickets = new ArrayDeque<>();
         saved = true;
         initDate = LocalDate.now();

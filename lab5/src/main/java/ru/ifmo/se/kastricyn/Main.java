@@ -32,8 +32,10 @@ public class Main {
             System.out.println("Нарушена структура файла, для работоспособности программы верните правильную структуру" +
                     "\n или удалите файл и мы создадим новый с пустой структурой по указанному пути. " +
                     "\n После исправления повторите попытку.");
+            return;
         } catch (AccessDeniedException e) {
             System.out.println("Недостаточно прав на чтение файла, повторите попыку позже.");
+            tickets = new TicketCollection();
         }
 
         Scanner in = new Scanner(System.in);

@@ -23,7 +23,7 @@ public class Console {
     /**
      * Конструктор Console
      *
-     * @param in  сканер, откуда стоит читать
+     * @param in сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
      */
     public Console(Scanner in) {
@@ -34,8 +34,8 @@ public class Console {
     /**
      * Метод получает строку от пользователя необходимого формата
      *
-     * @param possibleNull   может ли строка быть null
-     * @param possibleEmpty  может ли быть пустой
+     * @param possibleNull  может ли строка быть null
+     * @param possibleEmpty может ли быть пустой
      * @return строку полученную от пользователя необходимого формата
      */
     public String getString(boolean possibleNull, boolean possibleEmpty) {
@@ -326,7 +326,12 @@ public class Console {
     public boolean requestConfirmation(String message) {
         System.out.println(message);
         System.out.println("Для подтверждения введите y, для отмены любую другую клавишу");
-        String t = in.nextLine().trim().toUpperCase();
+        String t = "";
+        try {
+            t = in.nextLine().trim().toUpperCase();
+        } catch (NoSuchElementException e) {
+            System.exit(0);
+        }
         return !t.isEmpty() && t.charAt(0) == 'Y';
     }
 
