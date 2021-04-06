@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.data;
 
-import ru.ifmo.se.kastricyn.exceptions.EmptyStringException;
 import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Objects;
@@ -59,7 +58,7 @@ public class Address implements Comparable<Address> {
 
     public Address setStreet(String street) {
         if (street != null && street.isEmpty())
-            throw new EmptyStringException();
+            throw new IllegalArgumentException();
         this.street = street;
         return this;
     }
