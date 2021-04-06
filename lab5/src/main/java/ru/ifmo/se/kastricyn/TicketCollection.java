@@ -23,7 +23,7 @@ public class TicketCollection {
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     @XmlAttribute
     private LocalDate initDate;
-    @XmlTransient
+    @XmlAttribute
     private boolean saved;
     private ArrayDeque<Ticket> tickets;
 

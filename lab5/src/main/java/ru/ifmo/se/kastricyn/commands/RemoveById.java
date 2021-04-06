@@ -16,6 +16,7 @@ public class RemoveById extends AbstractCommand {
         try {
             ticketCollection.remove(Long.parseLong(args[0]));
             ticketCollection.setSaved(false);
+            System.out.println("Элемент удалён");
         } catch (Exception e) {
             System.out.println("Команда не выполнена, проверьте правильность аргументов.");
         }

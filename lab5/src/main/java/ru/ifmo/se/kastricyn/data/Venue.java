@@ -90,7 +90,7 @@ public class Venue implements Comparable<Venue> {
         if (equals(o))
             return 0;
         else
-            return (capacity - o.getCapacity()) * type.compareTo(o.getType()) * address.compareTo(o.getAddress()) * name.compareTo(o.getName());
+            return address.compareTo(o.getAddress());
     }
 
 

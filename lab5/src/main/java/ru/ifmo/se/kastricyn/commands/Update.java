@@ -21,9 +21,9 @@ public class Update extends AbstractCommand {
         //todo more information exceptions
         long id = -1;
         try {
-            id = Long.parseLong(console.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Неправильная конфигурация параметров, для справки вызовите help");
+            id = Long.parseLong(args[0]);
+        } catch (NumberFormatException | IndexOutOfBoundsException Ie) {
+            System.out.println("Команда принимает на вход только одно число типа long - id элемента коллекции");
             return;
         }
         if (!ticketCollection.hasElement(id)) {

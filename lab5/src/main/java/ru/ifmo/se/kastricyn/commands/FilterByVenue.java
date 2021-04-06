@@ -24,10 +24,18 @@ public class FilterByVenue extends AbstractCommand {
     public void execute(String... args) {
         Venue venue = new Venue(new Console(in, shouldPrintHints)); //todo change all commands in, shouldPrintHints -> CONSOLE
         Iterator<Ticket> iterator = ticketCollection.iterator();
+        boolean flag = true;
         while(iterator.hasNext()){
             Ticket ticket = iterator.next();
-            if(venue.equals(ticket.getVenue()))
+            if(venue.equals(ticket.getVenue())) {
+                if(flag){
+                    flag = false;
+                    System.out.println("Элементы имеющие введённый venue:");
+                }
                 System.out.println(ticket);
+            }
+            if(flag)
+                System.out.println("Нет элементов имеющие введённый venue.");
         }
     }
 }

@@ -32,7 +32,7 @@ public class RemoveLower extends AbstractCommand {
                 i++;
             }
         }
-        System.out.println("ИЗ коллекции удалено " + i + " объектов.");
+        System.out.println("Из коллекции удалено " + i + " объектов.");
         if (i > 0)
             ticketCollection.setSaved(false);
     }

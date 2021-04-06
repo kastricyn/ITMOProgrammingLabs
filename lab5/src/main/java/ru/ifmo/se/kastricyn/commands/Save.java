@@ -16,14 +16,15 @@ public class Save extends AbstractCommand {
     @Override
     public void execute(String... args) {
         try {
+            ticketCollection.setSaved(true);
             JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(ticketCollection, ticketCollection.getFile());
             System.out.println("Сохранено.");
-            ticketCollection.setSaved(true);
         } catch (Exception e) {
             System.out.println("Сохранить не удалось.");
+            ticketCollection.setSaved(false);
         }
     }
 }

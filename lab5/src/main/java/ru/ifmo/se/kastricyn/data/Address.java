@@ -6,7 +6,9 @@ import java.util.Objects;
 
 public class Address implements Comparable<Address> {
     private String street; //Строка не может быть пустой, Поле может быть null
-    private Address(){} //for working JAXB
+
+    private Address() {
+    } //for working JAXB
 
     /**
      * Конструктор Address
@@ -65,6 +67,9 @@ public class Address implements Comparable<Address> {
 
     @Override
     public int compareTo(Address o) {
+        if (o.getStreet() == null)
+            return 1;
+        if (street == null) return -1;
         return street.compareTo(o.getStreet());
     }
 }

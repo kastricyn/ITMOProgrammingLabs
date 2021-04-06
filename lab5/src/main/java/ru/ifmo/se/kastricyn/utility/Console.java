@@ -12,8 +12,8 @@ public class Console {
     /**
      * Конструктор Console
      *
-     * @param in               - сканер, откуда стоит читать
-     * @param shouldPrintHints - надо ли печатать подсказки в вывод
+     * @param in               сканер, откуда стоит читать
+     * @param shouldPrintHints надо ли печатать подсказки в вывод
      */
     public Console(Scanner in, boolean shouldPrintHints) {
         this.in = in;
@@ -23,7 +23,7 @@ public class Console {
     /**
      * Конструктор Console
      *
-     * @param in - сканер, откуда стоит читать
+     * @param in  сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
      */
     public Console(Scanner in) {
@@ -34,8 +34,8 @@ public class Console {
     /**
      * Метод получает строку от пользователя необходимого формата
      *
-     * @param possibleNull  - может ли строка быть null
-     * @param possibleEmpty - может ли быть пустой
+     * @param possibleNull   может ли строка быть null
+     * @param possibleEmpty  может ли быть пустой
      * @return строку полученную от пользователя необходимого формата
      */
     public String getString(boolean possibleNull, boolean possibleEmpty) {
@@ -62,7 +62,7 @@ public class Console {
     /**
      * Метод получает строку от пользователя необходимого формата
      *
-     * @param possibleNull - может ли строка быть null
+     * @param possibleNull может ли строка быть null
      * @return непустую строку или null
      */
     public String getString(boolean possibleNull) {
@@ -327,7 +327,7 @@ public class Console {
         System.out.println(message);
         System.out.println("Для подтверждения введите y, для отмены любую другую клавишу");
         String t = in.nextLine().trim().toUpperCase();
-        return !t.isEmpty()&&t.charAt(0) == 'Y';
+        return !t.isEmpty() && t.charAt(0) == 'Y';
     }
 
     public boolean isInteractiveMode() {
@@ -342,7 +342,7 @@ public class Console {
         return in.hasNext();
     }
 
-    public String nextLine(){
+    public String nextLine() {
         return in.nextLine();
     }
 }

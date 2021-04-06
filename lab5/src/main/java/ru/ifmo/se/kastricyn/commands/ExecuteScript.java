@@ -16,10 +16,13 @@ public class ExecuteScript extends AbstractCommand {
     private TicketCollection ticketCollection;
     private static Stack<Path> openedScripts;
 
+    static {
+        openedScripts = new Stack<>();
+    }
+
     public ExecuteScript(TicketCollection ticketCollection) {
         super("execute_script", "execute_script file_name \n - считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
         this.ticketCollection = ticketCollection;
-        openedScripts = new Stack<>();
     }
 
     @Override
@@ -40,7 +43,7 @@ public class ExecuteScript extends AbstractCommand {
         }
 
         try (Scanner scriptIn = new Scanner(path)) {
-            if (openedScripts.search(path) > -1) {
+            if (openedScripts.search(path.toAbsolutePath()) > -1) {
                 System.out.println("Рекурсивное выполнение " + args[0] + " не поддерживается");
                 return;
             }
