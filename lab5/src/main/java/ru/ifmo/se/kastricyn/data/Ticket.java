@@ -29,6 +29,20 @@ public class Ticket implements Comparable<Ticket> {
     private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
     private TicketType type; //Поле может быть null
     private Venue venue; //Поле не может быть null
+    /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception
+     */
+    public boolean isExisting(){
+        if(id<1)
+            throw new IllegalStateException();
+        setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
+        coordinates.isExisting();
+        venue.isExisting();
+        if(creationDate==null)
+            throw new NullPointerException();
+        return true;
+    }
 
     private void initial(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
         setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);

@@ -14,6 +14,15 @@ public class Address implements Comparable<Address> {
     }
 
     /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception
+     */
+    public boolean isExisting(){
+        setStreet(street);
+        return true;
+    }
+
+    /**
      * Конструктор Address
      *
      * @param street строка содержащая улицу

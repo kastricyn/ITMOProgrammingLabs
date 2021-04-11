@@ -1,5 +1,8 @@
 package ru.ifmo.se.kastricyn.utility;
 
+import ru.ifmo.se.kastricyn.data.Ticket;
+import ru.ifmo.se.kastricyn.data.TicketType;
+
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;

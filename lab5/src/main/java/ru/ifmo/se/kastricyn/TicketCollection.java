@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.commands.Save;
 import ru.ifmo.se.kastricyn.data.Ticket;
+import sun.util.resources.cldr.kea.TimeZoneNames_kea;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -37,25 +38,25 @@ public class TicketCollection {
     }
 
     public static TicketCollection getTicketCollection(Path p) throws JAXBException, AccessDeniedException {
-            if(!Files.isReadable(p))
-                throw new AccessDeniedException(p.toString());
-            JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            TicketCollection ticketCollection = (TicketCollection) unmarshaller.unmarshal(p.toFile());
-            ticketCollection.file = p.toFile();
-            ticketCollection.saved = false;
-            return ticketCollection;
+        if (!Files.isReadable(p))
+            throw new AccessDeniedException(p.toString());
+        JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        TicketCollection ticketCollection = (TicketCollection) unmarshaller.unmarshal(p.toFile());
+        ticketCollection.file = p.toFile();
+        ticketCollection.saved = false;
+        return ticketCollection;
     }
 
     public static TicketCollection createTicketCollection(Path p) {
-        TicketCollection ticketCollection =  new TicketCollection();
+        TicketCollection ticketCollection = new TicketCollection();
         ticketCollection.file = p.toFile();
         try {
             Files.createFile(p);
         } catch (IOException e) {
             System.out.println("Создать файл не удалось. Сохранение не доступно.");
         }
-        if(Files.isWritable(p)){
+        if (Files.isWritable(p)) {
             new Save(ticketCollection).execute();
         }
         return ticketCollection;
@@ -106,7 +107,7 @@ public class TicketCollection {
         throw new IllegalArgumentException("В коллекции нет элемента с таким индексом");
     }
 
-    public boolean hasElement(long id){
+    public boolean hasElement(long id) {
         for (Ticket t : tickets) {
             if (t.getId() == id)
                 return true;
@@ -159,5 +160,32 @@ public class TicketCollection {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public void check() {
+        HashSet<Long> idTicket = new HashSet<>();
+        HashSet<Long> idVenue = new HashSet<>();
+        Iterator<Ticket> iterator = iterator();
+        boolean isDeleted = false;
+        while (iterator().hasNext()) {
+            Ticket t = iterator.next();
+            try {
+                t.isExisting();
+                long idT = t.getId();
+                long idV = t.getVenue().getId();
+                if (idTicket.contains(idT) || idVenue.contains(idV)) {
+                    iterator.remove();
+                    isDeleted = true;
+                    continue;
+                }
+                idTicket.add(idT);
+                idVenue.add(idV);
+            } catch (RuntimeException e) {
+                iterator.remove();
+                isDeleted = true;
+            }
+        }
+        if (isDeleted)
+            System.out.println("Некоторые элементы не были импортированы, из-за неверных данных");
     }
 }

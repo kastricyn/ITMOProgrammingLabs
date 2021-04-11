@@ -17,6 +17,18 @@ public class Venue implements Comparable<Venue> {
     private VenueType type; //Поле не может быть null
     private Address address; //Поле не может быть null
 
+    /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception или false
+     */
+    public boolean isExisting(){
+        setName(name).setCapacity(capacity).setType(type).setAddress(address);
+        address.isExisting();
+        if(id<1)
+            throw new IllegalStateException();
+        return true;
+    }
+
     private void initial(String name, int capacity, VenueType type, Address address) {
         setName(name).setCapacity(capacity).setType(type).setAddress(address);
     }

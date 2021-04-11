@@ -24,9 +24,9 @@ public class Main {
         try {
             if (Files.exists(p))
                 tickets = TicketCollection.getTicketCollection(p);
-            else if(Files.notExists(p))
+            else if (Files.notExists(p))
                 tickets = TicketCollection.createTicketCollection(p);
-            if(!Files.isWritable(p))
+            if (!Files.isWritable(p))
                 System.out.println("Файл не доступен для записи.");
         } catch (JAXBException e) {
             System.out.println("Нарушена структура файла, для работоспособности программы верните правильную структуру" +
@@ -38,6 +38,7 @@ public class Main {
             tickets = new TicketCollection();
         }
 
+        tickets.check();
         Scanner in = new Scanner(System.in);
 //
 //
@@ -46,7 +47,7 @@ public class Main {
 //                new Venue("ven", 45, VenueType.CINEMA, new Address("dfs")));
 //
 //        tickets.add(t);
-        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets,new Console(in));
+        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
         consoleCommandManager.run();
     }
 }

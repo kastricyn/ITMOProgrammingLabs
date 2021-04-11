@@ -49,6 +49,15 @@ public class Coordinates {
                 ", y=" + y +
                 '}';
     }
+    /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception
+     */
+    public boolean isExisting(){
+        setX(x);
+        setY(y);
+        return true;
+    }
 
     //All gets
     public Float getY() {
