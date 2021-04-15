@@ -157,7 +157,7 @@ public class Venue implements Comparable<Venue> {
     }
 
     public Venue setType(VenueType type) {
-        if (name == null)
+        if (type == null)
             throw new NullPointerException("Поле не может быть null");
         this.type = type;
         return this;

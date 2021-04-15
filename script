@@ -1,5 +1,3 @@
-help
-2
 info
 add
 Max
@@ -14,5 +12,3 @@ loft
 
 show
 execute_script script
-info
-save

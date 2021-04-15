@@ -24,7 +24,7 @@ public class TicketCollection {
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     @XmlAttribute
     private LocalDate initDate;
-    @XmlAttribute
+    @XmlTransient
     private boolean saved;
     private ArrayDeque<Ticket> tickets;
 
@@ -44,7 +44,6 @@ public class TicketCollection {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         TicketCollection ticketCollection = (TicketCollection) unmarshaller.unmarshal(p.toFile());
         ticketCollection.file = p.toFile();
-        ticketCollection.saved = false;
         return ticketCollection;
     }
 
@@ -167,7 +166,7 @@ public class TicketCollection {
         HashSet<Long> idVenue = new HashSet<>();
         Iterator<Ticket> iterator = iterator();
         boolean isDeleted = false;
-        while (iterator().hasNext()) {
+        while (iterator.hasNext()) {
             Ticket t = iterator.next();
             try {
                 t.isExisting();

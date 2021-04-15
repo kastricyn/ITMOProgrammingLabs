@@ -19,7 +19,7 @@ public class Main {
         }
 
         Path p = Paths.get(args[0]);
-        TicketCollection tickets = null;
+        TicketCollection tickets = new TicketCollection();
 
         try {
             if (Files.exists(p))
@@ -35,7 +35,6 @@ public class Main {
             return;
         } catch (AccessDeniedException e) {
             System.out.println("Недостаточно прав на чтение файла, повторите попыку позже.");
-            tickets = new TicketCollection();
         }
 
         tickets.check();
