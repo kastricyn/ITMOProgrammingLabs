@@ -120,10 +120,6 @@ public class Ticket implements Comparable<Ticket> {
 
     @Override
     public int compareTo(Ticket o) {
-//        if (equals(o))
-//            return 0;
-//        else
-//            return (int) (venue.compareTo(o.getVenue()) * (100 - discount));
         return name.compareTo(o.getName());
     }
 

@@ -2,7 +2,6 @@ package ru.ifmo.se.kastricyn;
 
 import ru.ifmo.se.kastricyn.commands.Save;
 import ru.ifmo.se.kastricyn.data.Ticket;
-import sun.util.resources.cldr.kea.TimeZoneNames_kea;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -140,7 +139,7 @@ public class TicketCollection {
     //todo: why is it working
     public void sort(Comparator<Ticket> cmp) {
         LinkedList<Ticket> list = new LinkedList<>(tickets);
-        Collections.sort(list, cmp);
+        list.sort(cmp);
         tickets = new ArrayDeque<>(list);
     }
 

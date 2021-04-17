@@ -1,8 +1,5 @@
 package ru.ifmo.se.kastricyn.utility;
 
-import ru.ifmo.se.kastricyn.data.Ticket;
-import ru.ifmo.se.kastricyn.data.TicketType;
-
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -100,7 +97,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Long l = Long.parseLong(t);
+                    long l = Long.parseLong(t);
                     if (l < min || l > max)
                         System.out.println("Введённые данные не корректны");
                     else return l;
@@ -168,7 +165,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Integer l = Integer.parseInt(t);
+                    int l = Integer.parseInt(t);
                     if (l < min || l > max)
                         System.out.println("Введённые данные не корректны");
                     else return l;
@@ -236,7 +233,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Float f = Float.parseFloat(t);
+                    float f = Float.parseFloat(t);
                     if (f < min || f > max)
                         System.out.println("Введённые данные не корректны");
                     else return f;
@@ -278,7 +275,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Double f = Double.parseDouble(t);
+                    double f = Double.parseDouble(t);
                     if (f < min || f > max)
                         System.out.println("Введённые данные не корректны");
                     else return f;
@@ -313,8 +310,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    T answ = Enum.valueOf(eClass, t);
-                    return answ;
+                    return Enum.valueOf(eClass, t);
                 } catch (RuntimeException e) {
                     System.out.println("Данные не корректны");
                 }

@@ -39,13 +39,7 @@ public class Main {
 
         tickets.check();
         Scanner in = new Scanner(System.in);
-//
-//
-//
-//        Ticket t = new Ticket("name", new Coordinates(2l, 2.0f), 5, 2., TicketType.CHEAP,
-//                new Venue("ven", 45, VenueType.CINEMA, new Address("dfs")));
-//
-//        tickets.add(t);
+
         CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
         consoleCommandManager.run();
     }
