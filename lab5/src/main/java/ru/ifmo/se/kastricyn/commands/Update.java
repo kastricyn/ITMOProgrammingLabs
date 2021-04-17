@@ -4,8 +4,6 @@ import ru.ifmo.se.kastricyn.TicketCollection;
 import ru.ifmo.se.kastricyn.data.Ticket;
 import ru.ifmo.se.kastricyn.utility.Console;
 
-import java.util.Scanner;
-
 public class Update extends AbstractCommand {
     private TicketCollection ticketCollection;
     private Console console;
