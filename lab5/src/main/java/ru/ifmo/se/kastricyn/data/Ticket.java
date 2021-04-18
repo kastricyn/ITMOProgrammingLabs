@@ -66,6 +66,9 @@ public class Ticket implements Comparable<Ticket> {
         nextId = id + 1;
     }
 
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
     private Ticket() {
         id = nextId++;
         creationDate = LocalDate.now();

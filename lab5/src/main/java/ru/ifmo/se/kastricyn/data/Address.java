@@ -48,8 +48,8 @@ public class Address implements Comparable<Address> {
 
     /**
      * сравниваются по полю street типа String
-     * @param o
-     * @return
+     * @param o объект сравнения
+     * @return true, если равны, иначе false
      */
     @Override
     public boolean equals(Object o) {
@@ -94,7 +94,7 @@ public class Address implements Comparable<Address> {
 
     /**
      * Сравниваются как строки, содержащие street (null всегда меньше, оба null - равны)
-     * @param o
+     * @param o объект сравнения
      * @return
      */
     @Override

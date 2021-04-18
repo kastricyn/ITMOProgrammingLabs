@@ -47,6 +47,9 @@ public class Venue implements Comparable<Venue> {
         nextId = id + 1;
     }
 
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
     private Venue() {
         id = nextId++;
     }

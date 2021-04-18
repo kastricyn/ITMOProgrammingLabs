@@ -8,16 +8,13 @@ mainClassName = "ru.ifmo.se.kastricyn.Main"
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-jar {
-    manifest {
-        attributes("Manifest-Version": "1.0",
+jar.manifest.attributes("Manifest-Version": "1.0",
                 "Main-Class": mainClassName)
-    }
-}
-compileJava.options.encoding = 'UTF-8'
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+javadoc.options.encoding = 'UTF-8'
 
 version '0.1'
 

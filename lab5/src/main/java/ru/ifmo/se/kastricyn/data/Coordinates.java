@@ -8,8 +8,12 @@ public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
     private Float y; //Поле не может быть null
 
-    public static final long X_MIN = -502;
-    private Coordinates(){}//for working JAXB
+    private static final long X_MIN = -502;
+
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
+    private Coordinates(){}
 
     public Coordinates(Long x, Float y) {
         setX(x).setY(y);
