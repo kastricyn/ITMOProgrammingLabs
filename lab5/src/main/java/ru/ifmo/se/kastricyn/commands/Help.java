@@ -2,7 +2,7 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.CommandManager;
 
-import java.util.*;
+import java.util.stream.Collectors;
 
 public class Help extends AbstractCommand {
     private CommandManager commandManager;
@@ -14,8 +14,7 @@ public class Help extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        LinkedList<AbstractCommand> commands = new LinkedList<>(commandManager.getCommands().values());
-        Collections.sort(commands, Comparator.comparing(AbstractCommand::getName));
-        commands.forEach((v) -> System.out.println(v.getDescription()));
+        //todo: close stream better than now
+        commandManager.getCommandsToString().sorted().peek(System.out::println).collect(Collectors.toList());
     }
 }

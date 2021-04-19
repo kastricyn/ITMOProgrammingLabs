@@ -44,6 +44,6 @@ public abstract class AbstractCommand implements Command {
      */
     @Override
     public String toString() {
-        return name + " - \n" + description;
+        return /*name + " - \n" +*/ description;
     }
 }

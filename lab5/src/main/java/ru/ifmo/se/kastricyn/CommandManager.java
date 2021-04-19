@@ -3,21 +3,37 @@ package ru.ifmo.se.kastricyn;
 import ru.ifmo.se.kastricyn.commands.*;
 import ru.ifmo.se.kastricyn.utility.Console;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
+/**
+ * Исполнитель комманд. Класс реализует управление коммандами, доступными для пользователя.
+ * Разные объекты этого класса могут по-разному исполнять комманды.
+ */
 public class CommandManager {
     private HashMap<String, AbstractCommand> commands;
 
     public final TicketCollection ticketCollection;
     public final Console console;
 
+    /**
+     * Создаёт менеджер коммандами.
+     * @param ticketCollection коллекция с которой будут работать команды
+     * @param console объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
+     */
     public CommandManager(TicketCollection ticketCollection, Console console) {
         commands = new HashMap<>();
         this.ticketCollection = ticketCollection;
         this.console = console;
     }
 
+    /**
+     * Возвращает менеджер комманд поумолчанию
+     * @param ticketCollection коллекция с которой будут работать команды
+     * @param console объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
+     */
     public static CommandManager createCommandManager(TicketCollection ticketCollection, Console console) {
         Scanner in = console.getIn();
         boolean shouldPrintHints = console.isInteractiveMode();
@@ -42,22 +58,33 @@ public class CommandManager {
         return cm;
     }
 
+    /**
+     * Добавляет команду в менеджер команд, если её не было до этого
+     * @param cmd команда
+     */
     public void addIfAbsent(AbstractCommand cmd) {
         commands.putIfAbsent(cmd.getName(), cmd);
     }
 
-    public HashMap<String, AbstractCommand> getCommands() {
-        return (HashMap<String, AbstractCommand>) commands.clone();
+    /**
+     * Возвращает поток из команд в строковом представлении
+     */
+    public Stream<String> getCommandsToString() {
+         return commands.values().stream().map(AbstractCommand::toString);
     }
 
-    public void execute(String commandNameWithArgs) {
-        String[] r = commandNameWithArgs.trim().split("\\s", 2);
-        AbstractCommand command = commands.get(r[0].toLowerCase());
+    /**
+     * Исполняет команду имя которой передано в первом аргументе
+     * @param commandName имя команды
+     * @param args аргументы команды в строковом представлении
+     */
+    public void execute(String commandName, String ... args) {
+        AbstractCommand command = commands.get(commandName.toLowerCase());
         if (command == null) {
             System.out.println("Такой команды не существует. Для вызова справки введите: help");
             return;
         }
-        command.execute(r.length > 1 ? r[1] : "");
+        command.execute(args);
     }
 
     public void run() {
@@ -65,7 +92,8 @@ public class CommandManager {
             String t = console.nextLine().trim();
             if (t.isEmpty())
                 continue;
-            execute(t);
+            String[] s = t.trim().split("\\s");
+            execute(s[0], Arrays.copyOfRange(s, 1, s.length));
         }
     }
 }

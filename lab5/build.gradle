@@ -9,12 +9,14 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 jar.manifest.attributes("Manifest-Version": "1.0",
-                "Main-Class": mainClassName)
+        "Main-Class": mainClassName)
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
-javadoc.options.encoding = 'UTF-8'
+javadoc.options {
+    encoding = 'UTF-8'
+}
 
 version '0.1'
 
