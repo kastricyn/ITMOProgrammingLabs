@@ -8,6 +8,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Команда вывести элементы, значение поля venue которых равно заданному
+ */
 public class FilterByVenue extends AbstractCommand {
     private Scanner in;
     private TicketCollection ticketCollection;

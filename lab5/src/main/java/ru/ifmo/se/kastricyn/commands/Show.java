@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
 
+/**
+ * Команда вывести в стандартный поток вывода все элементы коллекции в строковом представлении
+ */
 public class Show extends AbstractCommand {
     private TicketCollection ticketCollection;
 

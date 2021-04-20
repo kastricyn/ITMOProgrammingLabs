@@ -7,6 +7,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Команда удалить из коллекции все элементы, меньшие, чем заданный
+ */
 public class RemoveLower extends AbstractCommand {
     private Scanner in;
     private boolean shouldPrintHints;

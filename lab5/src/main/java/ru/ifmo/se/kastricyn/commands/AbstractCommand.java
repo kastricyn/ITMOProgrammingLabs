@@ -20,16 +20,14 @@ public abstract class AbstractCommand implements Command {
     }
 
     /**
-     *
-     * @return имя команды
+     * Возвращает имя команды
      */
     public String getName(){
         return name;
     }
 
     /**
-     *
-     * @return  описание команды
+     * Возвращает  описание команды
      */
     public String getDescription() {
         return description;
@@ -38,7 +36,7 @@ public abstract class AbstractCommand implements Command {
 
     /**
      *
-     * @return строку для представления команды в справке:
+     * Возвращает строку для представления команды в справке:
      * <code>name -
      * description</code>
      */

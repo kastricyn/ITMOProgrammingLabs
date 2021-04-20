@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
 
+/**
+ * Команда очистить колекцию
+ */
 public class Clear extends AbstractCommand {
     private TicketCollection ticketCollection;
 

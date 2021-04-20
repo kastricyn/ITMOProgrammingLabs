@@ -4,6 +4,9 @@ import ru.ifmo.se.kastricyn.TicketCollection;
 import ru.ifmo.se.kastricyn.data.Ticket;
 import ru.ifmo.se.kastricyn.utility.Console;
 
+/**
+ * Команда обновить значение элемента коллекции, id которого равен заданному
+ */
 public class Update extends AbstractCommand {
     private TicketCollection ticketCollection;
     private Console console;

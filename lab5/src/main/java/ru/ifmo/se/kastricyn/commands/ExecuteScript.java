@@ -11,6 +11,11 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.Stack;
 
+/**
+ * Команда исполнить скрипт
+ * путь до скрипта должен передаваться как аргумент команды
+ * Рекцрсивное выполнение скриптов не поддерживается
+ */
 public class ExecuteScript extends AbstractCommand {
     private TicketCollection ticketCollection;
     private static Stack<Path> openedScripts;

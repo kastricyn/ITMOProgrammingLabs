@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Иммитирует консоль для работы с пользователем.
+ * Предоставляет удобный нтерфейс получение данных от пользвателя и реализует его
+ */
 public class Console {
     private Scanner in;
     private boolean interactiveMode;
@@ -21,7 +25,6 @@ public class Console {
     }
 
     /**
-     * Конструктор Console
      *
      * @param in сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
@@ -257,6 +260,7 @@ public class Console {
 
 
     /**
+     * Получает от пользователя число в заданном диапазоне
      * Чтобы получить null пользователю необходимо подать на <code>Scanner</code> пустую строку
      *
      * @param min          минимальное допустимое значение
@@ -291,6 +295,7 @@ public class Console {
     }
 
     /**
+     * Получает от пользователя число в заданном диапазоне
      * @return примитив типа double
      */
     public double getDouble(double min, double max) {
@@ -321,7 +326,11 @@ public class Console {
         return null;
     }
 
-
+    /**
+     * Запрашивает у пользователя подтверждение на вполнение действия
+     * @param message сообщение о действии, которое необходимо подтвердить
+     * @return true, если пользователь подтверждает своё желание, иначе false
+     */
     public boolean requestConfirmation(String message) {
         System.out.println(message);
         System.out.println("Для подтверждения введите y, для отмены любую другую клавишу");
@@ -334,18 +343,32 @@ public class Console {
         return !t.isEmpty() && t.charAt(0) == 'Y';
     }
 
+    /**
+     * Проверяет в интерактивном ли режиме
+     */
     public boolean isInteractiveMode() {
         return interactiveMode;
     }
 
+    /**
+     * @return Сканер, откуда считываются данные
+     */
     public Scanner getIn() {
         return in;
     }
 
+    /**
+     * Вызывает hasNext() у сканера
+     * Аналогично getIn().hasNext()
+     */
     public boolean hasNext() {
         return in.hasNext();
     }
 
+    /**
+     *
+     * @return getIn().nextLine()
+     */
     public String nextLine() {
         return in.nextLine();
     }

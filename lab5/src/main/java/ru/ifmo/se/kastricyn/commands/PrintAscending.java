@@ -5,6 +5,9 @@ import ru.ifmo.se.kastricyn.data.Ticket;
 
 import java.util.Iterator;
 
+/**
+ * Команда вывести элементы коллекции в порядке возрастания
+ */
 public class PrintAscending extends AbstractCommand {
     private TicketCollection ticketCollection;
 

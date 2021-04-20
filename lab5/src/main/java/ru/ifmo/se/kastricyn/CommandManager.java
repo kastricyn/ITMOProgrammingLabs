@@ -79,7 +79,7 @@ public class CommandManager {
      * @param args аргументы команды в строковом представлении
      */
     public void execute(String commandName, String ... args) {
-        AbstractCommand command = commands.get(commandName.toLowerCase());
+        Command command = commands.get(commandName.toLowerCase());
         if (command == null) {
             System.out.println("Такой команды не существует. Для вызова справки введите: help");
             return;
@@ -87,6 +87,9 @@ public class CommandManager {
         command.execute(args);
     }
 
+    /**
+     * Ожидает команды от пользователя и запускает их исполнение
+     */
     public void run() {
         while (console.hasNext()) {
             String t = console.nextLine().trim();

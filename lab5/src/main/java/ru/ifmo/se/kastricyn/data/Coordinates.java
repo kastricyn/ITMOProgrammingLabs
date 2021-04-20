@@ -4,6 +4,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Objects;
 
+/**
+ * Надо для {@link Ticket}
+ */
 public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
     private Float y; //Поле не может быть null

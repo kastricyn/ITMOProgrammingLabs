@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
 
+/**
+ * Команда удалить элемент из коллекции по его id
+ */
 public class RemoveById extends AbstractCommand {
     private TicketCollection ticketCollection;
 

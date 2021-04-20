@@ -5,6 +5,9 @@ import ru.ifmo.se.kastricyn.TicketCollection;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+/**
+ * Команда сохранить коллекцию в файл, путь до которого передан при запуске программы
+ */
 public class Save extends AbstractCommand {
     TicketCollection ticketCollection;
 

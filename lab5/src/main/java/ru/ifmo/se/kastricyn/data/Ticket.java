@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Класс представляющий элемент коллекции
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Ticket implements Comparable<Ticket> {
     public static final int PRICE_MIN = 1;

@@ -2,8 +2,9 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.CommandManager;
 
-import java.util.stream.Collectors;
-
+/**
+ * Команда вывести справку по доступным командам
+ */
 public class Help extends AbstractCommand {
     private CommandManager commandManager;
 
@@ -15,6 +16,7 @@ public class Help extends AbstractCommand {
     @Override
     public void execute(String... args) {
         //todo: close stream better than now
-        commandManager.getCommandsToString().sorted().peek(System.out::println).collect(Collectors.toList());
+        commandManager.getCommandsToString().sorted().forEachOrdered(System.out::println);
+        return;
     }
 }

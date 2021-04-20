@@ -4,6 +4,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Objects;
 
+/**
+ * Надо для {@link Venue}
+ */
 public class Address implements Comparable<Address> {
     private String street; //Строка не может быть пустой, Поле может быть null
 

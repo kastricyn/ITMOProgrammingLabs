@@ -7,6 +7,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Команда добавить элемент в колекцию, если он больше всех элементов в колекции
+ */
 public class AddIfMax extends AbstractCommand {
     private Scanner in;
     private boolean shouldPrintHints;
@@ -18,6 +21,7 @@ public class AddIfMax extends AbstractCommand {
         this.shouldPrintHints = shouldPrintHints;
         this.ticketCollection = ticketCollection;
     }
+
 
     @Override
     public void execute(String... args) {

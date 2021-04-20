@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
 
+/**
+ * Команда вывести первый элемент коллекции
+ */
 public class Head extends AbstractCommand {
     private TicketCollection ticketCollection;
 

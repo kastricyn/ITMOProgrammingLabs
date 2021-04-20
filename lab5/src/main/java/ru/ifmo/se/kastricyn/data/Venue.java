@@ -5,6 +5,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import javax.xml.bind.annotation.*;
 import java.util.Objects;
 
+/**
+ * Нужен для {@link Ticket}
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Venue implements Comparable<Venue> {
     public static final int CAPACITY_MIN = 1;
