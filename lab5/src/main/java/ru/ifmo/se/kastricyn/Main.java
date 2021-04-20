@@ -34,7 +34,7 @@ public class Main {
                     "\n После исправления повторите попытку.");
             return;
         } catch (AccessDeniedException e) {
-            System.out.println("Недостаточно прав на чтение файла, повторите попыку позже.");
+            System.out.println("Недостаточно прав на чтение файла, возможна работа с пустой коллекцией без сохранения.");
         }
 
         tickets.check();

@@ -52,7 +52,7 @@ public class ExecuteScript extends AbstractCommand {
             openedScripts.pop();
         } catch (IOException e) {
             System.out.println("Что-то пошло не так. Не удалось прочитать файл.");
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             System.err.println("Выполнение скрипта не удалось завершить правильно.");
         }
     }
