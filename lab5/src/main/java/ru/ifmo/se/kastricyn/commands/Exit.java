@@ -3,6 +3,9 @@ package ru.ifmo.se.kastricyn.commands;
 import ru.ifmo.se.kastricyn.TicketCollection;
 import ru.ifmo.se.kastricyn.utility.Console;
 
+/**
+ * Команда выйти из программы
+ */
 public class Exit extends AbstractCommand {
     TicketCollection ticketCollection;
     Console console;

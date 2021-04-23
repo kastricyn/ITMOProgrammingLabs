@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.commands;
 
 import ru.ifmo.se.kastricyn.TicketCollection;
 
+/**
+ * Команда удалить элемент из коллекции по его id
+ */
 public class RemoveById extends AbstractCommand {
     private TicketCollection ticketCollection;
 
@@ -16,6 +19,7 @@ public class RemoveById extends AbstractCommand {
         try {
             ticketCollection.remove(Long.parseLong(args[0]));
             ticketCollection.setSaved(false);
+            System.out.println("Элемент удалён");
         } catch (Exception e) {
             System.out.println("Команда не выполнена, проверьте правильность аргументов.");
         }

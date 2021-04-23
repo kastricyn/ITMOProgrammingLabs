@@ -1,8 +1,14 @@
-help
-2
 info
 add
-
 Max
 500
 5
+10
+5
+
+budget
+56
+loft
+
+show
+execute_script script

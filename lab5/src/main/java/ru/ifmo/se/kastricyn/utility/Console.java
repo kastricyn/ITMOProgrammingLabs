@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Иммитирует консоль для работы с пользователем.
+ * Предоставляет удобный нтерфейс получение данных от пользвателя и реализует его
+ */
 public class Console {
     private Scanner in;
     private boolean interactiveMode;
@@ -12,8 +16,8 @@ public class Console {
     /**
      * Конструктор Console
      *
-     * @param in               - сканер, откуда стоит читать
-     * @param shouldPrintHints - надо ли печатать подсказки в вывод
+     * @param in               сканер, откуда стоит читать
+     * @param shouldPrintHints надо ли печатать подсказки в вывод
      */
     public Console(Scanner in, boolean shouldPrintHints) {
         this.in = in;
@@ -21,9 +25,8 @@ public class Console {
     }
 
     /**
-     * Конструктор Console
      *
-     * @param in - сканер, откуда стоит читать
+     * @param in сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
      */
     public Console(Scanner in) {
@@ -34,8 +37,8 @@ public class Console {
     /**
      * Метод получает строку от пользователя необходимого формата
      *
-     * @param possibleNull  - может ли строка быть null
-     * @param possibleEmpty - может ли быть пустой
+     * @param possibleNull  может ли строка быть null
+     * @param possibleEmpty может ли быть пустой
      * @return строку полученную от пользователя необходимого формата
      */
     public String getString(boolean possibleNull, boolean possibleEmpty) {
@@ -62,7 +65,7 @@ public class Console {
     /**
      * Метод получает строку от пользователя необходимого формата
      *
-     * @param possibleNull - может ли строка быть null
+     * @param possibleNull может ли строка быть null
      * @return непустую строку или null
      */
     public String getString(boolean possibleNull) {
@@ -97,7 +100,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Long l = Long.parseLong(t);
+                    long l = Long.parseLong(t);
                     if (l < min || l > max)
                         System.out.println("Введённые данные не корректны");
                     else return l;
@@ -165,7 +168,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Integer l = Integer.parseInt(t);
+                    int l = Integer.parseInt(t);
                     if (l < min || l > max)
                         System.out.println("Введённые данные не корректны");
                     else return l;
@@ -233,7 +236,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Float f = Float.parseFloat(t);
+                    float f = Float.parseFloat(t);
                     if (f < min || f > max)
                         System.out.println("Введённые данные не корректны");
                     else return f;
@@ -257,6 +260,7 @@ public class Console {
 
 
     /**
+     * Получает от пользователя число в заданном диапазоне
      * Чтобы получить null пользователю необходимо подать на <code>Scanner</code> пустую строку
      *
      * @param min          минимальное допустимое значение
@@ -275,7 +279,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    Double f = Double.parseDouble(t);
+                    double f = Double.parseDouble(t);
                     if (f < min || f > max)
                         System.out.println("Введённые данные не корректны");
                     else return f;
@@ -291,6 +295,7 @@ public class Console {
     }
 
     /**
+     * Получает от пользователя число в заданном диапазоне
      * @return примитив типа double
      */
     public double getDouble(double min, double max) {
@@ -310,8 +315,7 @@ public class Console {
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
-                    T answ = Enum.valueOf(eClass, t);
-                    return answ;
+                    return Enum.valueOf(eClass, t);
                 } catch (RuntimeException e) {
                     System.out.println("Данные не корректны");
                 }
@@ -322,27 +326,50 @@ public class Console {
         return null;
     }
 
-
+    /**
+     * Запрашивает у пользователя подтверждение на вполнение действия
+     * @param message сообщение о действии, которое необходимо подтвердить
+     * @return true, если пользователь подтверждает своё желание, иначе false
+     */
     public boolean requestConfirmation(String message) {
         System.out.println(message);
         System.out.println("Для подтверждения введите y, для отмены любую другую клавишу");
-        String t = in.nextLine().trim().toUpperCase();
-        return !t.isEmpty()&&t.charAt(0) == 'Y';
+        String t = "";
+        try {
+            t = in.nextLine().trim().toUpperCase();
+        } catch (NoSuchElementException e) {
+            System.exit(0);
+        }
+        return !t.isEmpty() && t.charAt(0) == 'Y';
     }
 
+    /**
+     * Проверяет в интерактивном ли режиме
+     */
     public boolean isInteractiveMode() {
         return interactiveMode;
     }
 
+    /**
+     * @return Сканер, откуда считываются данные
+     */
     public Scanner getIn() {
         return in;
     }
 
+    /**
+     * Вызывает hasNext() у сканера
+     * Аналогично getIn().hasNext()
+     */
     public boolean hasNext() {
         return in.hasNext();
     }
 
-    public String nextLine(){
+    /**
+     *
+     * @return getIn().nextLine()
+     */
+    public String nextLine() {
         return in.nextLine();
     }
 }

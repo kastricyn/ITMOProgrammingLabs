@@ -4,12 +4,19 @@ import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Objects;
 
+/**
+ * Надо для {@link Ticket}
+ */
 public class Coordinates {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
     private Float y; //Поле не может быть null
 
-    public static final long X_MIN = -502;
-    private Coordinates(){}//for working JAXB
+    private static final long X_MIN = -502;
+
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
+    private Coordinates(){}
 
     public Coordinates(Long x, Float y) {
         setX(x).setY(y);
@@ -48,6 +55,15 @@ public class Coordinates {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+    /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception
+     */
+    public boolean isExisting(){
+        setX(x);
+        setY(y);
+        return true;
     }
 
     //All gets

@@ -6,6 +6,9 @@ import ru.ifmo.se.kastricyn.data.Venue;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+/**
+ * Команда вывести значения поля venue всех элементов в порядке убывания
+ */
 public class PrintFieldDescendingVenue extends AbstractCommand {
     private TicketCollection ticketCollection;
 

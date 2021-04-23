@@ -4,9 +4,26 @@ import ru.ifmo.se.kastricyn.utility.Console;
 
 import java.util.Objects;
 
+/**
+ * Надо для {@link Venue}
+ */
 public class Address implements Comparable<Address> {
     private String street; //Строка не может быть пустой, Поле может быть null
-    private Address(){} //for working JAXB
+
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
+    private Address() {
+    }
+
+    /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception
+     */
+    public boolean isExisting(){
+        setStreet(street);
+        return true;
+    }
 
     /**
      * Конструктор Address
@@ -32,6 +49,11 @@ public class Address implements Comparable<Address> {
             System.out.println("Создан объект: " + this);
     }
 
+    /**
+     * сравниваются по полю street типа String
+     * @param o объект сравнения
+     * @return true, если равны, иначе false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,10 +74,20 @@ public class Address implements Comparable<Address> {
                 '}';
     }
 
+    /**
+     *
+     * @return поле street
+     */
     public String getStreet() {
         return street;
     }
 
+    /**
+     * Устанавливает sreet
+     * @param street
+     * @return обновлённый объект типа Address
+     * @exception IllegalArgumentException если street.isEmpty() возвращает true
+     */
     public Address setStreet(String street) {
         if (street != null && street.isEmpty())
             throw new IllegalArgumentException();
@@ -63,8 +95,18 @@ public class Address implements Comparable<Address> {
         return this;
     }
 
+    /**
+     * Сравниваются как строки, содержащие street (null всегда меньше, оба null - равны)
+     * @param o объект сравнения
+     * @return
+     */
     @Override
     public int compareTo(Address o) {
+        if(o.getStreet()==null && street==null)
+            return 0;
+        if (o.getStreet() == null)
+            return 1;
+        if (street == null) return -1;
         return street.compareTo(o.getStreet());
     }
 }

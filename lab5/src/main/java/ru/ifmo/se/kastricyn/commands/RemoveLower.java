@@ -7,6 +7,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Команда удалить из коллекции все элементы, меньшие, чем заданный
+ */
 public class RemoveLower extends AbstractCommand {
     private Scanner in;
     private boolean shouldPrintHints;
@@ -32,7 +35,7 @@ public class RemoveLower extends AbstractCommand {
                 i++;
             }
         }
-        System.out.println("ИЗ коллекции удалено " + i + " объектов.");
+        System.out.println("Из коллекции удалено " + i + " объектов.");
         if (i > 0)
             ticketCollection.setSaved(false);
     }

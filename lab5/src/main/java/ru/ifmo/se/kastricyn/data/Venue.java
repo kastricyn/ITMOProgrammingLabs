@@ -5,6 +5,9 @@ import ru.ifmo.se.kastricyn.utility.Console;
 import javax.xml.bind.annotation.*;
 import java.util.Objects;
 
+/**
+ * Нужен для {@link Ticket}
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Venue implements Comparable<Venue> {
     public static final int CAPACITY_MIN = 1;
@@ -16,6 +19,18 @@ public class Venue implements Comparable<Venue> {
     private int capacity; //Значение поля должно быть больше 0
     private VenueType type; //Поле не может быть null
     private Address address; //Поле не может быть null
+
+    /**
+     *
+     * @return true, если все поля заданы верно, иначе могут быть @exception или false
+     */
+    public boolean isExisting(){
+        setName(name).setCapacity(capacity).setType(type).setAddress(address);
+        address.isExisting();
+        if(id<1)
+            throw new IllegalStateException();
+        return true;
+    }
 
     private void initial(String name, int capacity, VenueType type, Address address) {
         setName(name).setCapacity(capacity).setType(type).setAddress(address);
@@ -35,6 +50,9 @@ public class Venue implements Comparable<Venue> {
         nextId = id + 1;
     }
 
+    /**
+     * конструктор по умолчанию, для работы JAXB
+     */
     private Venue() {
         id = nextId++;
     }
@@ -90,7 +108,7 @@ public class Venue implements Comparable<Venue> {
         if (equals(o))
             return 0;
         else
-            return (capacity - o.getCapacity()) * type.compareTo(o.getType()) * address.compareTo(o.getAddress()) * name.compareTo(o.getName());
+            return address.compareTo(o.getAddress());
     }
 
 
@@ -145,7 +163,7 @@ public class Venue implements Comparable<Venue> {
     }
 
     public Venue setType(VenueType type) {
-        if (name == null)
+        if (type == null)
             throw new NullPointerException("Поле не может быть null");
         this.type = type;
         return this;
