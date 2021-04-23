@@ -1,26 +1,26 @@
 plugins {
     id 'java'
-    id 'application'
+    id 'com.github.johnrengelman.shadow'
 }
-
-mainClassName = "ru.ifmo.se.kastricyn.lab5.Main"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 jar.manifest.attributes("Manifest-Version": "1.0",
-        "Main-Class": mainClassName)
+            "Main-Class": "ru.ifmo.se.kastricyn.lab6.client.Main")
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
-javadoc.options {
-    encoding = 'UTF-8'
-//    -encoding UTF-8 -docencoding UTF-8 -charset UTF-8
-}
 
-version '0.1'
+group 'ru.ifmo.se.kastricyn'
+version '1.0'
 
 repositories {
     mavenCentral()
 }
+
+dependencies {
+    compile project(":Lib")
+}
+
