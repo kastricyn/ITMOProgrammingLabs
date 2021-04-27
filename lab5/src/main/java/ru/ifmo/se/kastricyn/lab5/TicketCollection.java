@@ -45,9 +45,10 @@ public class TicketCollection {
 
     /**
      * Восстанавливает коллекцию из файла
+     *
      * @param p путь до файла, в котором записан XML коллекции
      * @return коллекцию, сохранённую до этого в XML файле
-     * @throws JAXBException если файл был изменён некорректным образом
+     * @throws JAXBException         если файл был изменён некорректным образом
      * @throws AccessDeniedException если файл недоступен для чтения
      */
     public static TicketCollection getTicketCollection(Path p) throws JAXBException, AccessDeniedException {
@@ -61,7 +62,8 @@ public class TicketCollection {
     }
 
     /**
-     * Создаёт пустую коллекцию связаннуюс файлом
+     * Создаёт пустую коллекцию связанную с файлом
+     *
      * @param p путь до файла в который будет сохраняться коллекция
      * @return пустую коллекцию, связанную с файлом, путь до которого был передан
      */
@@ -81,6 +83,7 @@ public class TicketCollection {
 
     /**
      * Добавляет элемент в коллекцию
+     *
      * @param e элемент, который добавляют
      * @return true, если коллекция изменилась, иначе false
      */
@@ -90,7 +93,8 @@ public class TicketCollection {
 
     /**
      * Обновляёт (перезаписывает) элемент по id
-     * @param id обновляемого (перезаписываемого / старого) элемена
+     *
+     * @param id        обновляемого (перезаписываемого / старого) элемена
      * @param newTicket обновлённый (новый) элемент
      * @throws NullPointerException если <code>newTicket==null</code>
      */
@@ -108,6 +112,7 @@ public class TicketCollection {
 
     /**
      * Удаляет элемент из коллекции по id и возвращает его
+     *
      * @param id id удаляемого элемента
      * @return удалённый элемент
      * @throws IllegalArgumentException если в коллекции не нашлось элемента с таким id
@@ -141,28 +146,23 @@ public class TicketCollection {
 
     /**
      * Возвращает элемент коллекции по его id
+     *
      * @param id id элемента, который надо получить
      * @throws IllegalArgumentException если в коллекции не нашлось элемета с таким id
      */
     public Ticket getElement(long id) {
-        for (Ticket t : tickets) {
-            if (t.getId() == id)
-                return t;
-        }
-        throw new IllegalArgumentException("В коллекции нет элемента с таким индексом");
+        return tickets.stream().filter(x -> x.getId() == id).findFirst().orElseThrow(
+                () -> new IllegalArgumentException("В коллекции нет элемента с таким индексом"));
     }
 
     /**
      * Проверяет наличие элемента в колекции по его id
+     *
      * @param id id элемента который проверяется
      * @return true, если элемент нашёлся, иначе false
      */
     public boolean hasElement(long id) {
-        for (Ticket t : tickets) {
-            if (t.getId() == id)
-                return true;
-        }
-        return false;
+        return tickets.stream().anyMatch(x -> x.getId() == id);
     }
 
     /**
@@ -174,6 +174,7 @@ public class TicketCollection {
 
     /**
      * Возвращает кол-во элементов в коллекции
+     *
      * @return число типа int, равное кол-ву элементов в коллекции
      */
     public int size() {
@@ -182,6 +183,7 @@ public class TicketCollection {
 
     /**
      * Проверяет пустая ли коллекция
+     *
      * @return true, если кол-во элементов равно 0, иначе false
      */
     public boolean isEmpty() {
@@ -190,6 +192,7 @@ public class TicketCollection {
 
     /**
      * Выполняет функцию action
+     *
      * @param action выполняемая функция
      * @throws NullPointerException если action==null
      */
@@ -209,11 +212,12 @@ public class TicketCollection {
 
     /**
      * Сортирует коллекцию
+     *
      * @param cmp компаратор по которому будет проходит сортировка
      */
     //todo: why is it working
     public void sort(Comparator<Ticket> cmp) {
-        tickets = new ArrayDeque<>(tickets.stream().sorted(cmp).collect(Collectors.toList()));
+        tickets = tickets.stream().sorted(cmp).collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     /**
@@ -232,6 +236,7 @@ public class TicketCollection {
 
     /**
      * Проверяет сохранена ли коллекция в файл
+     *
      * @return true, если сохранена, иначе false
      */
     public boolean isSaved() {
@@ -240,6 +245,7 @@ public class TicketCollection {
 
     /**
      * Устанавливает параметр сохранения коллекции
+     *
      * @param saved true - считать коллекцию сохранённой, иначе false
      */
     public void setSaved(boolean saved) {

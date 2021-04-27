@@ -5,13 +5,13 @@ plugins {
 
 mainClassName = "ru.ifmo.se.kastricyn.lab5.Main"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
 
 jar.manifest.attributes("Manifest-Version": "1.0",
         "Main-Class": mainClassName)
 
 tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
     options.encoding = 'UTF-8'
 }
 javadoc.options {
