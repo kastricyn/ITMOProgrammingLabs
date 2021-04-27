@@ -1,0 +1,14 @@
+apply plugin: "application"
+
+version '1.0'
+mainClassName = "ru.ifmo.se.kastricyn.lab6.server.Main"
+
+dependencies {
+    compile project(":lib")
+}
+
+jar {
+    manifest.attributes("Main-Class": mainClassName)
+}
+
+

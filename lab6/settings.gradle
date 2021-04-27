@@ -1,4 +1,4 @@
 rootProject.name = 'lab6'
-include 'Server'
-include 'Client'
-include 'Lib'
+include 'server'
+include 'client'
+include 'lib'
