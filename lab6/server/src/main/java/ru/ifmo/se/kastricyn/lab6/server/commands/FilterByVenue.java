@@ -1,11 +1,10 @@
-package ru.ifmo.se.kastricyn.lab5.commands;
+package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab5.TicketCollection;
-import ru.ifmo.se.kastricyn.lab5.data.Ticket;
-import ru.ifmo.se.kastricyn.lab5.data.Venue;
-import ru.ifmo.se.kastricyn.lab5.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
+import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
+import ru.ifmo.se.kastricyn.lab6.lib.Console;
+import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -20,7 +19,7 @@ public class FilterByVenue extends AbstractCommand {
     private boolean shouldPrintHints;
 
     public FilterByVenue(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
-        super("filter_by_venue", "filter_by_venue {venue} \n - вывести элементы, значение поля venue которых равно заданному");
+        super("filter_by_venue", "вывести элементы, значение поля venue которых равно заданному");
         this.in = in;
         this.shouldPrintHints = shouldPrintHints;
         this.ticketCollection = ticketCollection;

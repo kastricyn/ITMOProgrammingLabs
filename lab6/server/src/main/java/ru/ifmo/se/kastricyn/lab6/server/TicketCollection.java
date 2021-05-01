@@ -1,21 +1,16 @@
-package ru.ifmo.se.kastricyn.lab5;
+package ru.ifmo.se.kastricyn.lab6.server;
 
-import ru.ifmo.se.kastricyn.lab5.commands.Save;
-import ru.ifmo.se.kastricyn.lab5.data.Ticket;
+import ru.ifmo.se.kastricyn.lab6.lib.LocalDateAdapter;
+import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 /**
@@ -23,16 +18,16 @@ import java.util.stream.Collectors;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TicketCollection implements Iterable<Ticket>{
+public class TicketCollection implements Iterable<Ticket> {
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     @XmlAttribute
-    private LocalDate initDate;
+    private final LocalDate initDate;
     @XmlTransient
     private boolean saved;
-    private ArrayDeque<Ticket> tickets;
+    private  ArrayDeque<Ticket> tickets;
 
     @XmlTransient
-    private File file;
+    private Path path;
 
     /**
      * создаёт пустую коллекцию
@@ -43,43 +38,13 @@ public class TicketCollection implements Iterable<Ticket>{
         initDate = LocalDate.now();
     }
 
-    /**
-     * Восстанавливает коллекцию из файла
-     *
-     * @param p путь до файла, в котором записан XML коллекции
-     * @return коллекцию, сохранённую до этого в XML файле
-     * @throws JAXBException         если файл был изменён некорректным образом
-     * @throws AccessDeniedException если файл недоступен для чтения
-     */
-    public static TicketCollection getTicketCollection(Path p) throws JAXBException, AccessDeniedException {
-        if (!Files.isReadable(p))
-            throw new AccessDeniedException(p.toString());
-        JAXBContext context = JAXBContext.newInstance(TicketCollection.class);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
-        TicketCollection ticketCollection = (TicketCollection) unmarshaller.unmarshal(p.toFile());
-        ticketCollection.file = p.toFile();
-        return ticketCollection;
+    public TicketCollection(Path p) {
+        tickets = new ArrayDeque<>();
+        saved = true;
+        initDate = LocalDate.now();
+        this.path = p;
     }
 
-    /**
-     * Создаёт пустую коллекцию связанную с файлом
-     *
-     * @param p путь до файла в который будет сохраняться коллекция
-     * @return пустую коллекцию, связанную с файлом, путь до которого был передан
-     */
-    public static TicketCollection createTicketCollection(Path p) {
-        TicketCollection ticketCollection = new TicketCollection();
-        ticketCollection.file = p.toFile();
-        try {
-            Files.createFile(p);
-        } catch (IOException e) {
-            System.out.println("Создать файл не удалось. Сохранение не доступно.");
-        }
-        if (Files.isWritable(p)) {
-            new Save(ticketCollection).execute();
-        }
-        return ticketCollection;
-    }
 
     /**
      * Добавляет элемент в коллекцию
@@ -151,7 +116,7 @@ public class TicketCollection implements Iterable<Ticket>{
      * @throws IllegalArgumentException если в коллекции не нашлось элемета с таким id
      */
     public Ticket getElement(long id) {
-        return tickets.stream().filter(x -> x.getId() == id).findFirst().orElseThrow(
+        return tickets.stream().filter(x -> x.getId() == id).findAny().orElseThrow(
                 () -> new IllegalArgumentException("В коллекции нет элемента с таким индексом"));
     }
 
@@ -190,18 +155,6 @@ public class TicketCollection implements Iterable<Ticket>{
         return tickets.isEmpty();
     }
 
-    /**
-     * Выполняет функцию action
-     *
-     * @param action выполняемая функция
-     * @throws NullPointerException если action==null
-     */
-    public void forEach(Consumer<? super Ticket> action) {
-        tickets.forEach(action);
-    }
-
-
-//  delete
 
     /**
      * Сортирует коллекцию по умолчанию
@@ -223,8 +176,8 @@ public class TicketCollection implements Iterable<Ticket>{
     /**
      * Возвращает файл, связанный с коллекцией
      */
-    public File getFile() {
-        return file;
+    public Path getPath() {
+        return path;
     }
 
     /**
