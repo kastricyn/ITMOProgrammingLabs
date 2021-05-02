@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
 import ru.ifmo.se.kastricyn.lab6.lib.LocalDateAdapter;
-import ru.ifmo.se.kastricyn.lab6.lib.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,8 +10,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Класс представляющий элемент коллекции

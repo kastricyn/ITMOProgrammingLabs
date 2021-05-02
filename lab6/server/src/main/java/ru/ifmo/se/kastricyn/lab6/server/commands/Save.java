@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
-import ru.ifmo.se.kastricyn.lab6.server.Parser;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 

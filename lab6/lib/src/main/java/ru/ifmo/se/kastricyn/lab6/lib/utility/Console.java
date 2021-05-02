@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.lab6.lib;
+package ru.ifmo.se.kastricyn.lab6.lib.utility;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -371,5 +371,9 @@ public class Console {
      */
     public String nextLine() {
         return in.nextLine();
+    }
+
+    public static void printError(String str){
+        System.out.println("Error: " + str);
     }
 }

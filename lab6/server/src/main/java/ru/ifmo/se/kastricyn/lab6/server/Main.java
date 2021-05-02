@@ -1,6 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
-import ru.ifmo.se.kastricyn.lab6.lib.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -47,7 +48,11 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
-        Connect.getConnect();
+        try {
+            Connect.getConnect();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
         consoleCommandManager.run();
     }
 }

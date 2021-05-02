@@ -1,25 +1,27 @@
 package ru.ifmo.se.kastricyn.lab6.client;
 
+import ru.ifmo.se.kastricyn.lab6.lib.ServerRequest;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
-import ru.ifmo.se.kastricyn.lab6.lib.data.Address;
-
-import java.io.*;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.nio.ByteBuffer;
 
 /**
  * Main-class
  */
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println("Привет, я клиент!\n и получил:");
-        try (Socket socket = new Socket(InetAddress.getLoopbackAddress(), 8189)) {
-            byte[] b = new byte[1024*1024];
-            ByteArrayOutputStream bais = new ByteArrayOutputStream(1024*1024);
-            new ObjectOutputStream(bais).writeObject(new Address("Just address"));
+        for (int i = 0; i < 5; i++) {
+            try (Connection connect = new Connection(InetAddress.getLocalHost(), 8189)) {
+                System.out.println(connect.sendRequest(new ServerRequest("just request" + i)));
 
-
+            } catch (IOException e) {
+                Console.printError("подключение неудалось установить, попробуйте позже/проверьте параметры");
+            } catch (InterruptedException | JAXBException e) {
+                e.printStackTrace();
+            }
         }
     }
 

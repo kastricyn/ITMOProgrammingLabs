@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
-import ru.ifmo.se.kastricyn.lab6.lib.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import java.io.Serializable;
 import java.util.Objects;
