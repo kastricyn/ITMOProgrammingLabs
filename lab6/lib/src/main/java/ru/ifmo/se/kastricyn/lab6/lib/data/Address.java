@@ -2,12 +2,13 @@ package ru.ifmo.se.kastricyn.lab6.lib.data;
 
 import ru.ifmo.se.kastricyn.lab6.lib.Console;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Надо для {@link Venue}
  */
-public class Address implements Comparable<Address> {
+public class Address implements Comparable<Address>, Serializable {
     private String street; //Строка не может быть пустой, Поле может быть null
 
     /**

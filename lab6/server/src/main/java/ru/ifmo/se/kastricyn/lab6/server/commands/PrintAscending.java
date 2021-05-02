@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
+import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 import java.util.stream.StreamSupport;

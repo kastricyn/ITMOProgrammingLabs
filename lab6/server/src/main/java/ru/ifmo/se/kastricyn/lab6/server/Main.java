@@ -3,6 +3,7 @@ package ru.ifmo.se.kastricyn.lab6.server;
 import ru.ifmo.se.kastricyn.lab6.lib.Console;
 
 import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * Main-class
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         if (args.length != 1) {
             System.out.println("Программа принимает на вход ровно один аргумент - путь до файла.\n" +
@@ -46,6 +47,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
 
         CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
+        Connect.getConnect();
         consoleCommandManager.run();
     }
 }

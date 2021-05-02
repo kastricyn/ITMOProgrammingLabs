@@ -7,14 +7,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Класс представляющий элемент коллекции
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Ticket implements Comparable<Ticket> {
+public class Ticket implements Comparable<Ticket>, Serializable {
     public static final int PRICE_MIN = 1;
     public static final double DISCOUNT_MIN = 0;
     public static final double DISCOUNT_MAX = 100;

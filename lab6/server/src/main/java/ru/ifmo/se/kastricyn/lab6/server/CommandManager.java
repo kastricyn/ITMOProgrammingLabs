@@ -1,7 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
 
-import ru.ifmo.se.kastricyn.lab6.server.commands.Command;
+import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.lib.Command;
 import ru.ifmo.se.kastricyn.lab6.lib.Console;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 

@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.lab6.server.commands;
+package ru.ifmo.se.kastricyn.lab6.lib;
 
 /**
  * Абстрактный класс для команд пользователя
