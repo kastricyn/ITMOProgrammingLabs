@@ -13,8 +13,9 @@ import java.net.InetAddress;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Привет, я клиент!\n и получил:");
-        for (int i = 0; i < 5; i++) {
+         {
             try (Connection connect = new Connection(InetAddress.getLocalHost(), 8189)) {
+                for (int i = 0; i < 5; i++)
                 System.out.println(connect.sendRequest(new ServerRequest("just request" + i)));
 
             } catch (IOException e) {
