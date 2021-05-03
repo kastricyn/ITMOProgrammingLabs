@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.client;
 
-import ru.ifmo.se.kastricyn.lab6.lib.ServerAnswer;
-import ru.ifmo.se.kastricyn.lab6.lib.ServerRequest;
+import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
+import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 
@@ -19,11 +19,12 @@ public class Connection implements Closeable {
     public static final int MAX_TIMEOUT = 3000;
     public static final int INTERVAL = 5000;
 
+    private Socket socket;
     private InputStream is;
     private OutputStream os;
 
     public Connection(SocketAddress sa) throws IOException, InterruptedException {
-        Socket socket = new Socket();
+        socket = new Socket();
         for (int i = 0; i < MAX_ATTEMPT; i++) {
             try {
                 socket.connect(sa, MAX_TIMEOUT);
@@ -62,6 +63,6 @@ public class Connection implements Closeable {
     public void close() throws IOException {
         is.close();
         os.close();
-
+        socket.close();
     }
 }

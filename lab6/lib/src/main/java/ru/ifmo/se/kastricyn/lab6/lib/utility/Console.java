@@ -1,5 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.lib.utility;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.Channel;
+import java.nio.channels.Channels;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -11,7 +14,6 @@ import java.util.Scanner;
 public class Console {
     private Scanner in;
     private boolean interactiveMode;
-
 
     /**
      * Конструктор Console
@@ -25,7 +27,6 @@ public class Console {
     }
 
     /**
-     *
      * @param in сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
      */
@@ -48,7 +49,7 @@ public class Console {
                     System.out.println("Введите строку");
                     System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
                 }
-                String t = in.nextLine().trim();
+                String t = nextLine().trim();
                 if (t.isEmpty() && possibleEmpty)
                     return t;
                 if (t.isEmpty() && possibleNull)
@@ -96,7 +97,7 @@ public class Console {
                     System.out.println("Введите целое число в границах [" + min + "; " + max + "]");
                     System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
                 }
-                String t = in.nextLine().trim();
+                String t = nextLine().trim();
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
@@ -164,7 +165,7 @@ public class Console {
                     System.out.println("Введите целое число в границах [" + min + "; " + max + "]");
                     System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
                 }
-                String t = in.nextLine().trim();
+                String t = nextLine().trim();
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
@@ -232,7 +233,7 @@ public class Console {
                     System.out.println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
                     System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
                 }
-                String t = in.nextLine().trim();
+                String t = nextLine().trim();
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
@@ -275,7 +276,7 @@ public class Console {
                     System.out.println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
                     System.out.println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
                 }
-                String t = in.nextLine().trim();
+                String t = nextLine().trim();
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
@@ -296,6 +297,7 @@ public class Console {
 
     /**
      * Получает от пользователя число в заданном диапазоне
+     *
      * @return примитив типа double
      */
     public double getDouble(double min, double max) {
@@ -311,7 +313,7 @@ public class Console {
         }
         try {
             while (true) {
-                String t = in.nextLine().trim().toUpperCase();
+                String t = nextLine().trim().toUpperCase();
                 if (t.isEmpty() && possibleNull)
                     return null;
                 try {
@@ -328,6 +330,7 @@ public class Console {
 
     /**
      * Запрашивает у пользователя подтверждение на вполнение действия
+     *
      * @param message сообщение о действии, которое необходимо подтвердить
      * @return true, если пользователь подтверждает своё желание, иначе false
      */
@@ -336,7 +339,7 @@ public class Console {
         System.out.println("Для подтверждения введите y, для отмены любую другую клавишу");
         String t = "";
         try {
-            t = in.nextLine().trim().toUpperCase();
+            t = nextLine().trim().toUpperCase();
         } catch (NoSuchElementException e) {
             System.exit(0);
         }
@@ -366,14 +369,13 @@ public class Console {
     }
 
     /**
-     *
      * @return getIn().nextLine()
      */
     public String nextLine() {
         return in.nextLine();
     }
 
-    public static void printError(String str){
+    public static void printError(String str) {
         System.out.println("Error: " + str);
     }
 }

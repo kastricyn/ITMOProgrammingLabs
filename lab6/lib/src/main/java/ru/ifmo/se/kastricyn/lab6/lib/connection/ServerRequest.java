@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.lab6.lib;
+package ru.ifmo.se.kastricyn.lab6.lib.connection;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ServerAnswer implements Serializable {
+public class ServerRequest implements Serializable {
     private String a;
-    public ServerAnswer(){}
-    public ServerAnswer(String answ) {
+    public ServerRequest(){}
+    public ServerRequest(String answ) {
         a = answ;
     }
 

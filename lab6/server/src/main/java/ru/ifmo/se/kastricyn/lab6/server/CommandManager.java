@@ -85,6 +85,8 @@ public class CommandManager {
      * @param args        аргументы команды в строковом представлении
      */
     public void executeCommand(String commandName, String... args) {
+        if(commandName==null)
+            return;
         Command command = commands.get(commandName.toLowerCase());
         if (command == null) {
             System.out.println("Такой команды не существует. Для вызова справки введите: help");
