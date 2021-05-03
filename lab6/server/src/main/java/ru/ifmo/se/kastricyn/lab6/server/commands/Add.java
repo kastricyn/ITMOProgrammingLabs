@@ -10,7 +10,7 @@ import java.util.Scanner;
 /**
  * Команда добавить эллемент в коллекцию
  */
-public class Add extends AbstractCommand {
+public class Add extends AbstractCommand<Ticket> {
     private Scanner in;
     private boolean shouldPrintHints;
     private TicketCollection ticketCollection;
@@ -25,10 +25,14 @@ public class Add extends AbstractCommand {
         this.ticketCollection = ticketCollection;
     }
 
+    @Override
+    protected Ticket getParam(){
+        return new Ticket(new Console(in, shouldPrintHints));
+    }
 
     @Override
     public void execute(String ... args) {
-        Ticket t = new Ticket(new Console(in, shouldPrintHints));
+        Ticket t = getParam();
         ticketCollection.add(t);
         System.out.println("В коллекцю добавлен объект " + t);
         ticketCollection.setSaved(false);

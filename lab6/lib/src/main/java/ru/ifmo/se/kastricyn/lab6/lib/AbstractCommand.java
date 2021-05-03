@@ -3,13 +3,15 @@ package ru.ifmo.se.kastricyn.lab6.lib;
 /**
  * Абстрактный класс для команд пользователя
  */
-public abstract class AbstractCommand implements Command {
+public abstract class AbstractCommand<T> implements Command {
     final String name;
     final String description;
+    protected T param;
 
     /**
      * вызвается из конструктора класса наследника, конструктор класса наседника принимает на вход параметры, необходимые для реализации конкретной команды
-     * @param name - имя команды
+     *
+     * @param name        - имя команды
      * @param description - описание команды
      */
     public AbstractCommand(String name, String description) {
@@ -18,9 +20,17 @@ public abstract class AbstractCommand implements Command {
     }
 
     /**
+     * Надо переопределить команду у наследника, если необходим параметр
+     * @return
+     */
+    protected T getParam() {
+        return null;
+    }
+
+    /**
      * Возвращает имя команды
      */
-    public String getName(){
+    public String getName() {
         return name;
     }
 
@@ -33,7 +43,6 @@ public abstract class AbstractCommand implements Command {
     // todo: description is only description; toString = name + description
 
     /**
-     *
      * Возвращает строку для представления команды в справке:
      * <code>name -
      * description</code>
