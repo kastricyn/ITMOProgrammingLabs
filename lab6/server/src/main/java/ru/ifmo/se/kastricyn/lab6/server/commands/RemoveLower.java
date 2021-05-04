@@ -2,30 +2,25 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 import java.util.Iterator;
-import java.util.Scanner;
 
 /**
  * Команда удалить из коллекции все элементы, меньшие, чем заданный
  */
 public class RemoveLower extends AbstractCommand {
-    private Scanner in;
-    private boolean shouldPrintHints;
-    private TicketCollection ticketCollection;
 
-    public RemoveLower(TicketCollection ticketCollection, Scanner in, boolean shouldPrintHints) {
+    public RemoveLower() {
         super("remove_lower", "удалить из коллекции все элементы, меньшие, чем заданный");
-        this.in = in;
-        this.shouldPrintHints = shouldPrintHints;
-        this.ticketCollection = ticketCollection;
+        setArgumentTypes(TicketCollection.class, Ticket.class);
     }
+
 
     @Override
     public void execute(String... args) {
-        Ticket minTicket = new Ticket(new Console(in, shouldPrintHints));
+        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        Ticket minTicket = (Ticket) this.args.get(1);
         Iterator<Ticket> iterator = ticketCollection.iterator();
         Ticket t;
         int i = 0;
@@ -36,7 +31,7 @@ public class RemoveLower extends AbstractCommand {
                 i++;
             }
         }
-        System.out.println("Из коллекции удалено " + i + " объектов.");
+        answer = "Из коллекции удалено " + i + " объектов.";
         if (i > 0)
             ticketCollection.setSaved(false);
     }

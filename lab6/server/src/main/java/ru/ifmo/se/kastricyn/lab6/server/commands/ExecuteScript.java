@@ -18,48 +18,52 @@ import java.util.Stack;
  * Рекцрсивное выполнение скриптов не поддерживается
  */
 public class ExecuteScript extends AbstractCommand {
-    private TicketCollection ticketCollection;
     private static Stack<Path> openedScripts;
 
     static {
         openedScripts = new Stack<>();
     }
 
-    public ExecuteScript(TicketCollection ticketCollection) {
+    public ExecuteScript() {
         super("execute_script", "считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
-        this.ticketCollection = ticketCollection;
     }
+
+    //TODO: загрузка скриптов с клиента (на клиенте обрабатывается команда execute_script, и каждая команда, которой нет
+    // на клиенте отправляется на сервер
 
     @Override
     public void execute(String... args) {
+        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+
         if (args.length != 1) {
-            System.out.println("Данная команда должна принимать один аргумет - путь до файла.");
+            answer = "Данная команда должна принимать один аргумет - путь до файла.";
             return;
         }
 
         Path path = Paths.get(args[0]);
         if (Files.notExists(path)) {
-            System.out.println("Файл не найден.");
+            answer = "Файл не найден.";
             return;
         }
         if (!Files.isReadable(path)) {
-            System.out.println("Недостаточно прав для чтения");
+            answer = "Недостаточно прав для чтения";
             return;
         }
 
         try (Scanner scriptIn = new Scanner(path)) {
             if (openedScripts.search(path.toAbsolutePath()) > -1) {
-                System.out.println("Рекурсивное выполнение " + args[0] + " не поддерживается");
+                answer = "Рекурсивное выполнение " + args[0] + " не поддерживается";
                 return;
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
             CommandManager cm = CommandManager.getServerCommandManager(ticketCollection, new Console(scriptIn, false));
+            //todo проверить new commandManager для клиента и сервера разные
             cm.run();
             openedScripts.pop();
         } catch (IOException e) {
-            System.out.println("Что-то пошло не так. Не удалось прочитать файл.");
+            answer = "Не удалось прочитать файл.";
         } catch (Exception e) {
-            System.err.println("Выполнение скрипта не удалось завершить правильно.");
+            answer = "Выполнение скрипта не удалось завершить правильно.";
         }
     }
 }

@@ -25,7 +25,12 @@ public interface Command {
      *
      * @param args аргуменьты
      */
-    Command setArguments(ArrayList<?> args);
+    Command setArguments(Object... args);
+
+    /**
+     * Удаляет аргументы, для корректного последующего вызова
+     */
+    void clearArguments();
 
     /**
      * Возврщает строку ответ на команду

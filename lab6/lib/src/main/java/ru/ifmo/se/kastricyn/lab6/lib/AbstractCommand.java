@@ -1,6 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Абстрактный класс для команд пользователя
@@ -39,24 +41,29 @@ public abstract class AbstractCommand implements Command {
      * @param argTypes типы аргументов команы
      * @return команду с аргументами
      */
-    protected Command setArgumentTypes(ArrayList<Class> argTypes) {
-        argTypes.clear();
-        argTypes.addAll(argTypes);
+    protected Command setArgumentTypes(Class... argTypes) {
+        this.argTypes.clear();
+        this.argTypes.addAll(Arrays.stream(argTypes).collect(Collectors.toList()));
         return this;
     }
 
     @Override
-    public Command setArguments(ArrayList<?> args) {
+    public Command setArguments(Object... args) {
         this.args.clear();
-        this.args.addAll(args);
+        this.args.addAll(Arrays.stream(args).collect(Collectors.toList()));
         return this;
     }
 
     /**
      * возвращает аргументы команды
      */
-    public ArrayList<Object> getArgs() {
+    public ArrayList<Object> getArguments() {
         return new ArrayList<>(args);
+    }
+
+    @Override
+    public void clearArguments() {
+        args.clear();
     }
 
     /**

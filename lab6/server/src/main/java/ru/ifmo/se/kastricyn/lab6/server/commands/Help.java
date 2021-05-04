@@ -1,23 +1,25 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
 
 /**
  * Команда вывести справку по доступным командам
  */
 public class Help extends AbstractCommand {
-    private CommandManager commandManager;
 
-    public Help(CommandManager commandManager) {
+    public Help() {
         super("help", "вывести справку по доступным командам");
-        this.commandManager = commandManager;
+
+        setArgumentTypes(CommandManager.class);
     }
 
     @Override
     public void execute(String... args) {
-        //todo: close stream better than now
-        commandManager.getCommandsAsString().sorted().forEachOrdered(System.out::println);
-        return;
+        CommandManager commandManager = (CommandManager) this.args.get(0);
+
+        answer = Console.getStringFromStream("Доступны следующие команды:",
+                commandManager.getCommandsAsString().sorted());
     }
 }

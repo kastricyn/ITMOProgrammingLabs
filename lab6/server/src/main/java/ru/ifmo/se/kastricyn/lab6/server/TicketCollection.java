@@ -62,8 +62,9 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param id        обновляемого (перезаписываемого / старого) элемена
      * @param newTicket обновлённый (новый) элемент
      * @throws NullPointerException если <code>newTicket==null</code>
+     * @throws IllegalArgumentException если в коллекции нет элемента с таким id
      */
-    public void update(long id, Ticket newTicket) {
+    public void update(long id, Ticket newTicket) throws NullPointerException, IllegalArgumentException {
         if (newTicket == null)
             throw new NullPointerException();
         Ticket tmp = getElement(id);
@@ -82,7 +83,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * @return удалённый элемент
      * @throws IllegalArgumentException если в коллекции не нашлось элемента с таким id
      */
-    public Ticket remove(long id) {
+    public Ticket remove(long id) throws IllegalArgumentException {
         Iterator<Ticket> iterator = tickets.iterator();
         Ticket t;
         while (iterator.hasNext()) {
@@ -115,7 +116,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param id id элемента, который надо получить
      * @throws IllegalArgumentException если в коллекции не нашлось элемета с таким id
      */
-    public Ticket getElement(long id) {
+    public Ticket getElement(long id)  throws IllegalArgumentException {
         return tickets.stream().filter(x -> x.getId() == id).findAny().orElseThrow(
                 () -> new IllegalArgumentException("В коллекции нет элемента с таким индексом"));
     }
@@ -159,8 +160,9 @@ public class TicketCollection implements Iterable<Ticket> {
     /**
      * Сортирует коллекцию по умолчанию
      */
-    public void sort() {
+    public TicketCollection sort() {
         sort(Ticket::compareTo);
+        return this;
     }
 
     /**
@@ -169,8 +171,9 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param cmp компаратор по которому будет проходит сортировка
      */
     //todo: why is it working
-    public void sort(Comparator<Ticket> cmp) {
+    public TicketCollection sort(Comparator<Ticket> cmp) {
         tickets = tickets.stream().sorted(cmp).collect(Collectors.toCollection(ArrayDeque::new));
+        return this;
     }
 
     /**

@@ -8,7 +8,6 @@ import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.stream.Stream;
 
 /**
@@ -40,26 +39,24 @@ public class CommandManager {
      * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
     public static CommandManager getServerCommandManager(TicketCollection ticketCollection, Console console) {
-        Scanner in = console.getIn();
-        boolean shouldPrintHints = console.isInteractiveMode();
 
         CommandManager cm = new CommandManager(ticketCollection, console);
-        cm.addIfAbsent(new Add(ticketCollection, in, shouldPrintHints));
-        cm.addIfAbsent(new AddIfMax(ticketCollection, in, shouldPrintHints));
-        cm.addIfAbsent(new Clear(ticketCollection));
-        cm.addIfAbsent(new ExecuteScript(ticketCollection));
-        cm.addIfAbsent(new Exit(ticketCollection, console));
-        cm.addIfAbsent(new FilterByVenue(ticketCollection, in, shouldPrintHints));
-        cm.addIfAbsent(new Head(ticketCollection));
-        cm.addIfAbsent(new Help(cm));
-        cm.addIfAbsent(new Info(ticketCollection));
-        cm.addIfAbsent(new PrintAscending(ticketCollection));
-        cm.addIfAbsent(new PrintFieldDescendingVenue(ticketCollection));
-        cm.addIfAbsent(new RemoveById(ticketCollection));
-        cm.addIfAbsent(new RemoveLower(ticketCollection, in, shouldPrintHints));
-        cm.addIfAbsent(new Save(ticketCollection));
-        cm.addIfAbsent(new Show(ticketCollection));
-        cm.addIfAbsent(new Update(ticketCollection, console));
+        cm.addIfAbsent(new Add());
+        cm.addIfAbsent(new AddIfMax());
+        cm.addIfAbsent(new Clear());
+        cm.addIfAbsent(new ExecuteScript());
+        cm.addIfAbsent(new Exit());
+        cm.addIfAbsent(new FilterByVenue());
+        cm.addIfAbsent(new Head());
+        cm.addIfAbsent(new Help());
+        cm.addIfAbsent(new Info());
+        cm.addIfAbsent(new PrintAscending());
+        cm.addIfAbsent(new PrintFieldDescendingVenue());
+        cm.addIfAbsent(new RemoveById());
+        cm.addIfAbsent(new RemoveLower());
+        cm.addIfAbsent(new Save());
+        cm.addIfAbsent(new Show());
+        cm.addIfAbsent(new Update());
         return cm;
     }
 
@@ -69,7 +66,7 @@ public class CommandManager {
      * @param ticketCollection коллекция с которой будут работать команды
      * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static CommandManager getClientCommandManager(TicketCollection ticketCollection, Console console){
+    public static CommandManager getClientCommandManager(TicketCollection ticketCollection, Console console) {
         //todo
         return null;
     }
@@ -102,11 +99,12 @@ public class CommandManager {
             System.out.println("Такой команды не существует. Для вызова справки введите: help");
             return;
         }
-        console.setArgs(command);
+        console. (command);
         command.execute(args);
+        command.clearArguments();
     }
 
-    public Command getCommand(String commandName){
+    public Command getCommand(String commandName) {
         return commands.get(commandName.toLowerCase());
     }
 
@@ -119,5 +117,14 @@ public class CommandManager {
             return;
         String[] s = t.trim().split("\\s");
         executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
+    }
+
+    /**
+     * Заканчивает процесс
+     */
+    public void exit() {
+        executeCommand("Save");
+        // TODO: реальный выход из программы
+        System.err.println("типо вышли из программы");
     }
 }

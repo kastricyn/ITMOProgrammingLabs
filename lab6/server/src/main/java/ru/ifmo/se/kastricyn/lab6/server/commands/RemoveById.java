@@ -7,22 +7,25 @@ import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
  * Команда удалить элемент из коллекции по его id
  */
 public class RemoveById extends AbstractCommand {
-    private TicketCollection ticketCollection;
 
-    public RemoveById(TicketCollection ticketCollection) {
+    public RemoveById() {
         super("remove_by_id", "удалить элемент из коллекции по его id");
-        this.ticketCollection = ticketCollection;
+        setArgumentTypes(TicketCollection.class);
     }
+
 
     @Override
     public void execute(String... args) {
-        //todo write more information exceptions:не правильный формат аргумента, нет эллемента,
+        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        //todo написать правильный help для команд с аргументами
         try {
             ticketCollection.remove(Long.parseLong(args[0]));
             ticketCollection.setSaved(false);
-            System.out.println("Элемент удалён");
-        } catch (Exception e) {
-            System.out.println("Команда не выполнена, проверьте правильность аргументов.");
+            answer = "Элемент удалён";
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            answer = "Команда принимает на вход аргумент - целочисленный id элемента коллекции";
+        } catch (IllegalArgumentException e) {
+            answer = "В коллекции нет элемента с таким id.";
         }
     }
 }

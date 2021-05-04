@@ -207,7 +207,7 @@ public class TicketCollection implements Iterable<Ticket>{
      * Сортирует коллекцию по умолчанию
      */
     public void sort() {
-        sort(Ticket::compareTo);
+        sort(Comparator.naturalOrder());
     }
 
     /**
@@ -215,7 +215,6 @@ public class TicketCollection implements Iterable<Ticket>{
      *
      * @param cmp компаратор по которому будет проходит сортировка
      */
-    //todo: why is it working
     public void sort(Comparator<Ticket> cmp) {
         tickets = tickets.stream().sorted(cmp).collect(Collectors.toCollection(ArrayDeque::new));
     }

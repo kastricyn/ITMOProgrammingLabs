@@ -7,17 +7,23 @@ import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
  * Команда очистить колекцию
  */
 public class Clear extends AbstractCommand {
-    private TicketCollection ticketCollection;
 
-    public Clear(TicketCollection ticketCollection) {
+    public Clear() {
         super("clear", "очистить коллекцию");
-        this.ticketCollection = ticketCollection;
+
+        setArgumentTypes(TicketCollection.class);
     }
+
 
     @Override
     public void execute(String... args) {
-        if(!ticketCollection.isEmpty())
+        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        if (!ticketCollection.isEmpty()) {
             ticketCollection.setSaved(false);
-        ticketCollection.clear();
+            answer = "Колекция уже пуста";
+        } else {
+            ticketCollection.clear();
+            answer = "Колекция очищена";
+        }
     }
 }

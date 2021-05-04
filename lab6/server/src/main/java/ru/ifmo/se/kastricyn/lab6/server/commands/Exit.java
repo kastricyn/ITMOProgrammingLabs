@@ -1,28 +1,25 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
-import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
+import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
 
 /**
  * Команда выйти из программы
  */
 public class Exit extends AbstractCommand {
-    TicketCollection ticketCollection;
-    Console console;
 
-    public Exit(TicketCollection ticketCollection, Console console) {
+    public Exit() {
         super("exit", "завершить программу (без сохранения в файл)");
-        this.ticketCollection = ticketCollection;
-        this.console = console;
+
+        setArgumentTypes(CommandManager.class);
     }
 
+    //TODO: общая функция для всех выходов из программы
+
     @Override
-    public void execute(String... args) {
-        if (console.isInteractiveMode() && !ticketCollection.isSaved()) {
-            if (console.requestConfirmation("Вы действительно хотите выйти без сохранения")) System.exit(0);
-        } else
-            System.exit(0);
+    public void execute(String ... args) {
+        CommandManager cm = (CommandManager) this.args.get(0);
+        cm.exit();
     }
 
 }

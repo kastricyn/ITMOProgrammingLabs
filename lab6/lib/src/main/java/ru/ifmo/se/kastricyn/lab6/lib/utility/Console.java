@@ -1,14 +1,9 @@
 package ru.ifmo.se.kastricyn.lab6.lib.utility;
 
-import ru.ifmo.se.kastricyn.lab6.lib.Command;
-
-import java.nio.ByteBuffer;
-import java.nio.channels.Channel;
-import java.nio.channels.Channels;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /**
  * Иммитирует консоль для работы с пользователем.
@@ -38,6 +33,11 @@ public class Console {
         interactiveMode = true;
     }
 
+    public static String getStringFromStream(String before, Stream<?> stream) {
+        StringBuffer sb = new StringBuffer(1024).append(before).append("\n");
+        stream.forEachOrdered(x -> sb.append(x).append("\n"));
+        return sb.toString();
+    }
 
     /**
      * Метод получает строку от пользователя необходимого формата

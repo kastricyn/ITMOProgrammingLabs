@@ -7,15 +7,16 @@ import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
  * Команда вывести первый элемент коллекции
  */
 public class Head extends AbstractCommand {
-    private TicketCollection ticketCollection;
 
-    public Head(TicketCollection ticketCollection) {
+    public Head() {
         super("head", "вывести первый элемент коллекции");
-        this.ticketCollection = ticketCollection;
+
+        setArgumentTypes(TicketCollection.class);
     }
 
     @Override
     public void execute(String... args) {
-        System.out.println(ticketCollection.isEmpty() ? "Коллекция пуста" : ticketCollection.peekFirst());
+        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        answer = ticketCollection.isEmpty() ? "Коллекция пуста" : ticketCollection.peekFirst().toString();
     }
 }
