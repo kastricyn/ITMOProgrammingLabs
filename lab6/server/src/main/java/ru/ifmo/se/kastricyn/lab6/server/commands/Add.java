@@ -2,7 +2,6 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 import java.util.Scanner;
@@ -10,7 +9,7 @@ import java.util.Scanner;
 /**
  * Команда добавить эллемент в коллекцию
  */
-public class Add extends AbstractCommand<Ticket> {
+public class Add extends AbstractCommand {
     private Scanner in;
     private boolean shouldPrintHints;
     private TicketCollection ticketCollection;
@@ -35,4 +34,5 @@ public class Add extends AbstractCommand<Ticket> {
         ticketCollection.setSaved(false);
         params.clear();
     }
+
 }

@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 
 import javax.xml.bind.JAXBException;
@@ -53,7 +53,7 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager = CommandManager.getServerCommandMenedger(tickets, new Console(in));
+        CommandManager consoleCommandManager = CommandManager.getServerCommandManager(tickets, new Director(in));
         {
             ServerSocketChannel ssc = ServerSocketChannel.open()
                     .bind(new InetSocketAddress(PORT));

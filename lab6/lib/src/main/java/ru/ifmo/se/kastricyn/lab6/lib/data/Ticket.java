@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
 import ru.ifmo.se.kastricyn.lab6.lib.LocalDateAdapter;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -78,34 +78,34 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         creationDate = LocalDate.now();
     }
 
-    public Ticket(Console console) {
+    public Ticket(Director director) {
         id = nextId++;
         creationDate = LocalDate.now();
-        if (console.isInteractiveMode()) {
+        if (director.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Ticket\":");
             System.out.println("Поле имя:");
         }
-        setName(console.getString());
+        setName(director.getString());
 
-        setCoordinates(new Coordinates(console));
+        setCoordinates(new Coordinates(director));
 
-        if (console.isInteractiveMode())
+        if (director.isInteractiveMode())
             System.out.println("Возвращаемся к объекту типа \"Ticket\":\n Поле price:");
-        setPrice(console.getInt(PRICE_MIN, Integer.MAX_VALUE, true));
+        setPrice(director.getInt(PRICE_MIN, Integer.MAX_VALUE, true));
 
-        if (console.isInteractiveMode())
+        if (director.isInteractiveMode())
             System.out.println("Поле discount:");
 
-        setDiscount(console.getDouble(DISCOUNT_MIN, DISCOUNT_MAX));
+        setDiscount(director.getDouble(DISCOUNT_MIN, DISCOUNT_MAX));
 
-        if (console.isInteractiveMode())
+        if (director.isInteractiveMode())
             System.out.println("Поле type:");
 
-        setType(console.getEnumConstant(TicketType.class, true));
+        setType(director.getEnumConstant(TicketType.class, true));
 
-        setVenue(new Venue(console));
+        setVenue(new Venue(director));
 
-        if (console.isInteractiveMode()) {
+        if (director.isInteractiveMode()) {
             System.out.println("Возвращаемся к объекту типа \"Ticket\":\n создан объект: " + this);
         }
 

@@ -1,18 +1,17 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
 import java.util.ArrayList;
-import java.util.function.BooleanSupplier;
 
 /**
  * Абстрактный класс для команд пользователя
  */
-public abstract class AbstractCommand<T> implements Command {
+public abstract class AbstractCommand implements Command {
     final String name;
+    protected String answer = "";
     final String description;
 
-    protected static final ArrayList<Class> paramTypes = new ArrayList<>();
-    protected ArrayList<Object> params;
-
+    protected final ArrayList<Class> paramTypes = new ArrayList<>();
+    protected ArrayList<Object> params = new ArrayList<>();
 
     /**
      * вызвается из конструктора класса наследника, конструктор класса наседника принимает на вход параметры, необходимые для реализации конкретной команды
@@ -23,20 +22,33 @@ public abstract class AbstractCommand<T> implements Command {
     public AbstractCommand(String name, String description) {
         this.name = name;
         this.description = description;
-        params = new ArrayList<>();
-
     }
 
+    public ArrayList<Class> getParamTypes() {
+        return new ArrayList<>(paramTypes);
+    }
 
-    protected void setParam(ArrayList<?> params) {
+    protected Command setParamTypes(ArrayList<Class> paramTypes){
+        paramTypes.clear();
+        paramTypes.addAll(paramTypes);
+        return this;
+    }
+
+    public Command setParams(ArrayList<? extends Object> params) {
         this.params.clear();
-        this.params.add(params);
+        this.params.addAll(params);
+        return this;
+    }
+
+    public ArrayList<Object> getParams() {
+        return new ArrayList<>(params);
     }
 
     /**
      * @return true, если у команды указаны верные параметры, инчае false
      */
-    protected boolean paramIsValidate() {
+    public boolean paramsIsValidate() {
+        if(paramTypes.size()==0)
         if (params.size() != paramTypes.size())
             return false;
         for (int i = 0; i < params.size(); i++) {
@@ -70,4 +82,12 @@ public abstract class AbstractCommand<T> implements Command {
     public String toString() {
         return name + "\n - " + description;
     }
+    /**
+     *
+     * @param args аргументы команды
+     * @throws IndexOutOfBoundsException if paramsIsValidate()!=true
+     */
+    @Override
+    public abstract void execute(String ... args);
+
 }

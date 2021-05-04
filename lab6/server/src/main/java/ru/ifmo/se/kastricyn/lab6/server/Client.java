@@ -16,6 +16,8 @@ public class Client {
     private SocketChannel sh;
     private Selector selector;
 
+    private static CommandManager cm = null;
+
     public Client(ServerSocketChannel ssc, Selector selector) throws IOException {
         sh = ssc.accept();
         if (sh == null)
@@ -24,7 +26,6 @@ public class Client {
         this.selector = selector;
         sh.register(selector, SelectionKey.OP_READ, this);
     }
-
 
     public void reply(ByteBuffer bf) {
         try {
@@ -49,7 +50,6 @@ public class Client {
 
     protected void write(ServerAnswer sa) throws IOException {
         StringWriter sw = new StringWriter();
-
         Parser.write(sw, ServerAnswer.class, sa);
         sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
     }
@@ -63,6 +63,16 @@ public class Client {
     }
 
     protected  ServerAnswer processing(ServerRequest serverRequest){
+        if(serverRequest.getCommandName())
         return new ServerAnswer("dsfa" + serverRequest);
+    }
+
+
+    public static void setCm(CommandManager cm) {
+        Client.cm = cm;
+    }
+
+    public static CommandManager getCm() {
+        return cm;
     }
 }

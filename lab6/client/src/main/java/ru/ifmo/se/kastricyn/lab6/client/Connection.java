@@ -2,7 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.client;
 
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 
 import javax.xml.bind.JAXBException;
@@ -29,7 +29,7 @@ public class Connection implements Closeable {
             try {
                 socket.connect(sa, MAX_TIMEOUT);
             } catch (IOException e) {
-                Console.printError("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000 + " с.");
+                Director.printError("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000 + " с.");
             }
             if (socket.isConnected())
                 break;

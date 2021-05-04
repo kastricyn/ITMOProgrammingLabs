@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -38,15 +38,15 @@ public class Address implements Comparable<Address>, Serializable {
     /**
      * Конструктор Address
      *
-     * @param console объект типа Console, методами которго будут получены данные от пользователя с учётом ограничений
+     * @param director объект типа Console, методами которго будут получены данные от пользователя с учётом ограничений
      */
-    public Address(Console console) {
-        if (console.isInteractiveMode()) {
+    public Address(Director director) {
+        if (director.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Address\":");
             System.out.println("Введите пожалуйста улицу:");
         }
-        street = console.getString(true);
-        if (console.isInteractiveMode())
+        street = director.getString(true);
+        if (director.isInteractiveMode())
             System.out.println("Создан объект: " + this);
     }
 

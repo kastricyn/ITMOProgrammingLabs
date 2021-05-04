@@ -1,8 +1,11 @@
 package ru.ifmo.se.kastricyn.lab6.lib.utility;
 
+import ru.ifmo.se.kastricyn.lab6.lib.Command;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
 import java.nio.channels.Channels;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -11,7 +14,7 @@ import java.util.Scanner;
  * Иммитирует консоль для работы с пользователем.
  * Предоставляет удобный интерфейс получение данных от пользвателя и реализует его
  */
-public class Console {
+public class Director {
     private Scanner in;
     private boolean interactiveMode;
 
@@ -21,7 +24,7 @@ public class Console {
      * @param in               сканер, откуда стоит читать
      * @param shouldPrintHints надо ли печатать подсказки в вывод
      */
-    public Console(Scanner in, boolean shouldPrintHints) {
+    public Director(Scanner in, boolean shouldPrintHints) {
         this.in = in;
         this.interactiveMode = shouldPrintHints;
     }
@@ -30,9 +33,21 @@ public class Console {
      * @param in сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
      */
-    public Console(Scanner in) {
+    public Director(Scanner in) {
         this.in = in;
         interactiveMode = true;
+    }
+
+    /**
+     * Устанавливает параметры для переданной команды
+     * @param command команда которой надо установить параметры
+     * @return true если установлено иначе false
+     */
+    public boolean setParams(Command command){
+        ArrayList<Object> params = new ArrayList<>(command.getParamTypes().size());
+        //todo get Params в зависимости от консоли и команды или чего-то ещё
+        command.setParams(params);
+        return true;
     }
 
     /**

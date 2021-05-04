@@ -12,8 +12,11 @@ import java.util.stream.Stream;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
+    public String getCommandName() {
+        return commandName;
+    }
+
     private String commandName;
-    private ArrayList<Class> paramTypes;
     private ArrayList<Object> params;
 
     public ServerRequest() {
@@ -21,16 +24,16 @@ public class ServerRequest implements Serializable {
 
     public ServerRequest(String commandName) {
         this.commandName = commandName;
-        paramTypes = new ArrayList<>();
         params = new ArrayList<>();
     }
 
     public ServerRequest addParam(Object... objects) {
-        for (Object o :
-                objects) {
-            paramTypes.add(o.getClass());
-            params.add(objects);
-        }
+        params.add(objects);
+        return this;
+    }
+
+    public ServerRequest clear(){
+        params.clear();
         return this;
     }
 
@@ -38,7 +41,6 @@ public class ServerRequest implements Serializable {
     public String toString() {
         return "ServerRequest{" +
                 "commandName='" + commandName + '\'' +
-                ", paramTypes=" + paramTypes +
                 ", params=" + params +
                 '}';
     }

@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.client;
 
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class Main {
                     Thread.sleep(1000);
                 }
             } catch (IOException e) {
-                Console.printError("Соединение прервалось");
+                Director.printError("Соединение прервалось");
             } catch (InterruptedException | JAXBException e) {
                 e.printStackTrace();
             }

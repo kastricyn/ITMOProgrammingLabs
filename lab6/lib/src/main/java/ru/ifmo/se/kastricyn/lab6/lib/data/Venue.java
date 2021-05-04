@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -59,25 +59,25 @@ public class Venue implements Comparable<Venue> {
         id = nextId++;
     }
 
-    public Venue(Console console) {
+    public Venue(Director director) {
         id = nextId++;
-        if (console.isInteractiveMode()) {
+        if (director.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Venue\":");
             System.out.println("Поле имя:");
         }
-        setName(console.getString());
+        setName(director.getString());
 
-        if (console.isInteractiveMode())
+        if (director.isInteractiveMode())
             System.out.println("Поле capacity:");
-        setCapacity(console.getInt(CAPACITY_MIN));
+        setCapacity(director.getInt(CAPACITY_MIN));
 
-        if (console.isInteractiveMode())
+        if (director.isInteractiveMode())
             System.out.println("Поле type:");
 
-        setType(console.getEnumConstant(VenueType.class, false));
-        setAddress(new Address(console));
+        setType(director.getEnumConstant(VenueType.class, false));
+        setAddress(new Address(director));
 
-        if (console.isInteractiveMode())
+        if (director.isInteractiveMode())
             System.out.println("Создан объект: " + this);
     }
 
