@@ -22,17 +22,17 @@ public class Add extends AbstractCommand {
         this.in = in;
         this.shouldPrintHints = shouldPrintHints;
         this.ticketCollection = ticketCollection;
-        params.add(Ticket.class);
+        args.add(Ticket.class);
     }
 
 
     @Override
     public void execute(String ... args) {
-        Ticket t = (Ticket) params.get(0);
+        Ticket t = (Ticket) this.args.get(0);
         ticketCollection.add(t);
         System.out.println("В коллекцю добавлен объект " + t);
         ticketCollection.setSaved(false);
-        params.clear();
+        this.args.clear();
     }
 
 }

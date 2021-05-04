@@ -2,7 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 /**
@@ -10,12 +10,12 @@ import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
  */
 public class Update extends AbstractCommand {
     private TicketCollection ticketCollection;
-    private Director director;
+    private Console console;
 
-    public Update(TicketCollection ticketCollection, Director director) {
+    public Update(TicketCollection ticketCollection, Console console) {
         super("update", "обновить значение элемента коллекции, id которого равен заданному");
         this.ticketCollection = ticketCollection;
-        this.director = director;
+        this.console = console;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Update extends AbstractCommand {
             System.out.println("В коллекции нет элемента с таким id");
             return;
         }
-        Ticket t = new Ticket(director);
+        Ticket t = new Ticket(console);
         ticketCollection.update(id, t);
         System.out.println("Объект обновлён");
         ticketCollection.setSaved(false);

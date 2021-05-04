@@ -3,7 +3,7 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 import java.util.Scanner;
@@ -28,7 +28,7 @@ public class FilterByVenue extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        Venue venue = new Venue(new Director(in, shouldPrintHints)); //todo change all commands in, shouldPrintHints -> CONSOLE
+        Venue venue = new Venue(new Console(in, shouldPrintHints)); //todo change all commands in, shouldPrintHints -> CONSOLE
         Supplier<Stream<Ticket>> v = () -> StreamSupport.stream(ticketCollection.spliterator(), true).filter(x -> x.getVenue().equals(venue));
         if (v.get().findAny().isPresent()) {
             System.out.println("Элементы имеющие введённый venue:");

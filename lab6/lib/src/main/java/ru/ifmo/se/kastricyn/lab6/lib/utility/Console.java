@@ -14,7 +14,7 @@ import java.util.Scanner;
  * Иммитирует консоль для работы с пользователем.
  * Предоставляет удобный интерфейс получение данных от пользвателя и реализует его
  */
-public class Director {
+public class Console {
     private Scanner in;
     private boolean interactiveMode;
 
@@ -24,7 +24,7 @@ public class Director {
      * @param in               сканер, откуда стоит читать
      * @param shouldPrintHints надо ли печатать подсказки в вывод
      */
-    public Director(Scanner in, boolean shouldPrintHints) {
+    public Console(Scanner in, boolean shouldPrintHints) {
         this.in = in;
         this.interactiveMode = shouldPrintHints;
     }
@@ -33,22 +33,11 @@ public class Director {
      * @param in сканер, откуда стоит читать
      *           По умолчанию <code>shouldPrintHints = true</code> (подсказки будут печататься)
      */
-    public Director(Scanner in) {
+    public Console(Scanner in) {
         this.in = in;
         interactiveMode = true;
     }
 
-    /**
-     * Устанавливает параметры для переданной команды
-     * @param command команда которой надо установить параметры
-     * @return true если установлено иначе false
-     */
-    public boolean setParams(Command command){
-        ArrayList<Object> params = new ArrayList<>(command.getParamTypes().size());
-        //todo get Params в зависимости от консоли и команды или чего-то ещё
-        command.setParams(params);
-        return true;
-    }
 
     /**
      * Метод получает строку от пользователя необходимого формата

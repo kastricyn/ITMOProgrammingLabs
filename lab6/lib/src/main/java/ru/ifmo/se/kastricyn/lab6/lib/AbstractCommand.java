@@ -6,56 +6,79 @@ import java.util.ArrayList;
  * Абстрактный класс для команд пользователя
  */
 public abstract class AbstractCommand implements Command {
-    final String name;
+    protected final String name;
+    protected final String description;
     protected String answer = "";
-    final String description;
 
-    protected final ArrayList<Class> paramTypes = new ArrayList<>();
-    protected ArrayList<Object> params = new ArrayList<>();
+    protected final ArrayList<Class> argTypes = new ArrayList<>();
+    protected ArrayList<Object> args = new ArrayList<>();
 
     /**
-     * вызвается из конструктора класса наследника, конструктор класса наседника принимает на вход параметры, необходимые для реализации конкретной команды
+     * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
+     * вызвается из конструктора класса наследника
      *
-     * @param name        - имя команды
-     * @param description - описание команды
+     * @param name        имя команды
+     * @param description описание команды
      */
     public AbstractCommand(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public ArrayList<Class> getParamTypes() {
-        return new ArrayList<>(paramTypes);
-    }
-
-    protected Command setParamTypes(ArrayList<Class> paramTypes){
-        paramTypes.clear();
-        paramTypes.addAll(paramTypes);
-        return this;
-    }
-
-    public Command setParams(ArrayList<? extends Object> params) {
-        this.params.clear();
-        this.params.addAll(params);
-        return this;
-    }
-
-    public ArrayList<Object> getParams() {
-        return new ArrayList<>(params);
+    /**
+     * возвращает типы необходимых нестроковых аргументов команды пользователя
+     */
+    @Override
+    public ArrayList<Class> getArgumentTypes() {
+        return new ArrayList<>(argTypes);
     }
 
     /**
-     * @return true, если у команды указаны верные параметры, инчае false
+     * Устанавливает типы нестроковых аргументов команды
+     *
+     * @param argTypes типы аргументов команы
+     * @return команду с аргументами
+     */
+    protected Command setArgumentTypes(ArrayList<Class> argTypes) {
+        argTypes.clear();
+        argTypes.addAll(argTypes);
+        return this;
+    }
+
+    @Override
+    public Command setArguments(ArrayList<?> args) {
+        this.args.clear();
+        this.args.addAll(args);
+        return this;
+    }
+
+    /**
+     * возвращает аргументы команды
+     */
+    public ArrayList<Object> getArgs() {
+        return new ArrayList<>(args);
+    }
+
+    /**
+     * возвращает true, если у команды указаны верные параметры, инчае false
      */
     public boolean paramsIsValidate() {
-        if(paramTypes.size()==0)
-        if (params.size() != paramTypes.size())
-            return false;
-        for (int i = 0; i < params.size(); i++) {
-            if (!paramTypes.get(i).isInstance(params.get(i)))
+        if (argTypes.size() == 0)
+            if (args.size() != argTypes.size())
+                return false;
+        for (int i = 0; i < args.size(); i++) {
+            if (!argTypes.get(i).isInstance(args.get(i)))
                 return false;
         }
         return true;
+    }
+
+    /**
+     * возвращает строку с ответом команды ползователю
+     */
+    @Override
+    public String getAnswer() {
+        return answer;
     }
 
     /**
@@ -82,12 +105,12 @@ public abstract class AbstractCommand implements Command {
     public String toString() {
         return name + "\n - " + description;
     }
+
     /**
-     *
      * @param args аргументы команды
      * @throws IndexOutOfBoundsException if paramsIsValidate()!=true
      */
     @Override
-    public abstract void execute(String ... args);
+    public abstract void execute(String... args);
 
 }

@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import java.util.Objects;
 
@@ -22,17 +22,17 @@ public class Coordinates {
         setX(x).setY(y);
     }
 
-    public Coordinates(Director director) {
-        if (director.isInteractiveMode()) {
+    public Coordinates(Console console) {
+        if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Coordinates\":");
             System.out.println("Поле x:");
         }
-        setX(director.getLong(X_MIN));
-        if (director.isInteractiveMode())
+        setX(console.getLong(X_MIN));
+        if (console.isInteractiveMode())
             System.out.println("Поле y:");
-        setY(director.getFloat());
+        setY(console.getFloat());
 
-        if (director.isInteractiveMode())
+        if (console.isInteractiveMode())
             System.out.println("Создан объект: " + this);
     }
 

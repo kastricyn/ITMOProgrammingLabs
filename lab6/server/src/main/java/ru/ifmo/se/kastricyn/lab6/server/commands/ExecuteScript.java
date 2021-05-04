@@ -2,7 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class ExecuteScript extends AbstractCommand {
                 return;
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
-            CommandManager cm = CommandManager.getServerCommandManager(ticketCollection, new Director(scriptIn, false));
+            CommandManager cm = CommandManager.getServerCommandManager(ticketCollection, new Console(scriptIn, false));
             cm.run();
             openedScripts.pop();
         } catch (IOException e) {

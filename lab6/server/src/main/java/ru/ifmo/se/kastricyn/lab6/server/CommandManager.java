@@ -2,7 +2,8 @@ package ru.ifmo.se.kastricyn.lab6.server;
 
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
+import ru.ifmo.se.kastricyn.lab6.lib.Command;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
 import java.util.Arrays;
@@ -18,36 +19,36 @@ public class CommandManager {
     private HashMap<String, AbstractCommand> commands;
 
     public final TicketCollection ticketCollection;
-    public final Director director;
+    public final Console console;
 
     /**
      * Создаёт менеджер коммандами.
      *
      * @param ticketCollection коллекция с которой будут работать команды
-     * @param director          объект типа {@link Director} с помощью которого происходит взаимодействие с пользователем
+     * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public CommandManager(TicketCollection ticketCollection, Director director) {
+    public CommandManager(TicketCollection ticketCollection, Console console) {
         commands = new HashMap<>();
         this.ticketCollection = ticketCollection;
-        this.director = director;
+        this.console = console;
     }
 
     /**
      * Возвращает менеджер комманд поумолчанию
      *
      * @param ticketCollection коллекция с которой будут работать команды
-     * @param director          объект типа {@link Director} с помощью которого происходит взаимодействие с пользователем
+     * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static CommandManager getServerCommandManager(TicketCollection ticketCollection, Director director) {
-        Scanner in = director.getIn();
-        boolean shouldPrintHints = director.isInteractiveMode();
+    public static CommandManager getServerCommandManager(TicketCollection ticketCollection, Console console) {
+        Scanner in = console.getIn();
+        boolean shouldPrintHints = console.isInteractiveMode();
 
-        CommandManager cm = new CommandManager(ticketCollection, director);
+        CommandManager cm = new CommandManager(ticketCollection, console);
         cm.addIfAbsent(new Add(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new AddIfMax(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Clear(ticketCollection));
         cm.addIfAbsent(new ExecuteScript(ticketCollection));
-        cm.addIfAbsent(new Exit(ticketCollection, director));
+        cm.addIfAbsent(new Exit(ticketCollection, console));
         cm.addIfAbsent(new FilterByVenue(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Head(ticketCollection));
         cm.addIfAbsent(new Help(cm));
@@ -58,7 +59,7 @@ public class CommandManager {
         cm.addIfAbsent(new RemoveLower(ticketCollection, in, shouldPrintHints));
         cm.addIfAbsent(new Save(ticketCollection));
         cm.addIfAbsent(new Show(ticketCollection));
-        cm.addIfAbsent(new Update(ticketCollection, director));
+        cm.addIfAbsent(new Update(ticketCollection, console));
         return cm;
     }
 
@@ -66,9 +67,9 @@ public class CommandManager {
      * Возвращает менеджер комманд поумолчанию
      *
      * @param ticketCollection коллекция с которой будут работать команды
-     * @param director          объект типа {@link Director} с помощью которого происходит взаимодействие с пользователем
+     * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static CommandManager getClientCommandManager(TicketCollection ticketCollection, Director director){
+    public static CommandManager getClientCommandManager(TicketCollection ticketCollection, Console console){
         //todo
         return null;
     }
@@ -96,16 +97,16 @@ public class CommandManager {
      * @param args        аргументы команды в строковом представлении
      */
     public void executeCommand(String commandName, String... args) {
-        AbstractCommand command = getCommand(commandName);
+        Command command = getCommand(commandName);
         if (command == null) {
             System.out.println("Такой команды не существует. Для вызова справки введите: help");
             return;
         }
-        command.
+        console.setArgs(command);
         command.execute(args);
     }
 
-    public AbstractCommand getCommand(String commandName){
+    public Command getCommand(String commandName){
         return commands.get(commandName.toLowerCase());
     }
 
@@ -113,7 +114,7 @@ public class CommandManager {
      * Ожидает команду от пользователя и запускает её исполнение
      */
     public void run() {
-        String t = director.nextLine().trim();
+        String t = console.nextLine().trim();
         if (t.isEmpty())
             return;
         String[] s = t.trim().split("\\s");

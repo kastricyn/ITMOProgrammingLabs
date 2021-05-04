@@ -6,20 +6,29 @@ import java.util.ArrayList;
  * Функциональный интерфейс комманды
  */
 public interface Command {
-    ArrayList<Class> getParamTypes();
-    /**
-     * @param objects параметры
-     */
-    Command setParams(ArrayList<?> objects);
-
     /**
      * Выполняет команду
+     *
      * @param args аргументы команды
      */
-    void execute(String ... args);
+    void execute(String... args);
 
     /**
-     * @return - строку ответ на команду
+     * возвращает типы нестроковых необходимых аргументов команды
+     *
+     * @return
+     */
+    ArrayList<Class> getArgumentTypes();
+
+    /**
+     * устанавливает аргументы для команды, порядок должен соответствовать {@see getArgumentTypes}
+     *
+     * @param args аргуменьты
+     */
+    Command setArguments(ArrayList<?> args);
+
+    /**
+     * Возврщает строку ответ на команду
      */
     String getAnswer();
 }

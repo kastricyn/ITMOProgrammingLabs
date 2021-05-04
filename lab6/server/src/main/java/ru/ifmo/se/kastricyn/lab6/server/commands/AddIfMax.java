@@ -2,7 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Director;
+import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 import java.util.*;
@@ -25,7 +25,7 @@ public class AddIfMax extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        Ticket maxTicket = new Ticket(new Director(in, shouldPrintHints));
+        Ticket maxTicket = new Ticket(new Console(in, shouldPrintHints));
         Optional<Ticket> t = StreamSupport.stream(ticketCollection.spliterator(), true).max(Comparator.naturalOrder());
         if (t.isPresent())
             if (t.get().compareTo(maxTicket) < 0) {
