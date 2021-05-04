@@ -23,7 +23,6 @@ public class AddIfMax extends AbstractCommand {
         this.ticketCollection = ticketCollection;
     }
 
-
     @Override
     public void execute(String... args) {
         Ticket maxTicket = new Ticket(new Console(in, shouldPrintHints));

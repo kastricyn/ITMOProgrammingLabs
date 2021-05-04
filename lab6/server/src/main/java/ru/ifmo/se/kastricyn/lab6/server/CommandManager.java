@@ -39,7 +39,7 @@ public class CommandManager {
      * @param ticketCollection коллекция с которой будут работать команды
      * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static CommandManager createCommandManager(TicketCollection ticketCollection, Console console) {
+    public static CommandManager getServerCommandMenedger(TicketCollection ticketCollection, Console console) {
         Scanner in = console.getIn();
         boolean shouldPrintHints = console.isInteractiveMode();
 
@@ -57,9 +57,15 @@ public class CommandManager {
         cm.addIfAbsent(new PrintFieldDescendingVenue(ticketCollection));
         cm.addIfAbsent(new RemoveById(ticketCollection));
         cm.addIfAbsent(new RemoveLower(ticketCollection, in, shouldPrintHints));
+        cm.addIfAbsent(new Save(ticketCollection));
         cm.addIfAbsent(new Show(ticketCollection));
         cm.addIfAbsent(new Update(ticketCollection, console));
         return cm;
+    }
+
+    public static CommandManager getClietCommandMenedger(TicketCollection ticketCollection){
+        //todo
+        return null;
     }
 
     /**

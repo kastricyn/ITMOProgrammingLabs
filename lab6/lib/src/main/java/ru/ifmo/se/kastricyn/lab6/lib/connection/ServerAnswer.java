@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerAnswer{
     private String a;
+
     public ServerAnswer(){}
     public ServerAnswer(String answ) {
         a = answ;

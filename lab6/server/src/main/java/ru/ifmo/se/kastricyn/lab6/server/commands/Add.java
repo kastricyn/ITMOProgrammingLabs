@@ -23,18 +23,16 @@ public class Add extends AbstractCommand<Ticket> {
         this.in = in;
         this.shouldPrintHints = shouldPrintHints;
         this.ticketCollection = ticketCollection;
+        params.add(Ticket.class);
     }
 
-    @Override
-    protected Ticket getParam(){
-        return new Ticket(new Console(in, shouldPrintHints));
-    }
 
     @Override
     public void execute(String ... args) {
-        Ticket t = getParam();
+        Ticket t = (Ticket) params.get(0);
         ticketCollection.add(t);
         System.out.println("В коллекцю добавлен объект " + t);
         ticketCollection.setSaved(false);
+        params.clear();
     }
 }

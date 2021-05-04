@@ -18,9 +18,5 @@ public class AddClient extends Add {
         super(ticketCollection, in, shouldPrintHints);
     }
 
-    @Override
-    protected Ticket getParam(){
-        //todo: getTicket from ServerRequest
-        return null;
-    }
+//todo
 }

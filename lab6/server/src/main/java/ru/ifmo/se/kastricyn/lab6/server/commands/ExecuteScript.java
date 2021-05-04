@@ -53,7 +53,7 @@ public class ExecuteScript extends AbstractCommand {
                 return;
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
-            CommandManager cm = CommandManager.createCommandManager(ticketCollection, new Console(scriptIn, false));
+            CommandManager cm = CommandManager.getServerCommandMenedger(ticketCollection, new Console(scriptIn, false));
             cm.run();
             openedScripts.pop();
         } catch (IOException e) {

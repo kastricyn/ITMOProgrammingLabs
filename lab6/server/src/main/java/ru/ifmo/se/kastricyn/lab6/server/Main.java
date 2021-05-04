@@ -53,7 +53,7 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
+        CommandManager consoleCommandManager = CommandManager.getServerCommandMenedger(tickets, new Console(in));
         {
             ServerSocketChannel ssc = ServerSocketChannel.open()
                     .bind(new InetSocketAddress(PORT));
