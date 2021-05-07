@@ -82,7 +82,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         id = nextId++;
         creationDate = LocalDate.now();
         if (console.isInteractiveMode()) {
-            System.out.println("Создаём объект типа \"Ticket\":");
+            console.println("Создаём объект типа \"Ticket\":");
             System.out.println("Поле имя:");
         }
         setName(console.getString());

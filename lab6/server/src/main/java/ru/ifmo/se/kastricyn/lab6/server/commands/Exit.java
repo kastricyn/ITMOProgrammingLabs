@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
-import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.CommandManager;
 
 /**
  * Команда выйти из программы
@@ -9,7 +9,7 @@ import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
 public class Exit extends AbstractCommand {
 
     public Exit() {
-        super("exit", "завершить программу (без сохранения в файл)");
+        super("exit", "завершить программу");
 
         setArgumentTypes(CommandManager.class);
     }
@@ -19,6 +19,7 @@ public class Exit extends AbstractCommand {
     @Override
     public void execute(String ... args) {
         CommandManager cm = (CommandManager) this.args.get(0);
+        cm.executeCommand("Save");
         cm.exit();
     }
 

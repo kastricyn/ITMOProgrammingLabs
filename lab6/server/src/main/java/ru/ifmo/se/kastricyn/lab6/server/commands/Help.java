@@ -2,7 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
-import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.CommandManager;
 
 /**
  * Команда вывести справку по доступным командам

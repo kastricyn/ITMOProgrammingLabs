@@ -2,12 +2,16 @@ package ru.ifmo.se.kastricyn.lab6.server;
 
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.CommandManager;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,7 +57,7 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager = CommandManager.getServerCommandManager(tickets, new Console(in));
+        CommandManager consoleCommandManager = ConsoleCommandManager.getStandardsConsoleCommandManager(tickets, new Console(in));
         {
             ServerSocketChannel ssc = ServerSocketChannel.open()
                     .bind(new InetSocketAddress(PORT));

@@ -20,7 +20,7 @@ public class Main {
                     Thread.sleep(1000);
                 }
             } catch (IOException e) {
-                Console.printError("Соединение прервалось");
+                new Console().printlnErr("Соединение прервалось");
             } catch (InterruptedException | JAXBException e) {
                 e.printStackTrace();
             }

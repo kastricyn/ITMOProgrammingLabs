@@ -1,9 +1,10 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
-import ru.ifmo.se.kastricyn.lab6.server.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.CommandManager;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,6 +27,7 @@ public class ExecuteScript extends AbstractCommand {
 
     public ExecuteScript() {
         super("execute_script", "считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
+        setArgumentTypes(TicketCollection.class);
     }
 
     //TODO: загрузка скриптов с клиента (на клиенте обрабатывается команда execute_script, и каждая команда, которой нет
@@ -56,7 +58,7 @@ public class ExecuteScript extends AbstractCommand {
                 return;
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
-            CommandManager cm = CommandManager.getServerCommandManager(ticketCollection, new Console(scriptIn, false));
+            CommandManager cm = ConsoleCommandManager.getStandardsConsoleCommandManager(ticketCollection, new Console(scriptIn, false));
             //todo проверить new commandManager для клиента и сервера разные
             cm.run();
             openedScripts.pop();

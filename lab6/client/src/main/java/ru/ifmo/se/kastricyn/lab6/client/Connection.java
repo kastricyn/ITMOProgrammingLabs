@@ -29,7 +29,7 @@ public class Connection implements Closeable {
             try {
                 socket.connect(sa, MAX_TIMEOUT);
             } catch (IOException e) {
-                Console.printError("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000 + " с.");
+                new Console().printlnErr("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000 + " с.");
             }
             if (socket.isConnected())
                 break;
