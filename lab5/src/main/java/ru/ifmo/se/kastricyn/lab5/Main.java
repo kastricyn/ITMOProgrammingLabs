@@ -43,7 +43,7 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
-        consoleCommandManager.run();
+        CommandManager consoleAbstractCommandManager = CommandManager.createCommandManager(tickets, new Console(in));
+        consoleAbstractCommandManager.run();
     }
 }

@@ -74,9 +74,9 @@ public class Console {
                 return t;
             if (t.isEmpty() && possibleNull)
                 return null;
-                if (!t.isEmpty())
-                    return t;
-            }
+            if (!t.isEmpty())
+                return t;
+        }
     }
 
     /**
@@ -118,13 +118,13 @@ public class Console {
                 return null;
             try {
                 long l = Long.parseLong(t);
-                    if (l < min || l > max)
-                        println("Введённые данные не корректны");
-                    else return l;
-                } catch (NumberFormatException e) {
+                if (l < min || l > max)
+                    println("Введённые данные не корректны");
+                else return l;
+            } catch (NumberFormatException e) {
                 println("Введённые данные не корректны");
-                }
             }
+        }
     }
 
     /**
@@ -182,13 +182,13 @@ public class Console {
                 return null;
             try {
                 int l = Integer.parseInt(t);
-                    if (l < min || l > max)
-                        println("Введённые данные не корректны");
-                    else return l;
-                } catch (NumberFormatException e) {
+                if (l < min || l > max)
+                    println("Введённые данные не корректны");
+                else return l;
+            } catch (NumberFormatException e) {
                 println("Введённые данные не корректны");
-                }
             }
+        }
     }
 
     /**
@@ -246,13 +246,13 @@ public class Console {
                 return null;
             try {
                 float f = Float.parseFloat(t);
-                    if (f < min || f > max)
-                        println("Введённые данные не корректны");
-                    else return f;
-                } catch (NumberFormatException e) {
+                if (f < min || f > max)
+                    println("Введённые данные не корректны");
+                else return f;
+            } catch (NumberFormatException e) {
                 println("Введённые данные не корректны");
-                }
             }
+        }
     }
 
     /**
@@ -284,13 +284,13 @@ public class Console {
                 return null;
             try {
                 double f = Double.parseDouble(t);
-                    if (f < min || f > max)
-                        println("Введённые данные не корректны");
-                    else return f;
-                } catch (NumberFormatException e) {
+                if (f < min || f > max)
+                    println("Введённые данные не корректны");
+                else return f;
+            } catch (NumberFormatException e) {
                 println("Введённые данные не корректны");
-                }
             }
+        }
 
     }
 
@@ -319,12 +319,12 @@ public class Console {
             String t = nextLine().trim().toUpperCase();
             if (t.isEmpty() && possibleNull)
                 return null;
-                try {
-                    return Enum.valueOf(eClass, t);
-                } catch (RuntimeException e) {
-                    println("Данные не корректны");
-                }
+            try {
+                return Enum.valueOf(eClass, t);
+            } catch (RuntimeException e) {
+                println("Данные не корректны");
             }
+        }
     }
 
     /**
@@ -376,7 +376,12 @@ public class Console {
         err.println("Error: " + str);
     }
 
+    /**
+     * Печатает в коносль, если <code>isInteractiveMode()</code>
+     *
+     * @param str строка которую надо напечатать
+     */
     public void println(String str) {
-        out.println(str);
+        if (isInteractiveMode()) out.println(str);
     }
 }

@@ -6,19 +6,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
-    public String getCommandName() {
-        return commandName;
-    }
+    private String commandName = "";
 
-    private String commandName;
     private ArrayList<Object> params;
 
+    //for JAXB
     public ServerRequest() {
     }
 
@@ -27,14 +23,18 @@ public class ServerRequest implements Serializable {
         params = new ArrayList<>();
     }
 
-    public ServerRequest addParam(Object... objects) {
-        params.add(objects);
+    public ServerRequest addParams(Object... objects) {
+        params.addAll(Arrays.asList(objects));
         return this;
     }
 
-    public ServerRequest clear(){
+    public ServerRequest clearParams() {
         params.clear();
         return this;
+    }
+
+    public String getCommandName() {
+        return commandName;
     }
 
     @Override

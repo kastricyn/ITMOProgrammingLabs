@@ -7,10 +7,7 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 
 import javax.xml.bind.JAXBException;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 //todo properties
@@ -23,13 +20,20 @@ public class Connection implements Closeable {
     private InputStream is;
     private OutputStream os;
 
+    /**
+     * Устанавливает соединение с сервером по TCP
+     *
+     * @param sa с кем установить подключение
+     * @throws IOException          если подкючение не установлено
+     * @throws InterruptedException
+     */
     public Connection(SocketAddress sa) throws IOException, InterruptedException {
         socket = new Socket();
         for (int i = 0; i < MAX_ATTEMPT; i++) {
             try {
                 socket.connect(sa, MAX_TIMEOUT);
-            } catch (IOException e) {
-                new Console().printlnErr("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000 + " с.");
+            } catch (SocketTimeoutException e) {
+                new Console().println("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000 + " с.");
             }
             if (socket.isConnected())
                 break;
@@ -52,10 +56,10 @@ public class Connection implements Closeable {
             return getAnswer();
     }
 
-    protected ServerAnswer getAnswer() throws IOException, JAXBException {
-            byte[] b = new byte[1024*1024];
-            int len = is.read(b);
-            return Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
+    public ServerAnswer getAnswer() throws IOException, JAXBException {
+        byte[] b = new byte[1024 * 1024];
+        int len = is.read(b);
+        return Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
     }
 
 

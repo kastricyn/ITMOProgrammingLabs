@@ -1,29 +1,22 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
+import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
-import ru.ifmo.se.kastricyn.lab6.server.commandManager.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.Scanner;
 
 /**
  * Main-class
  */
 public class Main {
-    static final int PORT = 8189;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
@@ -57,39 +50,8 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager = ConsoleCommandManager.getStandardsConsoleCommandManager(tickets, new Console(in));
-        {
-            ServerSocketChannel ssc = ServerSocketChannel.open()
-                    .bind(new InetSocketAddress(PORT));
-            ssc.configureBlocking(false);
+        AbstractCommandManager consoleAbstractCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
+//                consoleAbstractCommandManager.run();
 
-            Selector selector = Selector.open();
-            ssc.register(selector, SelectionKey.OP_ACCEPT);
-            ByteBuffer bf = ByteBuffer.allocate(1024 * 1024);
-
-            while (true) {
-                selector.select();
-                Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
-                while (iter.hasNext()) {
-                    SelectionKey key = iter.next();
-                    if (key.isValid()) {
-                        if (key.isAcceptable()) {
-                            new Client(ssc, selector);
-                        }
-                        if (key.isReadable()) {
-                            iter.remove();
-                            if(key.attachment() instanceof Client)
-                            ((Client) key.attachment()).reply(bf);
-//                            else if(key.attachment() instanceof )
-                            bf.clear();
-                        }
-
-                    }
-
-                }
-
-//                consoleCommandManager.run();
-            }
-        }
     }
 }

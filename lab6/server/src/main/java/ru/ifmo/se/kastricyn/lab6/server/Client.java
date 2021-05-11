@@ -1,9 +1,10 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
+import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
+import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
-import ru.ifmo.se.kastricyn.lab6.server.commandManager.CommandManager;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -14,12 +15,8 @@ import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
 
 public class Client {
-    //todo: read params from properties
-
     private SocketChannel sh;
     private Selector selector;
-
-    private static CommandManager cm = null;
 
     public Client(ServerSocketChannel ssc, Selector selector) throws IOException {
         sh = ssc.accept();
@@ -30,10 +27,10 @@ public class Client {
         sh.register(selector, SelectionKey.OP_READ, this);
     }
 
-    public void reply(ByteBuffer bf) {
+    public void reply(ByteBuffer bf, AbstractCommandManager cm) {
         try {
             write(processing(read(bf)));
-        } catch (IOException | JAXBException e){
+        } catch (IOException | JAXBException e) {
             System.out.println("Конец соединения");
             try {
                 sh.close();
@@ -51,6 +48,11 @@ public class Client {
         }
     }
 
+    protected ServerAnswer processing(ServerRequest serverRequest, AbstractCommandManager abstractCommandManager) {
+        if (serverRequest.getCommandName())
+            return new ServerAnswer("dsfa" + serverRequest, ServerAnswerType.OK);
+    }
+
     protected void write(ServerAnswer sa) throws IOException {
         StringWriter sw = new StringWriter();
         Parser.write(sw, ServerAnswer.class, sa);
@@ -65,17 +67,6 @@ public class Client {
         return request;
     }
 
-    protected  ServerAnswer processing(ServerRequest serverRequest){
-        if(serverRequest.getCommandName())
-        return new ServerAnswer("dsfa" + serverRequest);
-    }
 
 
-    public static void setCm(CommandManager cm) {
-        Client.cm = cm;
-    }
-
-    public static CommandManager getCm() {
-        return cm;
-    }
 }

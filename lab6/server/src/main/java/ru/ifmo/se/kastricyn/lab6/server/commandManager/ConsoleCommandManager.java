@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
+import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.Command;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
@@ -13,11 +14,12 @@ import java.util.Arrays;
 /**
  * Управление комманд, которые вводятся с консоли
  */
-public class ConsoleCommandManager extends CommandManager {
+public class ConsoleCommandManager extends AbstractCommandManager {
     private final Console console;
+    private final TicketCollection ticketCollection;
 
     public ConsoleCommandManager(TicketCollection ticketCollection, Console console) {
-        super(ticketCollection);
+        this.ticketCollection = ticketCollection;
         this.console = console;
     }
 
@@ -25,7 +27,7 @@ public class ConsoleCommandManager extends CommandManager {
      * @param ticketCollection коллекция с которой будут работать команды
      * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static ConsoleCommandManager getStandardsConsoleCommandManager(TicketCollection ticketCollection, Console console) {
+    public static ConsoleCommandManager getStandards(TicketCollection ticketCollection, Console console) {
         ConsoleCommandManager ccm = new ConsoleCommandManager(ticketCollection, console);
         ccm.addIfAbsent(new Add());
         ccm.addIfAbsent(new AddIfMax());
@@ -48,7 +50,7 @@ public class ConsoleCommandManager extends CommandManager {
 
 
     /**
-     * Исполняет команду имя которой передано в первом аргументе
+     * Исполняет команду, имя которой передано в первом аргументе, если она доступна в менеджере команд
      *
      * @param commandName имя команды
      * @param args        аргументы команды в строковом представлении
@@ -60,7 +62,7 @@ public class ConsoleCommandManager extends CommandManager {
             return;
         }
 
-        ArrayList<Object> arguments = new ArrayList<>();
+        ArrayList<Object> arguments = console.getParams(command.getArgumentTypes());
         for (Class eClass : command.getArgumentTypes()) {
             if (eClass.isInstance(ticketCollection))
                 arguments.add(ticketCollection);
@@ -68,7 +70,7 @@ public class ConsoleCommandManager extends CommandManager {
                 arguments.add(new Ticket(console));
             else if (eClass.equals(Venue.class))
                 arguments.add(new Venue(console));
-            else if (eClass.equals(CommandManager.class))
+            else if (eClass.equals(AbstractCommandManager.class))
                 arguments.add(this);
         }
         command.setArguments(arguments);
@@ -82,10 +84,12 @@ public class ConsoleCommandManager extends CommandManager {
      * Принимает команды и обрабатыввает их
      */
     public void run() {
-        String t = console.nextLine().trim();
-        if (t.isEmpty())
-            return;
-        String[] s = t.trim().split("\\s");
-        executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
+        while (true) {
+            String t = console.nextLine().trim();
+            if (t.isEmpty())
+                return;
+            String[] s = t.trim().split("\\s");
+            executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
+        }
     }
 }
