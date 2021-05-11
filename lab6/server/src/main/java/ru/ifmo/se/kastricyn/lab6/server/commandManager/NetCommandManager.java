@@ -1,7 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
-import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.server.Client;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
@@ -14,9 +13,13 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
 
-public class NetCommandManager extends AbstractCommandManager {
+public class NetCommandManager extends CommandManager {
     //todo: read params from properties
     static final int PORT = 8189;
+
+    public TicketCollection getTicketCollection() {
+        return ticketCollection;
+    }
 
     private final TicketCollection ticketCollection;
     private final ServerSocketChannel ssc;
@@ -38,7 +41,6 @@ public class NetCommandManager extends AbstractCommandManager {
      * Возвращает менеджер комманд поумолчанию
      *
      * @param ticketCollection коллекция с которой будут работать команды
-     * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
     public static NetCommandManager getStandards(TicketCollection ticketCollection) throws IOException {
         NetCommandManager ncm = new NetCommandManager(ticketCollection, PORT);
@@ -75,7 +77,7 @@ public class NetCommandManager extends AbstractCommandManager {
      */
     @Override
     public void run() {
-        while (true) {
+        while (isWorkable()) {
             try {
                 selector.select();
                 Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
@@ -100,4 +102,12 @@ public class NetCommandManager extends AbstractCommandManager {
 
     }
 
+    /**
+     * Иполняется при попытке выхода пользователя из программы (команда exit, ctrl+D)
+     */
+    @Override
+    public void exit() {
+        new Save().setArguments(ticketCollection).execute();
+        super.exit();
+    }
 }

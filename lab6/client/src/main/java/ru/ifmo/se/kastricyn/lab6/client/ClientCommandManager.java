@@ -2,8 +2,8 @@ package ru.ifmo.se.kastricyn.lab6.client;
 
 import ru.ifmo.se.kastricyn.lab6.client.command.Exit;
 import ru.ifmo.se.kastricyn.lab6.client.command.Help;
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.Command;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
@@ -15,10 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ClientCommandManager extends AbstractCommandManager {
+public class ClientCommandManager extends CommandManager {
     private Console console;
     private Connection connection;
-    private boolean workable = true;
 
     public ClientCommandManager(Connection connection, Console console) {
         this.connection = connection;
@@ -93,7 +92,7 @@ public class ClientCommandManager extends AbstractCommandManager {
      */
     @Override
     public void run() {
-        while (workable) {
+        while (isWorkable()) {
             String t = console.nextLine().trim();
             if (t.isEmpty())
                 return;
@@ -106,11 +105,4 @@ public class ClientCommandManager extends AbstractCommandManager {
         }
     }
 
-    public boolean isWorkable() {
-        return workable;
-    }
-
-    public void setWorkable(boolean workable) {
-        this.workable = workable;
-    }
 }

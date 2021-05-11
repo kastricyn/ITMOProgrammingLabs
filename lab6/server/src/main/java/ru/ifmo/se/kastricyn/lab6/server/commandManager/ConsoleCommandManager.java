@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.Command;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 /**
  * Управление комманд, которые вводятся с консоли
  */
-public class ConsoleCommandManager extends AbstractCommandManager {
+public class ConsoleCommandManager extends CommandManager {
     private final Console console;
     private final TicketCollection ticketCollection;
 
@@ -70,7 +70,7 @@ public class ConsoleCommandManager extends AbstractCommandManager {
                 arguments.add(new Ticket(console));
             else if (eClass.equals(Venue.class))
                 arguments.add(new Venue(console));
-            else if (eClass.equals(AbstractCommandManager.class))
+            else if (eClass.isInstance(this))
                 arguments.add(this);
         }
         command.setArguments(arguments);
@@ -84,7 +84,7 @@ public class ConsoleCommandManager extends AbstractCommandManager {
      * Принимает команды и обрабатыввает их
      */
     public void run() {
-        while (true) {
+        while (isWorkable()) {
             String t = console.nextLine().trim();
             if (t.isEmpty())
                 return;

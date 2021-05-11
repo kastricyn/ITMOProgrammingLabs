@@ -8,6 +8,10 @@ import java.util.ArrayList;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerAnswer {
+    public ServerAnswer(ServerAnswerType sat) {
+        this.sat = sat;
+    }
+
     private ServerAnswerType sat;
     private String answer;
     private String commandName;
@@ -32,7 +36,7 @@ public class ServerAnswer {
         return paramTypes;
     }
 
-    public ServerAnswer setParamTypes(ArrayList<Class> paramTypes) {
+    public ServerAnswer setObjectsArgsTypes(ArrayList<Class> paramTypes) {
         this.paramTypes = paramTypes;
         return this;
     }

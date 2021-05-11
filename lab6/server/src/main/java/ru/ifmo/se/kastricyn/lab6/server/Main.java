@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
@@ -50,8 +50,8 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        AbstractCommandManager consoleAbstractCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
-//                consoleAbstractCommandManager.run();
+        CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
+        consoleCommandManager.run();
 
     }
 }

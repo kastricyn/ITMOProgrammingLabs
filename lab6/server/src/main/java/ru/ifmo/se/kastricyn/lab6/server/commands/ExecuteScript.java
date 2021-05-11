@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
@@ -58,7 +58,7 @@ public class ExecuteScript extends AbstractCommand {
                 return;
             }
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
-            AbstractCommandManager cm = ConsoleCommandManager.getStandards(ticketCollection, new Console(scriptIn, false));
+            CommandManager cm = ConsoleCommandManager.getStandards(ticketCollection, new Console(scriptIn, false));
             //todo проверить new commandManager для клиента и сервера разные
             cm.run();
             openedScripts.pop();

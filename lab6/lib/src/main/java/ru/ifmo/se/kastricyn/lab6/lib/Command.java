@@ -33,6 +33,11 @@ public interface Command {
     void clearArguments();
 
     /**
+     * возвращает true, если у команды указаны верные параметры, инчае false
+     */
+    boolean objectsArgsIsValidate();
+
+    /**
      * Возврщает строку ответ на команду
      */
     String getAnswer();

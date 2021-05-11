@@ -10,13 +10,14 @@ import java.util.stream.Stream;
  * Исполнитель команд. Класс реализует управление коммандами, доступными для пользователя.
  * Разные объекты этого класса могут по-разному исполнять комманды.
  */
-public abstract class AbstractCommandManager implements Runnable {
+public abstract class CommandManager implements Runnable {
     protected HashMap<String, AbstractCommand> commands;
+    protected boolean workable = true;
 
     /**
      * Создаёт менеджер коммандами.
      */
-    public AbstractCommandManager() {
+    public CommandManager() {
         commands = new HashMap<>();
     }
 
@@ -60,5 +61,13 @@ public abstract class AbstractCommandManager implements Runnable {
      */
     public void exit() {
         System.exit(0);
+    }
+
+    public boolean isWorkable() {
+        return workable;
+    }
+
+    public void setWorkable(boolean workable) {
+        this.workable = workable;
     }
 }

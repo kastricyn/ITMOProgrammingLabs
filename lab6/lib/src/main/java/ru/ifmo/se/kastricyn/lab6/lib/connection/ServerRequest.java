@@ -10,38 +10,42 @@ import java.util.Arrays;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
-    private String commandName = "";
-
-    private ArrayList<Object> params;
+    private String input = "";
+    private String stringArgs;
+    private ArrayList<Object> objectsArgs;
 
     //for JAXB
     public ServerRequest() {
     }
 
     public ServerRequest(String commandName) {
-        this.commandName = commandName;
-        params = new ArrayList<>();
+        this.input = commandName;
+        objectsArgs = new ArrayList<>();
     }
 
     public ServerRequest addParams(Object... objects) {
-        params.addAll(Arrays.asList(objects));
+        this.objectsArgs.addAll(Arrays.asList(objects));
         return this;
+    }
+
+    public ArrayList<Object> getObjectsArgs() {
+        return objectsArgs;
     }
 
     public ServerRequest clearParams() {
-        params.clear();
+        objectsArgs.clear();
         return this;
     }
 
-    public String getCommandName() {
-        return commandName;
+    public String getInput() {
+        return input;
     }
 
     @Override
     public String toString() {
         return "ServerRequest{" +
-                "commandName='" + commandName + '\'' +
-                ", params=" + params +
+                "input='" + input + '\'' +
+                ", params=" + objectsArgs +
                 '}';
     }
 

@@ -10,9 +10,8 @@ import java.util.stream.Collectors;
 public abstract class AbstractCommand implements Command {
     protected final String name;
     protected final String description;
-    protected String answer = "";
-
     protected final ArrayList<Class> argTypes = new ArrayList<>();
+    protected String answer = "";
     protected ArrayList<Object> args = new ArrayList<>();
 
     /**
@@ -69,10 +68,9 @@ public abstract class AbstractCommand implements Command {
     /**
      * возвращает true, если у команды указаны верные параметры, инчае false
      */
-    public boolean paramsIsValidate() {
+    public boolean objectsArgsIsValidate() {
         if (argTypes.size() == 0)
-            if (args.size() != argTypes.size())
-                return false;
+            return args.size() == 0;
         for (int i = 0; i < args.size(); i++) {
             if (!argTypes.get(i).isInstance(args.get(i)))
                 return false;
