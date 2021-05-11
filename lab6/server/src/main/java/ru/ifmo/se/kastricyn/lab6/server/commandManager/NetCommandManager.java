@@ -4,6 +4,7 @@ import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.server.Client;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
+import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -39,9 +40,22 @@ public class NetCommandManager extends AbstractCommandManager {
      * @param ticketCollection коллекция с которой будут работать команды
      * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static NetCommandManager getStandards(TicketCollection ticketCollection) {
-        //todo
-        return null;
+    public static NetCommandManager getStandards(TicketCollection ticketCollection) throws IOException {
+        NetCommandManager ncm = new NetCommandManager(ticketCollection, PORT);
+        ncm.addIfAbsent(new Add());
+        ncm.addIfAbsent(new AddIfMax());
+        ncm.addIfAbsent(new Clear());
+        ncm.addIfAbsent(new FilterByVenue());
+        ncm.addIfAbsent(new Head());
+        ncm.addIfAbsent(new Help());
+        ncm.addIfAbsent(new Info());
+        ncm.addIfAbsent(new PrintAscending());
+        ncm.addIfAbsent(new PrintFieldDescendingVenue());
+        ncm.addIfAbsent(new RemoveById());
+        ncm.addIfAbsent(new RemoveLower());
+        ncm.addIfAbsent(new Show());
+        ncm.addIfAbsent(new Update());
+        return ncm;
     }
 
     /**

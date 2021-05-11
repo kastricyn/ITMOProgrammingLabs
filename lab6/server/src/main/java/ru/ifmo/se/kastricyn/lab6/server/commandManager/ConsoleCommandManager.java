@@ -62,7 +62,7 @@ public class ConsoleCommandManager extends AbstractCommandManager {
             return;
         }
 
-        ArrayList<Object> arguments = console.getParams(command.getArgumentTypes());
+        ArrayList<Object> arguments = new ArrayList<>();
         for (Class eClass : command.getArgumentTypes()) {
             if (eClass.isInstance(ticketCollection))
                 arguments.add(ticketCollection);
