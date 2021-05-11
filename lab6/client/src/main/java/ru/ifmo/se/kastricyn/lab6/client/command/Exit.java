@@ -20,7 +20,7 @@ public class Exit extends AbstractCommand {
         //todo будет ли проверка с отложенным буфером, для этого реализуем отдельный поток по передачи данных и
         // взаимодейтвию с пользователем
         ClientCommandManager ccm = (ClientCommandManager) getArguments().get(0);
-        ccm.exit();
+        ccm.setWorkable(false);
 
     }
 }

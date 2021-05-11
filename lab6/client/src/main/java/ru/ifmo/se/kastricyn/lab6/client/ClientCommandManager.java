@@ -18,6 +18,7 @@ import java.util.Arrays;
 public class ClientCommandManager extends AbstractCommandManager {
     private Console console;
     private Connection connection;
+    private boolean workable = true;
 
     public ClientCommandManager(Connection connection, Console console) {
         this.connection = connection;
@@ -92,7 +93,7 @@ public class ClientCommandManager extends AbstractCommandManager {
      */
     @Override
     public void run() {
-        while (true) {
+        while (workable) {
             String t = console.nextLine().trim();
             if (t.isEmpty())
                 return;
@@ -103,5 +104,13 @@ public class ClientCommandManager extends AbstractCommandManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean isWorkable() {
+        return workable;
+    }
+
+    public void setWorkable(boolean workable) {
+        this.workable = workable;
     }
 }
