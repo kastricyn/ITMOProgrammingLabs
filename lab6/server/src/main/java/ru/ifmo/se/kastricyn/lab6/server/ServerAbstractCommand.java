@@ -2,6 +2,9 @@ package ru.ifmo.se.kastricyn.lab6.server;
 
 
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
+import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
 
 public abstract class ServerAbstractCommand extends AbstractCommand {
     protected ServerCommandArgument objArgs;
@@ -28,4 +31,14 @@ public abstract class ServerAbstractCommand extends AbstractCommand {
         objArgs = new ServerCommandArgument();
     }
 
+    /**
+     * возвращает true, если у команды указаны верные параметры, инчае false
+     */
+    @Override
+    public boolean objectsArgsIsValidate() {
+        return (!argTypes.contains(Ticket.class) || objArgs.getTicket() != null) &&
+                (!argTypes.contains(Venue.class) || objArgs.getVenue() != null) &&
+                (!argTypes.contains(CommandManager.class) || objArgs.getCommandManager() != null) &&
+                (!argTypes.contains(TicketCollection.class) || objArgs.getTicketCollection() != null);
+    }
 }

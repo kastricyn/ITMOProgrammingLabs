@@ -7,9 +7,9 @@ import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
  * Содержит нестроковые аргументы для комманд
  */
 public class CommandArgument {
-    private Ticket ticket;
-    private Venue venue;
-    private CommandManager commandManager;
+    protected Ticket ticket;
+    protected Venue venue;
+    protected CommandManager commandManager;
 
     public CommandManager getCommandManager() {
         return commandManager;
@@ -36,5 +36,14 @@ public class CommandArgument {
     public CommandArgument setVenue(Venue venue) {
         this.venue = venue;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "CommandArgument{" +
+                "ticket=" + ticket +
+                ", venue=" + venue +
+                ", commandManager=" + commandManager +
+                '}';
     }
 }

@@ -55,12 +55,6 @@ public abstract class CommandManager implements Runnable {
      */
     public abstract void run();
 
-    /**
-     * Иполняется при попытке выхода пользователя из программы (команда exit, ctrl+D)
-     */
-    public void exit() {
-        System.exit(0);
-    }
 
     public boolean isWorkable() {
         return workable;

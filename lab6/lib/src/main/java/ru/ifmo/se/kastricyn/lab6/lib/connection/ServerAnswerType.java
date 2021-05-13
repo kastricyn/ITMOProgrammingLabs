@@ -4,5 +4,4 @@ public enum ServerAnswerType {
     OK,
     NEED_ARGS,
     NOT_FOUND_COMMAND,
-    MISTAKE_ARGS
 }

@@ -20,6 +20,5 @@ public class Exit extends ClientAbstractCommand {
         // взаимодейтвию с пользователем
         ClientCommandManager ccm = objArgs.getCommandManager();
         ccm.setWorkable(false);
-
     }
 }

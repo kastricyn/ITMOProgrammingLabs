@@ -24,8 +24,7 @@ public class TicketCollection implements Iterable<Ticket> {
     private final LocalDate initDate;
     @XmlTransient
     private boolean saved;
-    private  ArrayDeque<Ticket> tickets;
-
+    private ArrayDeque<Ticket> tickets;
     @XmlTransient
     private Path path;
 
@@ -45,7 +44,6 @@ public class TicketCollection implements Iterable<Ticket> {
         this.path = p;
     }
 
-
     /**
      * Добавляет элемент в коллекцию
      *
@@ -61,7 +59,7 @@ public class TicketCollection implements Iterable<Ticket> {
      *
      * @param id        обновляемого (перезаписываемого / старого) элемена
      * @param newTicket обновлённый (новый) элемент
-     * @throws NullPointerException если <code>newTicket==null</code>
+     * @throws NullPointerException     если <code>newTicket==null</code>
      * @throws IllegalArgumentException если в коллекции нет элемента с таким id
      */
     public void update(long id, Ticket newTicket) throws NullPointerException, IllegalArgumentException {
@@ -116,7 +114,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param id id элемента, который надо получить
      * @throws IllegalArgumentException если в коллекции не нашлось элемета с таким id
      */
-    public Ticket getElement(long id)  throws IllegalArgumentException {
+    public Ticket getElement(long id) throws IllegalArgumentException {
         return tickets.stream().filter(x -> x.getId() == id).findAny().orElseThrow(
                 () -> new IllegalArgumentException("В коллекции нет элемента с таким индексом"));
     }
@@ -156,7 +154,6 @@ public class TicketCollection implements Iterable<Ticket> {
         return tickets.isEmpty();
     }
 
-
     /**
      * Сортирует коллекцию по умолчанию
      */
@@ -181,6 +178,14 @@ public class TicketCollection implements Iterable<Ticket> {
      */
     public Path getPath() {
         return path;
+    }
+
+    /**
+     * устанавливает путь по которому будет сохраняться коллекция
+     */
+    public TicketCollection setPath(Path path) {
+        this.path = path;
+        return this;
     }
 
     /**

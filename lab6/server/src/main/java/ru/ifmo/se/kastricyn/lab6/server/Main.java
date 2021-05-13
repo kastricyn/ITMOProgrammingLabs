@@ -4,6 +4,7 @@ import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
+import ru.ifmo.se.kastricyn.lab6.server.commandManager.NetCommandManager;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -48,14 +49,19 @@ public class Main {
             System.out.println("Что-то пошло не так во время создания файла.");
         }
 
-        tickets.check();
+        tickets.setPath(p).check();
         Scanner in = new Scanner(System.in);
 
         try {
+            CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
+            new Thread(netCommandManager).start();
+
             CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
             consoleCommandManager.run();
         } catch (NoSuchElementException e) {
-            System.out.println("Ввод команд звершён пользователем.");
+            System.out.println("Программа звершена пользователем.");
+        } finally {
+            //закрыть другие потоки
         }
     }
 }

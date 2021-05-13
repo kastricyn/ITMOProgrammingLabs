@@ -16,7 +16,7 @@ public class Help extends AbstractCommand {
     @Override
     public void execute(String... args) {
         //todo: close stream better than now
-        commandManager.getCommandsToString().sorted().forEachOrdered(System.out::println);
+        commandManager.getCommandsToString().sorted().forEachOrdered(System.out::print);
         return;
     }
 }

@@ -2,7 +2,6 @@ package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.server.Client;
-import ru.ifmo.se.kastricyn.lab6.server.ServerCommandArgument;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
@@ -21,6 +20,7 @@ public class NetCommandManager extends CommandManager {
     private final ServerSocketChannel ssc;
     private final ByteBuffer bf;
     private final Selector selector;
+
     public NetCommandManager(TicketCollection ticketCollection, int port) throws IOException {
         this.ticketCollection = ticketCollection;
         ssc = ServerSocketChannel.open()
@@ -78,7 +78,8 @@ public class NetCommandManager extends CommandManager {
     public void run() {
         while (isWorkable()) {
             try {
-                selector.select();
+                if (selector.select() == 0)
+                    continue;
                 Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
                 while (iter.hasNext()) {
                     SelectionKey key = iter.next();
@@ -101,12 +102,4 @@ public class NetCommandManager extends CommandManager {
 
     }
 
-    /**
-     * Иполняется при попытке выхода пользователя из программы (команда exit, ctrl+D)
-     */
-    @Override
-    public void exit() {
-        new Save().setArguments(new ServerCommandArgument().setTicketCollection(ticketCollection)).execute();
-        super.exit();
-    }
 }

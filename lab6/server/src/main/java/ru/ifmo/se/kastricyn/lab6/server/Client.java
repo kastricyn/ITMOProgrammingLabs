@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
-import ru.ifmo.se.kastricyn.lab6.lib.Command;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
@@ -52,7 +51,7 @@ public class Client {
 
     protected ServerAnswer processing(ServerRequest serverRequest, NetCommandManager cm) {
         //получим команду по её имени
-        Command command = cm.getCommand(serverRequest.getInput().split("\\s", 2)[0]);
+        ServerAbstractCommand command = (ServerAbstractCommand) cm.getCommand(serverRequest.getInput().split("\\s", 2)[0]);
         //если команды нет, отправим ответ
         if (command == null)
             return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
@@ -66,9 +65,9 @@ public class Client {
             if (input.length > 1)
                 command.execute(Arrays.copyOfRange(input, 1, input.length));
             else command.execute();
-            return new ServerAnswer(command.getAnswer(), ServerAnswerType.OK);
+            return new ServerAnswer(ServerAnswerType.OK).setAnswer(command.getAnswer());
         } else
-            return new ServerAnswer(serverRequest.getInput(), ServerAnswerType.MISTAKE_ARGS)
+            return new ServerAnswer(ServerAnswerType.NEED_ARGS).setInput(serverRequest.getInput())
                     .setArgTypes(command.getArgumentTypes());
 
     }

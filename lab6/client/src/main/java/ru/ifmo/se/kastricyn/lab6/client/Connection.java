@@ -49,17 +49,25 @@ public class Connection implements Closeable {
         this(new InetSocketAddress(ia, port));
     }
 
-    public ServerAnswer sendRequest(ServerRequest request) throws IOException, JAXBException {
-            StringWriter sw = new StringWriter();
-            Parser.write(sw, ServerRequest.class, request);
-            os.write(sw.toString().getBytes(StandardCharsets.UTF_8));
-            return getAnswer();
+    public ServerAnswer getAnswer(ServerRequest request) throws IOException, JAXBException {
+        sendRequest(request);
+        return getAnswer();
     }
+
+    public void sendRequest(ServerRequest request) throws IOException, JAXBException {
+        StringWriter sw = new StringWriter();
+        Parser.write(sw, ServerRequest.class, request);
+        os.write(sw.toString().getBytes(StandardCharsets.UTF_8));
+        System.err.println("Отправлено: " + request);
+    }
+
 
     public ServerAnswer getAnswer() throws IOException, JAXBException {
         byte[] b = new byte[1024 * 1024];
         int len = is.read(b);
-        return Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
+        ServerAnswer sa = Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
+        System.err.println("Получено:" + sa);
+        return sa;
     }
 
 

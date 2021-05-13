@@ -12,8 +12,6 @@ import java.io.Serializable;
 public class ServerRequest implements Serializable {
     private String input = "";
     private CommandArgument objArgs = new CommandArgument();
-    private CommandArgument cca;
-
 
     //for JAXB
     public ServerRequest() {
@@ -21,6 +19,14 @@ public class ServerRequest implements Serializable {
 
     public ServerRequest(String commandName) {
         this.input = commandName;
+    }
+
+    @Override
+    public String toString() {
+        return "ServerRequest{" +
+                "input='" + input + '\'' +
+                ", objArgs=" + objArgs +
+                '}';
     }
 
     public CommandArgument getObjArgs() {

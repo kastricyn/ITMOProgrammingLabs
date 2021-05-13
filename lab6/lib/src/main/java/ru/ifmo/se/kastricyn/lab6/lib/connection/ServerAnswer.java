@@ -16,16 +16,10 @@ public class ServerAnswer {
     public ServerAnswer(ServerAnswerType sat) {
         this.sat = sat;
     }
-
     /**
      * for JAXB
      */
     public ServerAnswer() {
-    }
-
-    public ServerAnswer(String commandName, ServerAnswerType sat) {
-        this.input = commandName;
-        this.sat = sat;
     }
 
     public Set<Class> getArgTypes() {
@@ -41,8 +35,18 @@ public class ServerAnswer {
         return input;
     }
 
+    public ServerAnswer setInput(String input) {
+        this.input = input;
+        return this;
+    }
+
     public ServerAnswerType getSat() {
         return sat;
+    }
+
+    public ServerAnswer setSat(ServerAnswerType sat) {
+        this.sat = sat;
+        return this;
     }
 
     public String getAnswer() {
@@ -54,4 +58,13 @@ public class ServerAnswer {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "ServerAnswer{" +
+                "sat=" + sat +
+                ", answer='" + answer + '\'' +
+                ", input='" + input + '\'' +
+                ", argTypes=" + argTypes +
+                '}';
+    }
 }

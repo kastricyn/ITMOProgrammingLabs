@@ -1,5 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
+import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
+import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +14,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractCommand implements Command {
     protected final String name;
     protected final String description;
-    protected final Set<Class> needArgsType = new HashSet<>();
+    protected final Set<Class> argTypes = new HashSet<>();
     protected String answer = "";
 
     protected CommandArgument objArgs = new CommandArgument();
@@ -34,7 +37,7 @@ public abstract class AbstractCommand implements Command {
      */
     @Override
     public Set<Class> getArgumentTypes() {
-        return needArgsType;
+        return argTypes;
     }
 
     /**
@@ -44,8 +47,8 @@ public abstract class AbstractCommand implements Command {
      * @return команду с аргументами
      */
     protected AbstractCommand setNeedArgumentType(Class... argTypes) {
-        needArgsType.clear();
-        needArgsType.addAll(Arrays.stream(argTypes).collect(Collectors.toSet()));
+        this.argTypes.clear();
+        this.argTypes.addAll(Arrays.stream(argTypes).collect(Collectors.toSet()));
         return this;
     }
 
@@ -64,8 +67,9 @@ public abstract class AbstractCommand implements Command {
      * возвращает true, если у команды указаны верные параметры, инчае false
      */
     public boolean objectsArgsIsValidate() {
-        //todo
-        return true;
+        return (!argTypes.contains(Ticket.class) || objArgs.getTicket() != null) &&
+                (!argTypes.contains(Venue.class) || objArgs.getVenue() != null) &&
+                (!argTypes.contains(CommandManager.class) || objArgs.getCommandManager() != null);
     }
 
     /**

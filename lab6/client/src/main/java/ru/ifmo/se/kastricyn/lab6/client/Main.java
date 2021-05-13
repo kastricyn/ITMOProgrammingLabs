@@ -17,7 +17,7 @@ public class Main {
         Console console = new Console();
         try (Connection connect = new Connection(InetAddress.getLocalHost(), 8189)) {
             console.println("Соединение установлено");
-            ClientCommandManager manager = new ClientCommandManager(connect, console);
+            ClientCommandManager manager = ClientCommandManager.getStandards(connect, console);
             manager.run();
 
         } catch (IOException e) {

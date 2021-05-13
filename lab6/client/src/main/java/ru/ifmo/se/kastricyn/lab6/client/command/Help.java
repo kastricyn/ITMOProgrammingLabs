@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.client.command;
 
 import ru.ifmo.se.kastricyn.lab6.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.client.ClientCommandManager;
+import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
@@ -20,7 +21,7 @@ public class Help extends ClientAbstractCommand {
      */
     public Help() {
         super("help", "вывести справку по доступным командам");
-        setNeedArgumentType(ClientCommandManager.class, Stream.class);
+        setNeedArgumentType(ClientCommandManager.class);
     }
 
     /**
@@ -33,8 +34,8 @@ public class Help extends ClientAbstractCommand {
 
         try {
             //получаем доступные команды от сервера
-            ccm.getConnection().sendRequest(new ServerRequest("help"));
-            String string = ccm.getConnection().getAnswer().getAnswer();
+            ServerAnswer sa = ccm.getConnection().getAnswer(new ServerRequest("help"));
+            String string = sa.getAnswer();
 
             // выделяем команды как строки в Set
             final String regex = "^([\\w\\{}\\s-]{2,})([А-Яа-я ,\\.()\\w]+)$";
@@ -45,7 +46,7 @@ public class Help extends ClientAbstractCommand {
                 strings.add(matcher.group(0));
 
             answer = Console.getStringFromStream("Доступны следующие команды:",
-                    Stream.of(strings, ccm.getCommandsAsString().sorted()));
+                    Stream.concat(strings.stream(), ccm.getCommandsAsString()).distinct().sorted());
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }

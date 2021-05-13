@@ -25,8 +25,7 @@ public class Exit extends ServerAbstractCommand {
         s.setArguments(new ServerCommandArgument().setTicketCollection(objArgs.getTicketCollection()));
         s.execute();
         answer = s.getAnswer();
-        if (objArgs.getTicketCollection().isSaved())
-            cm.exit();
+        cm.setWorkable(false);
     }
 
 }
