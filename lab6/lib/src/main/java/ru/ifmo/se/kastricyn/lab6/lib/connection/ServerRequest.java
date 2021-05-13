@@ -1,18 +1,19 @@
 package ru.ifmo.se.kastricyn.lab6.lib.connection;
 
+import ru.ifmo.se.kastricyn.lab6.lib.CommandArgument;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
     private String input = "";
-    private String stringArgs;
-    private ArrayList<Object> objectsArgs;
+    private CommandArgument objArgs = new CommandArgument();
+    private CommandArgument cca;
+
 
     //for JAXB
     public ServerRequest() {
@@ -20,20 +21,26 @@ public class ServerRequest implements Serializable {
 
     public ServerRequest(String commandName) {
         this.input = commandName;
-        objectsArgs = new ArrayList<>();
     }
 
-    public ServerRequest addParams(Object... objects) {
-        this.objectsArgs.addAll(Arrays.asList(objects));
+    public CommandArgument getObjArgs() {
+        return objArgs;
+    }
+
+    /**
+     * устанавливает нестроковые аргументы
+     *
+     * @throws NullPointerException если cca=null
+     */
+    public ServerRequest setObjArgs(CommandArgument cca) {
+        if (cca == null)
+            throw new NullPointerException();
+        objArgs = cca;
         return this;
     }
 
-    public ArrayList<Object> getObjectsArgs() {
-        return objectsArgs;
-    }
-
-    public ServerRequest clearParams() {
-        objectsArgs.clear();
+    public ServerRequest clearArgs() {
+        objArgs = new CommandArgument();
         return this;
     }
 
@@ -41,13 +48,9 @@ public class ServerRequest implements Serializable {
         return input;
     }
 
-    @Override
-    public String toString() {
-        return "ServerRequest{" +
-                "input='" + input + '\'' +
-                ", params=" + objectsArgs +
-                '}';
+    public ServerRequest setInput(String input) {
+        this.input = input;
+        return this;
     }
-
 
 }

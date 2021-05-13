@@ -1,25 +1,32 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.server.ServerCommandArgument;
+import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 /**
  * Команда выйти из программы
  */
-public class Exit extends AbstractCommand {
+public class Exit extends ServerAbstractCommand {
 
     public Exit() {
         super("exit", "завершить программу");
 
-        setArgumentTypes(CommandManager.class);
+        setNeedArgumentType(CommandManager.class, TicketCollection.class);
     }
 
     //TODO: общая функция для всех выходов из программы
 
     @Override
-    public void execute(String ... args) {
-        CommandManager cm = (CommandManager) this.args.get(0);
-        cm.exit();
+    public void execute(String... args) {
+        CommandManager cm = objArgs.getCommandManager();
+        Save s = new Save();
+        s.setArguments(new ServerCommandArgument().setTicketCollection(objArgs.getTicketCollection()));
+        s.execute();
+        answer = s.getAnswer();
+        if (objArgs.getTicketCollection().isSaved())
+            cm.exit();
     }
 
 }

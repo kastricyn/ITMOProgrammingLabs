@@ -1,28 +1,29 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 /**
  * Команда добавить элемент в колекцию, если он больше всех элементов в колекции
  */
-public class AddIfMax extends AbstractCommand {
+public class AddIfMax extends ServerAbstractCommand {
 
     public AddIfMax() {
         super("add_if_max", "добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции");
 
-        setArgumentTypes(TicketCollection.class, Ticket.class);
+        setNeedArgumentType(TicketCollection.class, Ticket.class);
     }
 
 
     @Override
-    public void execute(String ... args) {
-        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
-        Ticket maxTicket = (Ticket) this.args.get(1);
+    public void execute(String... args) {
+        TicketCollection ticketCollection = objArgs.getTicketCollection();
+        Ticket maxTicket = objArgs.getTicket();
         Optional<Ticket> t = StreamSupport.stream(ticketCollection.spliterator(), true).max(Comparator.naturalOrder());
         if (t.isPresent())
             if (t.get().compareTo(maxTicket) < 0) {

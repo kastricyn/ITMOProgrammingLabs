@@ -41,7 +41,6 @@ public abstract class CommandManager implements Runnable {
         return commands.get(commandName.toLowerCase());
     }
 
-
     /**
      * Исполняет команду, имя которой передано в первом аргументе, если она доступна в менеджере команд
      *
@@ -70,4 +69,5 @@ public abstract class CommandManager implements Runnable {
     public void setWorkable(boolean workable) {
         this.workable = workable;
     }
+
 }

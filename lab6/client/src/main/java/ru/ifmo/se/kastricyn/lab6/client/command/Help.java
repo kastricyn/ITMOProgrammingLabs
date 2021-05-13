@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.client.command;
 
+import ru.ifmo.se.kastricyn.lab6.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.client.ClientCommandManager;
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
@@ -13,14 +13,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-public class Help extends AbstractCommand {
+public class Help extends ClientAbstractCommand {
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
      * вызвается из конструктора класса наследника
      */
     public Help() {
         super("help", "вывести справку по доступным командам");
-        setArgumentTypes(ClientCommandManager.class, Stream.class);
+        setNeedArgumentType(ClientCommandManager.class, Stream.class);
     }
 
     /**
@@ -29,7 +29,7 @@ public class Help extends AbstractCommand {
      */
     @Override
     public void execute(String... args) {
-        ClientCommandManager ccm = (ClientCommandManager) getArguments().get(0);
+        ClientCommandManager ccm = objArgs.getCommandManager();
 
         try {
             //получаем доступные команды от сервера

@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.server.Client;
+import ru.ifmo.se.kastricyn.lab6.server.ServerCommandArgument;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
@@ -16,16 +17,10 @@ import java.util.Iterator;
 public class NetCommandManager extends CommandManager {
     //todo: read params from properties
     static final int PORT = 8189;
-
-    public TicketCollection getTicketCollection() {
-        return ticketCollection;
-    }
-
     private final TicketCollection ticketCollection;
     private final ServerSocketChannel ssc;
     private final ByteBuffer bf;
     private final Selector selector;
-
     public NetCommandManager(TicketCollection ticketCollection, int port) throws IOException {
         this.ticketCollection = ticketCollection;
         ssc = ServerSocketChannel.open()
@@ -60,6 +55,10 @@ public class NetCommandManager extends CommandManager {
         return ncm;
     }
 
+    public TicketCollection getTicketCollection() {
+        return ticketCollection;
+    }
+
     /**
      * Исполняет команду, имя которой передано в первом аргументе, если она доступна в менеджере команд
      *
@@ -68,7 +67,7 @@ public class NetCommandManager extends CommandManager {
      */
     @Override
     public void executeCommand(String commandName, String... args) {
-
+        //не используется, здесь вместо этого используется Client.processing(....)
     }
 
     /**
@@ -107,7 +106,7 @@ public class NetCommandManager extends CommandManager {
      */
     @Override
     public void exit() {
-        new Save().setArguments(ticketCollection).execute();
+        new Save().setArguments(new ServerCommandArgument().setTicketCollection(ticketCollection)).execute();
         super.exit();
     }
 }

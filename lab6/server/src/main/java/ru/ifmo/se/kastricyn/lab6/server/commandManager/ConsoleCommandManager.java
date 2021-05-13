@@ -1,14 +1,14 @@
 package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
-import ru.ifmo.se.kastricyn.lab6.lib.Command;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.server.ServerCommandArgument;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -56,24 +56,24 @@ public class ConsoleCommandManager extends CommandManager {
      * @param args        аргументы команды в строковом представлении
      */
     public void executeCommand(String commandName, String... args) {
-        Command command = getCommand(commandName);
+        ServerAbstractCommand command = (ServerAbstractCommand) getCommand(commandName);
         if (command == null) {
             console.printlnErr("Такой команды не существует. Для вызова справки введите: help");
             return;
         }
 
-        ArrayList<Object> arguments = new ArrayList<>();
+        ServerCommandArgument ca = new ServerCommandArgument();
         for (Class eClass : command.getArgumentTypes()) {
             if (eClass.isInstance(ticketCollection))
-                arguments.add(ticketCollection);
+                ca.setTicketCollection(ticketCollection);
             else if (eClass.equals(Ticket.class))
-                arguments.add(new Ticket(console));
+                ca.setTicket(new Ticket(console));
             else if (eClass.equals(Venue.class))
-                arguments.add(new Venue(console));
+                ca.setVenue(new Venue(console));
             else if (eClass.isInstance(this))
-                arguments.add(this);
+                ca.setCommandManager(this);
         }
-        command.setArguments(arguments);
+        command.setArguments(ca);
         command.execute(args);
         console.println(command.getAnswer());
         command.clearArguments();
@@ -87,7 +87,7 @@ public class ConsoleCommandManager extends CommandManager {
         while (isWorkable()) {
             String t = console.nextLine().trim();
             if (t.isEmpty())
-                return;
+                continue;
             String[] s = t.trim().split("\\s");
             executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
         }

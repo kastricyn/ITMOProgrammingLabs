@@ -3,19 +3,19 @@ package ru.ifmo.se.kastricyn.lab6.lib.connection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
+import java.util.Set;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerAnswer {
+    private ServerAnswerType sat;
+    private String answer;
+    private String input;
+    private Set<Class> argTypes;
+
     public ServerAnswer(ServerAnswerType sat) {
         this.sat = sat;
     }
-
-    private ServerAnswerType sat;
-    private String answer;
-    private String commandName;
-    private ArrayList<Class> paramTypes;
 
     /**
      * for JAXB
@@ -24,28 +24,21 @@ public class ServerAnswer {
     }
 
     public ServerAnswer(String commandName, ServerAnswerType sat) {
-        this.commandName = commandName;
+        this.input = commandName;
         this.sat = sat;
     }
 
-    public String getCommandName() {
-        return commandName;
+    public Set<Class> getArgTypes() {
+        return argTypes;
     }
 
-    public ArrayList<Class> getParamTypes() {
-        return paramTypes;
-    }
-
-    public ServerAnswer setObjectsArgsTypes(ArrayList<Class> paramTypes) {
-        this.paramTypes = paramTypes;
+    public ServerAnswer setArgTypes(Set<Class> argTypes) {
+        this.argTypes = argTypes;
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "ServerAnswer{" +
-                "commandName='" + commandName + '\'' +
-                '}';
+    public String getInput() {
+        return input;
     }
 
     public ServerAnswerType getSat() {
@@ -60,4 +53,5 @@ public class ServerAnswer {
         this.answer = answer;
         return this;
     }
+
 }

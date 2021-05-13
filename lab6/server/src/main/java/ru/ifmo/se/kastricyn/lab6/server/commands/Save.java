@@ -1,23 +1,24 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 /**
  * Команда сохранить коллекцию в файл, путь до которого передан при запуске программы
  */
-public class Save extends AbstractCommand {
+public class Save extends ServerAbstractCommand {
 
     public Save() {
         super("save", "сохранить коллекцию в файл");
-        setArgumentTypes(TicketCollection.class);
+        setNeedArgumentType(TicketCollection.class);
     }
 
 
     @Override
     public void execute(String... args) {
-        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        TicketCollection ticketCollection = objArgs.getTicketCollection();
+
         boolean isSaved = ticketCollection.isSaved();
         try {
             ticketCollection.setSaved(true);
@@ -26,6 +27,7 @@ public class Save extends AbstractCommand {
         } catch (Exception e) {
             answer = "Сохранить не удалось.";
             ticketCollection.setSaved(isSaved);
+            e.printStackTrace();
         }
     }
 }

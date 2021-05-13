@@ -14,10 +14,7 @@ import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
-import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 public class Client {
     private SocketChannel sh;
@@ -54,33 +51,25 @@ public class Client {
     }
 
     protected ServerAnswer processing(ServerRequest serverRequest, NetCommandManager cm) {
+        //получим команду по её имени
         Command command = cm.getCommand(serverRequest.getInput().split("\\s", 2)[0]);
+        //если команды нет, отправим ответ
         if (command == null)
             return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
-        Iterator<Object> iter = serverRequest.getObjectsArgs().iterator();
-        AbstractList<Object> args = new ArrayList<>();
-        for (Class type :
-                command.getArgumentTypes()) {
-            if (type.equals(TicketCollection.class))
-                args.add(cm.getTicketCollection());
-            else if (type.isInstance(cm))
-                args.add(cm);
-            else if (iter.hasNext())
-                args.add(iter.next());
-            else
-                return new ServerAnswer(serverRequest.getInput(), ServerAnswerType.MISTAKE_ARGS)
-                        .setObjectsArgsTypes(command.getArgumentTypes());
-        }
-        command.setArguments(args);
+        //устанавливаем аргументы
+        ServerCommandArgument ca = new ServerCommandArgument(serverRequest.getObjArgs())
+                .setCommandManager(cm).setTicketCollection(cm.getTicketCollection());
+        command.setArguments(ca);
+        // проверяем аргументы и запускаем команду
         if (command.objectsArgsIsValidate()) {
-            String[] stringArgs = serverRequest.getInput().split("\\s");
-            if (stringArgs.length > 1)
-                command.execute(Arrays.copyOfRange(stringArgs, 1, stringArgs.length));
+            String[] input = serverRequest.getInput().split("\\s");
+            if (input.length > 1)
+                command.execute(Arrays.copyOfRange(input, 1, input.length));
             else command.execute();
             return new ServerAnswer(command.getAnswer(), ServerAnswerType.OK);
         } else
             return new ServerAnswer(serverRequest.getInput(), ServerAnswerType.MISTAKE_ARGS)
-                    .setObjectsArgsTypes(command.getArgumentTypes());
+                    .setArgTypes(command.getArgumentTypes());
 
     }
 

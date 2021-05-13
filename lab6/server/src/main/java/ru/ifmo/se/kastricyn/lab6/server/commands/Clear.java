@@ -1,23 +1,23 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 /**
  * Команда очистить колекцию
  */
-public class Clear extends AbstractCommand {
+public class Clear extends ServerAbstractCommand {
 
     public Clear() {
         super("clear", "очистить коллекцию");
 
-        setArgumentTypes(TicketCollection.class);
+        setNeedArgumentType(TicketCollection.class);
     }
 
 
     @Override
     public void execute(String... args) {
-        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        TicketCollection ticketCollection = objArgs.getTicketCollection();
         if (!ticketCollection.isEmpty()) {
             ticketCollection.setSaved(false);
             answer = "Колекция уже пуста";

@@ -3,6 +3,7 @@ package ru.ifmo.se.kastricyn.lab6.client;
 import ru.ifmo.se.kastricyn.lab6.client.command.Exit;
 import ru.ifmo.se.kastricyn.lab6.client.command.Help;
 import ru.ifmo.se.kastricyn.lab6.lib.Command;
+import ru.ifmo.se.kastricyn.lab6.lib.CommandArgument;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
@@ -12,7 +13,6 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ClientCommandManager extends CommandManager {
@@ -59,14 +59,15 @@ public class ClientCommandManager extends CommandManager {
                         console.println("Полученные дополнительные аргументы были ошибочны, попробуйте ввести их ещё раз:");
                     case NEED_ARGS:
                         console.println("Для этой команды необходимы дополнительные аргументы.");
+                        CommandArgument cca = new CommandArgument();
                         for (Class eClass :
-                                sa.getParamTypes()) {
+                                sa.getArgTypes()) {
                             if (eClass.equals(Ticket.class))
-                                sr.addParams(new Ticket(console));
+                                cca.setTicket(new Ticket(console));
                             else if (eClass.equals(Venue.class))
-                                sr.addParams(new Venue(console));
+                                cca.setVenue(new Venue(console));
                         }
-                        connection.sendRequest(sr);
+                        connection.sendRequest(sr.setObjArgs(cca));
                         break;
                     default:
                         console.printlnErr("Какой-то новый ServerAnswerType");
@@ -75,13 +76,16 @@ public class ClientCommandManager extends CommandManager {
 
         }
         //установка аргументов команде
-        ArrayList<Object> arguments = new ArrayList<>();
-        for (Class eClass :
-                command.getArgumentTypes()) {
-            if (eClass.equals(ClientCommandManager.class))
-                arguments.add(this);
+        ClientCommandArgument cca = new ClientCommandArgument();
+        for (Class eClass : command.getArgumentTypes()) {
+            if (eClass.equals(Ticket.class))
+                cca.setTicket(new Ticket(console));
+            else if (eClass.equals(Venue.class))
+                cca.setVenue(new Venue(console));
+            else if (eClass.isInstance(this))
+                cca.setCommandManager(this);
         }
-        command.setArguments(arguments);
+        command.setArguments(cca);
         command.execute(args);
         console.println(command.getAnswer());
     }
@@ -95,7 +99,7 @@ public class ClientCommandManager extends CommandManager {
         while (isWorkable()) {
             String t = console.nextLine().trim();
             if (t.isEmpty())
-                return;
+                continue;
             String[] s = t.trim().split("\\s");
             try {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));

@@ -1,8 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commandManager.ConsoleCommandManager;
 
@@ -18,7 +18,7 @@ import java.util.Stack;
  * путь до скрипта должен передаваться как аргумент команды
  * Рекцрсивное выполнение скриптов не поддерживается
  */
-public class ExecuteScript extends AbstractCommand {
+public class ExecuteScript extends ServerAbstractCommand {
     private static Stack<Path> openedScripts;
 
     static {
@@ -27,7 +27,7 @@ public class ExecuteScript extends AbstractCommand {
 
     public ExecuteScript() {
         super("execute_script", "считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
-        setArgumentTypes(TicketCollection.class);
+        setNeedArgumentType(TicketCollection.class);
     }
 
     //TODO: загрузка скриптов с клиента (на клиенте обрабатывается команда execute_script, и каждая команда, которой нет
@@ -35,7 +35,7 @@ public class ExecuteScript extends AbstractCommand {
 
     @Override
     public void execute(String... args) {
-        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        TicketCollection ticketCollection = objArgs.getTicketCollection();
 
         if (args.length != 1) {
             answer = "Данная команда должна принимать один аргумет - путь до файла.";

@@ -1,14 +1,13 @@
 package ru.ifmo.se.kastricyn.lab6.client.command;
 
+import ru.ifmo.se.kastricyn.lab6.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.client.ClientCommandManager;
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 
-public class Exit extends AbstractCommand {
+public class Exit extends ClientAbstractCommand {
 
     public Exit() {
         super("exit", "завершение работы программы");
-        setArgumentTypes(ClientCommandManager.class);
-
+        setNeedArgumentType(ClientCommandManager.class);
     }
 
     /**
@@ -19,7 +18,7 @@ public class Exit extends AbstractCommand {
     public void execute(String... args) {
         //todo будет ли проверка с отложенным буфером, для этого реализуем отдельный поток по передачи данных и
         // взаимодейтвию с пользователем
-        ClientCommandManager ccm = (ClientCommandManager) getArguments().get(0);
+        ClientCommandManager ccm = objArgs.getCommandManager();
         ccm.setWorkable(false);
 
     }

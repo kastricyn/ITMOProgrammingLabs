@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Функциональный интерфейс комманды
@@ -15,17 +15,15 @@ public interface Command {
 
     /**
      * возвращает типы нестроковых необходимых аргументов команды
-     *
-     * @return
      */
-    ArrayList<Class> getArgumentTypes();
+    Set<Class> getArgumentTypes();
 
     /**
-     * устанавливает аргументы для команды, порядок должен соответствовать {@see getArgumentTypes}
+     * устанавливает аргументы для команды
      *
-     * @param args аргуменьты
+     * @param args объект с аргументами
      */
-    Command setArguments(Object... args);
+    Command setArguments(CommandArgument args);
 
     /**
      * Удаляет аргументы, для корректного последующего вызова
@@ -33,12 +31,12 @@ public interface Command {
     void clearArguments();
 
     /**
-     * возвращает true, если у команды указаны верные параметры, инчае false
+     * возвращает true, если у команды указаны верные нестроковые аргументы, инчае false
      */
     boolean objectsArgsIsValidate();
 
     /**
-     * Возврщает строку ответ на команду
+     * Возврщает строку - результат команды
      */
     String getAnswer();
 }

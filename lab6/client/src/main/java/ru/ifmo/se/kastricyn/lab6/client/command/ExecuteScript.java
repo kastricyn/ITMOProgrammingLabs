@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.client.command;
 
+import ru.ifmo.se.kastricyn.lab6.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.client.ClientCommandManager;
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import java.io.IOException;
@@ -16,12 +16,12 @@ import java.util.Stack;
  * путь до скрипта должен передаваться как аргумент команды
  * Рекцрсивное выполнение скриптов не поддерживается
  */
-public class ExecuteScript extends AbstractCommand {
+public class ExecuteScript extends ClientAbstractCommand {
     private static final Stack<Path> openedScripts = new Stack<>();
 
     public ExecuteScript() {
         super("execute_script", "считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.");
-        setArgumentTypes(ClientCommandManager.class);
+        setNeedArgumentType(ClientCommandManager.class);
     }
 
     //TODO: загрузка скриптов с клиента (на клиенте обрабатывается команда execute_script, и каждая команда, которой нет
@@ -49,7 +49,7 @@ public class ExecuteScript extends AbstractCommand {
         }
 
         try (Scanner scriptIn = new Scanner(path)) {
-            ClientCommandManager ccm = (ClientCommandManager) getArguments().get(0);
+            ClientCommandManager ccm = objArgs.getCommandManager();
 
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
             ClientCommandManager cm = ClientCommandManager.getStandards(ccm.getConnection(), new Console(scriptIn, false));

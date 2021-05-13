@@ -1,22 +1,23 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
-import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
+import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
 /**
  * Команда удалить элемент из коллекции по его id
  */
-public class RemoveById extends AbstractCommand {
+public class RemoveById extends ServerAbstractCommand {
 
     public RemoveById() {
         super("remove_by_id", "удалить элемент из коллекции по его id");
-        setArgumentTypes(TicketCollection.class);
+        setNeedArgumentType(TicketCollection.class);
     }
 
 
     @Override
     public void execute(String... args) {
-        TicketCollection ticketCollection = (TicketCollection) this.args.get(0);
+        TicketCollection ticketCollection = objArgs.getTicketCollection();
+
         //todo написать правильный help для команд с аргументами
         try {
             ticketCollection.remove(Long.parseLong(args[0]));

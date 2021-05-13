@@ -11,6 +11,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -50,8 +51,11 @@ public class Main {
         tickets.check();
         Scanner in = new Scanner(System.in);
 
-        CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
-        consoleCommandManager.run();
-
+        try {
+            CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
+            consoleCommandManager.run();
+        } catch (NoSuchElementException e) {
+            System.out.println("Ввод команд звершён пользователем.");
+        }
     }
 }

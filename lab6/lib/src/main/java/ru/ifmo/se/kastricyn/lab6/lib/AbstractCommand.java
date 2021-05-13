@@ -1,7 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -10,9 +11,10 @@ import java.util.stream.Collectors;
 public abstract class AbstractCommand implements Command {
     protected final String name;
     protected final String description;
-    protected final ArrayList<Class> argTypes = new ArrayList<>();
+    protected final Set<Class> needArgsType = new HashSet<>();
     protected String answer = "";
-    protected ArrayList<Object> args = new ArrayList<>();
+
+    protected CommandArgument objArgs = new CommandArgument();
 
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
@@ -26,55 +28,43 @@ public abstract class AbstractCommand implements Command {
         this.description = description;
     }
 
+
     /**
-     * возвращает типы необходимых нестроковых аргументов команды пользователя
+     * возвращает типы нестроковых необходимых аргументов команды
      */
     @Override
-    public ArrayList<Class> getArgumentTypes() {
-        return new ArrayList<>(argTypes);
+    public Set<Class> getArgumentTypes() {
+        return needArgsType;
     }
 
     /**
      * Устанавливает типы нестроковых аргументов команды
      *
-     * @param argTypes типы аргументов команы
+     * @param argTypes типы аргументов команд
      * @return команду с аргументами
      */
-    protected Command setArgumentTypes(Class... argTypes) {
-        this.argTypes.clear();
-        this.argTypes.addAll(Arrays.stream(argTypes).collect(Collectors.toList()));
+    protected AbstractCommand setNeedArgumentType(Class... argTypes) {
+        needArgsType.clear();
+        needArgsType.addAll(Arrays.stream(argTypes).collect(Collectors.toSet()));
         return this;
     }
 
     @Override
-    public Command setArguments(Object... args) {
-        this.args.clear();
-        this.args.addAll(Arrays.stream(args).collect(Collectors.toList()));
+    public AbstractCommand setArguments(CommandArgument args) {
+        objArgs = args;
         return this;
-    }
-
-    /**
-     * возвращает аргументы команды
-     */
-    public ArrayList<Object> getArguments() {
-        return new ArrayList<>(args);
     }
 
     @Override
     public void clearArguments() {
-        args.clear();
+        objArgs = new CommandArgument();
     }
 
     /**
      * возвращает true, если у команды указаны верные параметры, инчае false
      */
     public boolean objectsArgsIsValidate() {
-        if (argTypes.size() == 0)
-            return args.size() == 0;
-        for (int i = 0; i < args.size(); i++) {
-            if (!argTypes.get(i).isInstance(args.get(i)))
-                return false;
-        }
+        //todo
         return true;
     }
 
@@ -113,7 +103,6 @@ public abstract class AbstractCommand implements Command {
 
     /**
      * @param args аргументы команды
-     * @throws IndexOutOfBoundsException if paramsIsValidate()!=true
      */
     @Override
     public abstract void execute(String... args);
