@@ -50,7 +50,7 @@ public class Client {
     }
 
     protected ServerAnswer processing(ServerRequest serverRequest, NetCommandManager cm) {
-        //получим команду по её имени
+        //получим команду по имени
         ServerAbstractCommand command = (ServerAbstractCommand) cm.getCommand(serverRequest.getInput().split("\\s", 2)[0]);
         //если команды нет, отправим ответ
         if (command == null)

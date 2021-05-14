@@ -43,9 +43,18 @@ public class ClientCommandManager extends CommandManager {
      * @param args        аргументы команды в строковом представлении
      */
     public void executeCommand(String commandName, String... args) throws JAXBException, IOException {
+
+        String input = commandName;
+        StringBuilder inputBuilder = new StringBuilder(commandName);
+        for (String a :
+                args) {
+            inputBuilder.append(" ").append(a);
+        }
+        input = inputBuilder.toString();
+
         ClientAbstractCommand command = (ClientAbstractCommand) getCommand(commandName);
         if (command == null) {
-            ServerRequest sr = new ServerRequest(commandName/*это работает т.к. в split(, limit: 2)*/);
+            ServerRequest sr = new ServerRequest(input);
             while (true) {
                 ServerAnswer sa = connection.getAnswer(sr);
                 switch (sa.getSat()) {
@@ -101,7 +110,7 @@ public class ClientCommandManager extends CommandManager {
             String t = console.nextLine().trim();
             if (t.isEmpty())
                 continue;
-            String[] s = t.split("\\s",2);
+            String[] s = t.split("\\s", 2);
             try {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
             } catch (JAXBException | IOException e) {

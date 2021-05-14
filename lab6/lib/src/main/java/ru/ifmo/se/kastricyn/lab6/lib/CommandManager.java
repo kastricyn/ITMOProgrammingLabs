@@ -44,8 +44,7 @@ public abstract class CommandManager implements Runnable {
     /**
      * Исполняет команду, имя которой передано в первом аргументе, если она доступна в менеджере команд
      *
-     * @param commandName имя команды
-     * @param args        аргументы команды в строковом представлении
+     * @param input имя команды
      */
     public abstract void executeCommand(String commandName, String... args) throws JAXBException, IOException;
 

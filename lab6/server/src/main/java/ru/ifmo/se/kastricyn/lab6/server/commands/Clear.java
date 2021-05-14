@@ -18,12 +18,12 @@ public class Clear extends ServerAbstractCommand {
     @Override
     public void execute(String... args) {
         TicketCollection ticketCollection = objArgs.getTicketCollection();
-        if (!ticketCollection.isEmpty()) {
-            ticketCollection.setSaved(false);
+        if (ticketCollection.isEmpty()) {
             answer = "Колекция уже пуста";
         } else {
             ticketCollection.clear();
             answer = "Колекция очищена";
+            ticketCollection.setSaved(false);
         }
     }
 }

@@ -66,7 +66,7 @@ public class NetCommandManager extends CommandManager {
      * @param args        аргументы команды в строковом представлении
      */
     @Override
-    public void executeCommand(String commandName, String... args) {
+    public void executeCommand(String commandName, String ... args) {
         //не используется, здесь вместо этого используется Client.processing(....)
     }
 
