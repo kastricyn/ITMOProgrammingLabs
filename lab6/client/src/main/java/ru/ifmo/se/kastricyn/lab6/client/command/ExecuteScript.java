@@ -5,6 +5,7 @@ import ru.ifmo.se.kastricyn.lab6.client.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,14 +53,19 @@ public class ExecuteScript extends ClientAbstractCommand {
             ClientCommandManager ccm = objArgs.getCommandManager();
 
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
-            ClientCommandManager cm = ClientCommandManager.getStandards(ccm.getConnection(), new Console(scriptIn, false));
+            ClientCommandManager cm = ClientCommandManager.getStandards(ccm.getConnection(), new Console(scriptIn,
+                    false));
             //todo проверить new commandManager для клиента и сервера разные
             cm.run();
+
             openedScripts.pop();
+        } catch (SocketException e) {
+            answer = "Соединение утеряно, попробуйте перезапустить программу.";
         } catch (IOException e) {
             answer = "Не удалось прочитать файл.";
         } catch (Exception e) {
             answer = "Выполнение скрипта не удалось завершить правильно.";
+            e.printStackTrace();
         }
     }
 }

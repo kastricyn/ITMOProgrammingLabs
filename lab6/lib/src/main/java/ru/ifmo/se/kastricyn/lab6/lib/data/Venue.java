@@ -22,22 +22,6 @@ public class Venue implements Comparable<Venue> {
     private VenueType type; //Поле не может быть null
     private Address address; //Поле не может быть null
 
-    /**
-     *
-     * @return true, если все поля заданы верно, иначе могут быть @exception или false
-     */
-    public boolean isExisting(){
-        setName(name).setCapacity(capacity).setType(type).setAddress(address);
-        address.isExisting();
-        if(id<1)
-            throw new IllegalStateException();
-        return true;
-    }
-
-    private void initial(String name, int capacity, VenueType type, Address address) {
-        setName(name).setCapacity(capacity).setType(type).setAddress(address);
-    }
-
     public Venue(String name, int capacity, VenueType type, Address address) {
         initial(name, capacity, type, address);
         id = nextId++;
@@ -56,6 +40,14 @@ public class Venue implements Comparable<Venue> {
      * конструктор по умолчанию, для работы JAXB
      */
     private Venue() {
+        id = nextId++;
+    }
+
+    /**
+     * Конструктор для верного задания автоматически присваиваемых параметров
+     */
+    public Venue(Venue venue) {
+        initial(venue.getName(), venue.getCapacity(), venue.getType(), venue.getAddress());
         id = nextId++;
     }
 
@@ -79,6 +71,26 @@ public class Venue implements Comparable<Venue> {
 
         if (console.isInteractiveMode())
             System.out.println("Создан объект: " + this);
+    }
+
+    // All gets
+    public static long getNextAvailableId() {
+        return nextId;
+    }
+
+    /**
+     * @return true, если все поля заданы верно, иначе могут быть @exception или false
+     */
+    public boolean isExisting() {
+        setName(name).setCapacity(capacity).setType(type).setAddress(address);
+        address.isExisting();
+        if (id < 1)
+            throw new IllegalStateException();
+        return true;
+    }
+
+    private void initial(String name, int capacity, VenueType type, Address address) {
+        setName(name).setCapacity(capacity).setType(type).setAddress(address);
     }
 
     @Override
@@ -113,12 +125,6 @@ public class Venue implements Comparable<Venue> {
             return address.compareTo(o.getAddress());
     }
 
-
-    // All gets
-    public static long getNextAvailableId() {
-        return nextId;
-    }
-
     public long getId() {
         return id;
     }
@@ -127,25 +133,15 @@ public class Venue implements Comparable<Venue> {
         return address;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public VenueType getType() {
-        return type;
-    }
-
-    //All sets
-
     public Venue setAddress(Address address) {
         if (address == null)
             throw new NullPointerException("Поле не может быть null");
         this.address = address;
         return this;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 
     public Venue setCapacity(int capacity) {
@@ -155,6 +151,12 @@ public class Venue implements Comparable<Venue> {
         return this;
     }
 
+    //All sets
+
+    public String getName() {
+        return name;
+    }
+
     public Venue setName(String name) {
         if (name == null)
             throw new NullPointerException("Поле name не может быть null");
@@ -162,6 +164,10 @@ public class Venue implements Comparable<Venue> {
             throw new IllegalArgumentException("name не может быть пустым");
         this.name = name;
         return this;
+    }
+
+    public VenueType getType() {
+        return type;
     }
 
     public Venue setType(VenueType type) {

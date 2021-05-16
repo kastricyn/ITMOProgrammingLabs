@@ -1,0 +1,4 @@
+port=28189
+max_timeout=1000
+interval=500
+max_attempt=10

@@ -20,7 +20,7 @@ import java.util.Scanner;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
 
         if (args.length != 1) {
             System.out.println("Программа принимает на вход ровно один аргумент - путь до файла.\n" +
@@ -54,10 +54,13 @@ public class Main {
 
         try {
             CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
-            new Thread(netCommandManager).start();
+            Thread netConnections = new Thread(netCommandManager);
+            netConnections.start();
+            System.out.println("Данные для подключения: " + netCommandManager);
 
             CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
             consoleCommandManager.run();
+            netConnections.interrupt();
         } catch (NoSuchElementException e) {
             System.out.println("Программа звершена пользователем.");
         } finally {

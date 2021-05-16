@@ -82,7 +82,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         id = nextId++;
         creationDate = LocalDate.now();
         if (console.isInteractiveMode()) {
-            console.println("Создаём объект типа \"Ticket\":");
+            console.printHints("Создаём объект типа \"Ticket\":");
             System.out.println("Поле имя:");
         }
         setName(console.getString());
@@ -111,6 +111,17 @@ public class Ticket implements Comparable<Ticket>, Serializable {
 
     }
 
+    /**
+     * Конструктор билета для верного задания автоматических параметров
+     *
+     * @param ticket билет получаемый на вход
+     */
+    public Ticket(Ticket ticket) {
+        initial(ticket.getName(), ticket.getCoordinates(), ticket.getPrice(), ticket.getDiscount(), ticket.getType(),
+                new Venue(ticket.getVenue()));
+        id = nextId++;
+        creationDate = LocalDate.now();
+    }
 
     @Override
     public boolean equals(Object o) {

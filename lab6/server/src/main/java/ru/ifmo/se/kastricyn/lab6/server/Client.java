@@ -76,6 +76,7 @@ public class Client {
         StringWriter sw = new StringWriter();
         Parser.write(sw, ServerAnswer.class, sa);
         sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
+//        System.err.println("Отправлено: "+ sa);
     }
 
     protected ServerRequest read(ByteBuffer bf) throws IOException, JAXBException {
@@ -83,6 +84,7 @@ public class Client {
         bf.flip();
         ServerRequest request = Parser.get(new StringReader(new String(bf.array(), bf.position(), bf.remaining(), "UTF-8")), ServerRequest.class);
         bf.clear();
+//        System.err.println("Принято: " + request);
         return request;
     }
 

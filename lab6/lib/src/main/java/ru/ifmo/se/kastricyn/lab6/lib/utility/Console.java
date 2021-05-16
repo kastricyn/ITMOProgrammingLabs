@@ -66,8 +66,8 @@ public class Console {
     public String getString(boolean possibleNull, boolean possibleEmpty) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
-                println("Введите строку");
-                println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                printHints("Введите строку");
+                printHints(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
             }
             String t = nextLine().trim();
             if (t.isEmpty() && possibleEmpty)
@@ -110,8 +110,8 @@ public class Console {
     public Long getLong(long min, long max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
-                println("Введите целое число в границах [" + min + "; " + max + "]");
-                println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                printHints("Введите целое число в границах [" + min + "; " + max + "]");
+                printHints(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
             }
             String t = nextLine().trim();
             if (t.isEmpty() && possibleNull)
@@ -119,10 +119,10 @@ public class Console {
             try {
                 long l = Long.parseLong(t);
                 if (l < min || l > max)
-                    println("Введённые данные не корректны");
+                    printHints("Введённые данные не корректны");
                 else return l;
             } catch (NumberFormatException e) {
-                println("Введённые данные не корректны");
+                printHints("Введённые данные не корректны");
             }
         }
     }
@@ -174,8 +174,8 @@ public class Console {
     public Integer getInt(int min, int max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
-                println("Введите целое число в границах [" + min + "; " + max + "]");
-                println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                printHints("Введите целое число в границах [" + min + "; " + max + "]");
+                printHints(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
             }
             String t = nextLine().trim();
             if (t.isEmpty() && possibleNull)
@@ -183,10 +183,10 @@ public class Console {
             try {
                 int l = Integer.parseInt(t);
                 if (l < min || l > max)
-                    println("Введённые данные не корректны");
+                    printHints("Введённые данные не корректны");
                 else return l;
             } catch (NumberFormatException e) {
-                println("Введённые данные не корректны");
+                printHints("Введённые данные не корректны");
             }
         }
     }
@@ -238,8 +238,8 @@ public class Console {
     public Float getFloat(float min, float max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
-                println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
-                println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                printHints("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
+                printHints(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
             }
             String t = nextLine().trim();
             if (t.isEmpty() && possibleNull)
@@ -247,10 +247,10 @@ public class Console {
             try {
                 float f = Float.parseFloat(t);
                 if (f < min || f > max)
-                    println("Введённые данные не корректны");
+                    printHints("Введённые данные не корректны");
                 else return f;
             } catch (NumberFormatException e) {
-                println("Введённые данные не корректны");
+                printHints("Введённые данные не корректны");
             }
         }
     }
@@ -276,8 +276,8 @@ public class Console {
     public Double getDouble(double min, double max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
-                println("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
-                println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+                printHints("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
+                printHints(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
             }
             String t = nextLine().trim();
             if (t.isEmpty() && possibleNull)
@@ -285,10 +285,10 @@ public class Console {
             try {
                 double f = Double.parseDouble(t);
                 if (f < min || f > max)
-                    println("Введённые данные не корректны");
+                    printHints("Введённые данные не корректны");
                 else return f;
             } catch (NumberFormatException e) {
-                println("Введённые данные не корректны");
+                printHints("Введённые данные не корректны");
             }
         }
 
@@ -312,8 +312,8 @@ public class Console {
         if (interactiveMode) {
             String str = Arrays.toString(eClass.getEnumConstants());
             str = str.substring(1, str.length() - 1);
-            println("Введите одно из: " + str);
-            println(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
+            printHints("Введите одно из: " + str);
+            printHints(possibleNull ? "Для получения null введите пустую строку" : "Получить null нельзя.");
         }
         while (true) {
             String t = nextLine().trim().toUpperCase();
@@ -322,7 +322,7 @@ public class Console {
             try {
                 return Enum.valueOf(eClass, t);
             } catch (RuntimeException e) {
-                println("Данные не корректны");
+                printHints("Данные не корректны");
             }
         }
     }
@@ -335,8 +335,8 @@ public class Console {
      * @throws NoSuchElementException если пользователь завершил ввод
      */
     public boolean requestConfirmation(String message) throws NoSuchElementException {
-        println(message);
-        println("Для подтверждения введите y, для отмены любую другую клавишу");
+        printHints(message);
+        printHints("Для подтверждения введите y, для отмены любую другую клавишу");
         String t = "";
         t = nextLine().trim().toUpperCase();
 
@@ -381,7 +381,16 @@ public class Console {
      *
      * @param str строка которую надо напечатать
      */
-    public void println(String str) {
+    public void printHints(String str) {
         if (isInteractiveMode()) out.println(str);
+    }
+
+    /**
+     * печатает в консоль
+     *
+     * @param str строка которую печатает
+     */
+    public void println(String str) {
+        out.println(str);
     }
 }

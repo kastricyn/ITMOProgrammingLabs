@@ -28,13 +28,13 @@ public class ServerCommandArgument extends CommandArgument {
 
     @Override
     public ServerCommandArgument setTicket(Ticket ticket) {
-        super.setTicket(ticket);
+        super.setTicket(ticket == null ? null : new Ticket(ticket));
         return this;
     }
 
     @Override
     public ServerCommandArgument setVenue(Venue venue) {
-        super.setVenue(venue);
+        super.setVenue(venue == null ? null : new Venue(venue));
         return this;
     }
 

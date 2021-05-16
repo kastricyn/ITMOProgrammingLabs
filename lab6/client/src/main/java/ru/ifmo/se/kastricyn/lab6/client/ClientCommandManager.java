@@ -13,6 +13,7 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Arrays;
 
 public class ClientCommandManager extends CommandManager {
@@ -65,7 +66,7 @@ public class ClientCommandManager extends CommandManager {
                         console.printlnErr("Команды " + commandName + " не существует. Для вызова справки введите: help");
                         return;
                     case NEED_ARGS:
-                        console.println("Для этой команды необходимы дополнительные аргументы.");
+                        console.printHints("Для этой команды необходимы дополнительные аргументы.");
                         CommandArgument cca = new CommandArgument();
                         for (Class eClass :
                                 sa.getArgTypes()) {
@@ -106,13 +107,16 @@ public class ClientCommandManager extends CommandManager {
      */
     @Override
     public void run() {
-        while (isWorkable()) {
+        while (isWorkable() && console.hasNext()) {
             String t = console.nextLine().trim();
             if (t.isEmpty())
                 continue;
             String[] s = t.split("\\s", 2);
             try {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
+            } catch (SocketException e) {
+                console.println("Соеденение утеряно, запустите программу заново");
+                return;
             } catch (JAXBException | IOException e) {
                 e.printStackTrace();
             }

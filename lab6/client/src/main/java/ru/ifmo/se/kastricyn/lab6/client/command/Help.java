@@ -8,6 +8,7 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -47,6 +48,8 @@ public class Help extends ClientAbstractCommand {
 
             answer = Console.getStringFromStream("Доступны следующие команды:",
                     Stream.concat(strings.stream(), ccm.getCommandsAsString()).distinct().sorted());
+        } catch (SocketException e) {
+            answer = "Соединение утеряно, попробуйте перезапустить программу.";
         } catch (IOException | JAXBException e) {
             e.printStackTrace();
         }
