@@ -56,19 +56,21 @@ public class Main {
         tickets.setPath(p).check();
         Scanner in = new Scanner(System.in);
 
+
+        CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
+        Thread netConnections = new Thread(netCommandManager);
         try {
-            CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
-            Thread netConnections = new Thread(netCommandManager);
+
             netConnections.start();
             System.out.println("Данные для подключения: " + netCommandManager);
 
             CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
             consoleCommandManager.run();
-            netConnections.interrupt();
+
         } catch (NoSuchElementException e) {
             System.out.println("Программа звершена пользователем.");
         } finally {
-            //закрыть другие потоки
+            netConnections.interrupt();
         }
         log.info("stop");
     }
