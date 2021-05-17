@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.ifmo.se.kastricyn.lab6.lib.LocalDateAdapter;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 
@@ -19,6 +21,9 @@ import java.util.stream.Collectors;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TicketCollection implements Iterable<Ticket> {
+    @XmlTransient
+    final static Logger log = LogManager.getLogger();
+
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     @XmlAttribute
     private final LocalDate initDate;
@@ -240,7 +245,9 @@ public class TicketCollection implements Iterable<Ticket> {
                 isDeleted = true;
             }
         }
-        if (isDeleted)
+        if (isDeleted){
             System.out.println("Некоторые элементы не были импортированы, из-за неверных данных");
+            log.warn("Некоторые элементы не были импортированы, из-за неверных данных");
+        }
     }
 }

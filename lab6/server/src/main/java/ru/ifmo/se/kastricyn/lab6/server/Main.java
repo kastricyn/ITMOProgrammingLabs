@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
@@ -19,9 +21,10 @@ import java.util.Scanner;
  * Main-class
  */
 public class Main {
+    static final Logger log = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
-
+        log.info("start");
         if (args.length != 1) {
             System.out.println("Программа принимает на вход ровно один аргумент - путь до файла.\n" +
                     " Пожалйста проверьте верность аргументов и повторите запуск.");
@@ -39,6 +42,7 @@ public class Main {
             if (!Files.isWritable(p))
                 System.out.println("Файл не доступен для записи.");
         } catch (JAXBException e) {
+            log.warn("Нарушена структура файла коллекции");
             System.out.println("Нарушена структура файла, для работоспособности программы верните правильную структуру" +
                     "\n или удалите файл и мы создадим новый с пустой структурой по указанному пути. " +
                     "\n После исправления повторите попытку.");
@@ -66,5 +70,6 @@ public class Main {
         } finally {
             //закрыть другие потоки
         }
+        log.info("stop");
     }
 }

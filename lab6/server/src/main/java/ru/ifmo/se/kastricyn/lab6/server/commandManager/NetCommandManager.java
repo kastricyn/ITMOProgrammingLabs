@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server.commandManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.server.Client;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
@@ -16,6 +18,8 @@ import java.util.Iterator;
 import java.util.Properties;
 
 public class NetCommandManager extends CommandManager {
+    static final Logger log = LogManager.getLogger();
+
     //todo: read params from properties
     static int PORT = 8189;
     private final TicketCollection ticketCollection;
@@ -32,6 +36,7 @@ public class NetCommandManager extends CommandManager {
         selector = Selector.open();
         ssc.register(selector, SelectionKey.OP_ACCEPT);
         bf = ByteBuffer.allocate(1024 * 1024);
+        log.info(toString());
     }
 
     /**
@@ -45,7 +50,7 @@ public class NetCommandManager extends CommandManager {
             properties.load(new FileReader("config"));
             PORT = Integer.parseInt(properties.getProperty("port", "8189"));
         } catch (Exception e) {
-            System.err.println("Испольщзуется порт по умолчанию.");
+            log.trace("config файл не найден");
         }
         NetCommandManager ncm = new NetCommandManager(ticketCollection, PORT);
         ncm.addIfAbsent(new Add());
@@ -110,7 +115,7 @@ public class NetCommandManager extends CommandManager {
 
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
 

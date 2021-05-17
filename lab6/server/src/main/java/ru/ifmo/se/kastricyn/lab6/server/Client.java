@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab6.lib.connection.ServerRequest;
@@ -16,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Client {
+    final static Logger log = LogManager.getLogger();
+
     private SocketChannel sh;
     private Selector selector;
 
@@ -26,17 +30,22 @@ public class Client {
         sh.configureBlocking(false);
         this.selector = selector;
         sh.register(selector, SelectionKey.OP_READ, this);
+        log.info("Подключено " + sh.getRemoteAddress());
     }
 
     public void reply(ByteBuffer bf, NetCommandManager cm) {
         try {
             write(processing(read(bf), cm));
         } catch (IOException | JAXBException e) {
-            System.out.println("Конец соединения");
+            try {
+                log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
+            } catch (IOException ioException) {
+                log.error(ioException.getMessage());
+            }
             try {
                 sh.close();
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                log.error(ioException.getMessage());
             }
             return;
         }
@@ -44,7 +53,7 @@ public class Client {
             try {
                 sh.register(selector, SelectionKey.OP_READ, this);
             } catch (ClosedChannelException e) {
-                e.printStackTrace();
+                log.warn(e.getMessage());
             }
         }
     }
@@ -76,7 +85,8 @@ public class Client {
         StringWriter sw = new StringWriter();
         Parser.write(sw, ServerAnswer.class, sa);
         sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
-//        System.err.println("Отправлено: "+ sa);
+        log.info("Отправлено " + sh.getRemoteAddress() + ":");
+        log.debug(sa);
     }
 
     protected ServerRequest read(ByteBuffer bf) throws IOException, JAXBException {
@@ -84,7 +94,8 @@ public class Client {
         bf.flip();
         ServerRequest request = Parser.get(new StringReader(new String(bf.array(), bf.position(), bf.remaining(), "UTF-8")), ServerRequest.class);
         bf.clear();
-//        System.err.println("Принято: " + request);
+        log.info("Принято " + sh.getRemoteAddress() + ":");
+        log.debug(request);
         return request;
     }
 
