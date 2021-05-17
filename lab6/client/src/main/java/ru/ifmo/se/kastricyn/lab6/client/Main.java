@@ -5,6 +5,7 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 /**
@@ -36,6 +37,8 @@ public class Main {
             ClientCommandManager manager = ClientCommandManager.getStandards(connect, console);
             manager.run();
 
+        } catch (NoSuchElementException e) {
+            System.out.println("Программа завершена пользователем");
         } catch (IOException | IllegalArgumentException e) {
             new Console().printlnErr("Соединение не установлено, проверьте параметры и попробуйте позже.");
         } catch (InterruptedException e) {
