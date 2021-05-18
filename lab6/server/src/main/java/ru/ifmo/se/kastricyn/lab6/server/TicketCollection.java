@@ -7,13 +7,12 @@ import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Представляет коллекцию Ticket-ов
@@ -172,7 +171,6 @@ public class TicketCollection implements Iterable<Ticket> {
      *
      * @param cmp компаратор по которому будет проходит сортировка
      */
-    //todo: why is it working
     public TicketCollection sort(Comparator<Ticket> cmp) {
         tickets = tickets.stream().sorted(cmp).collect(Collectors.toCollection(ArrayDeque::new));
         return this;
@@ -248,6 +246,13 @@ public class TicketCollection implements Iterable<Ticket> {
         if (isDeleted){
             System.out.println("Некоторые элементы не были импортированы, из-за неверных данных");
             log.warn("Некоторые элементы не были импортированы, из-за неверных данных");
+        }
+        try {
+            Field nextId = Ticket.class.getDeclaredField("nextId");
+            nextId.setAccessible(true);
+            nextId.setLong(Ticket.class, idTicket.stream().max(Long::compareTo).orElse(0L)+1);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

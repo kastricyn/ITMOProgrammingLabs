@@ -54,7 +54,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
 
     public Ticket(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
         initial(name, coordinates, price, discount, type, venue);
-        id = nextId++;
+        id = 0l;
         creationDate = LocalDate.now();
     }
 
@@ -74,12 +74,12 @@ public class Ticket implements Comparable<Ticket>, Serializable {
      * конструктор по умолчанию, для работы JAXB
      */
     private Ticket() {
-        id = nextId++;
+        id = 0l;
         creationDate = LocalDate.now();
     }
 
     public Ticket(Console console) {
-        id = nextId++;
+        id = 0l;
         creationDate = LocalDate.now();
         if (console.isInteractiveMode()) {
             console.printHints("Создаём объект типа \"Ticket\":");

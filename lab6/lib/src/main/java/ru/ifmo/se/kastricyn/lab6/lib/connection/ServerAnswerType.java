@@ -1,6 +1,8 @@
 package ru.ifmo.se.kastricyn.lab6.lib.connection;
 
-public enum ServerAnswerType {
+import java.io.Serializable;
+
+public enum ServerAnswerType implements Serializable {
     OK,
     NEED_ARGS,
     NOT_FOUND_COMMAND,

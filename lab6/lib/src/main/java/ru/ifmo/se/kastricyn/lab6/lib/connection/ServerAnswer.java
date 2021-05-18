@@ -3,11 +3,12 @@ package ru.ifmo.se.kastricyn.lab6.lib.connection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.Set;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ServerAnswer {
+public class ServerAnswer implements Serializable {
     private ServerAnswerType sat;
     private String answer;
     private String input;
