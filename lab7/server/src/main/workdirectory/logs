@@ -1,0 +1,112 @@
+2021-05-24 21:30:41,055 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 21:30:41,439 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 21:43:01,730 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 21:43:02,127 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 21:43:09,965 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53624
+2021-05-24 21:43:12,074 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53624 закрыто
+2021-05-24 21:43:14,936 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53625
+2021-05-24 21:43:17,443 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53625 закрыто
+2021-05-24 21:43:26,994 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53626
+2021-05-24 21:43:32,162 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53626 закрыто
+2021-05-24 21:43:38,060 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53629
+2021-05-24 21:43:40,690 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53629 закрыто
+2021-05-24 21:43:57,353 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53632
+2021-05-24 21:44:24,928 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53632 закрыто
+2021-05-24 21:44:34,797 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53636
+2021-05-24 21:44:37,362 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 21:44:37,801 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 21:44:42,005 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53642
+2021-05-24 21:44:44,031 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53642 закрыто
+2021-05-24 21:46:40,305 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53653
+2021-05-24 21:46:44,245 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53653 закрыто
+2021-05-24 21:52:53,964 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53678
+2021-05-24 21:52:56,589 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53678 закрыто
+2021-05-24 21:53:58,719 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 21:53:59,168 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 21:54:57,488 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53702
+2021-05-24 21:55:37,582 INFO r.i.s.k.l.s.Client [Thread-1] Принято /127.0.0.1:53702:
+2021-05-24 21:55:37,582 DEBUG r.i.s.k.l.s.Client [Thread-1] ServerRequest{input='show', objArgs=CommandArgument{ticket=null, venue=null, commandManager=null}}
+2021-05-24 21:55:37,598 INFO r.i.s.k.l.s.Client [Thread-1] Отправлено /127.0.0.1:53702:
+2021-05-24 21:55:37,599 DEBUG r.i.s.k.l.s.Client [Thread-1] ServerAnswer{sat=OK, answer='Коллекция:
+Ticket{id=1, name='First', coordinates=Coordinates{x=45, y=12.0}, creationDate=2021-05-24, price=21, discount=23.0, type=USUAL, venue=Venue{id=2, name='123', capacity=123, type=PUB, address=Address{street='dsgdsfgk sdfhjk'}}}
+Ticket{id=3, name='First', coordinates=Coordinates{x=45, y=12.0}, creationDate=2021-05-24, price=21, discount=23.0, type=USUAL, venue=Venue{id=6, name='123', capacity=123, type=PUB, address=Address{street='dsgdsfgk sdfhjk'}}}
+Ticket{id=2, name='First', coordinates=Coordinates{x=45, y=12.0}, creationDate=2021-05-24, price=21, discount=23.0, type=USUAL, venue=Venue{id=5, name='123', capacity=123, type=PUB, address=Address{street='dsgdsfgk sdfhjk'}}}
+', input='null', argTypes=null}
+2021-05-24 21:56:41,788 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53702 закрыто
+2021-05-24 21:56:42,659 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53710
+2021-05-24 21:56:43,608 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53710 закрыто
+2021-05-24 21:57:34,947 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53713
+2021-05-24 21:57:44,419 INFO r.i.s.k.l.s.Client [Thread-1] Принято /127.0.0.1:53713:
+2021-05-24 21:57:44,419 DEBUG r.i.s.k.l.s.Client [Thread-1] ServerRequest{input='show', objArgs=CommandArgument{ticket=null, venue=null, commandManager=null}}
+2021-05-24 21:57:44,422 INFO r.i.s.k.l.s.Client [Thread-1] Отправлено /127.0.0.1:53713:
+2021-05-24 21:57:44,422 DEBUG r.i.s.k.l.s.Client [Thread-1] ServerAnswer{sat=OK, answer='Коллекция:
+Ticket{id=1, name='First', coordinates=Coordinates{x=45, y=12.0}, creationDate=2021-05-24, price=21, discount=23.0, type=USUAL, venue=Venue{id=2, name='123', capacity=123, type=PUB, address=Address{street='dsgdsfgk sdfhjk'}}}
+Ticket{id=3, name='First', coordinates=Coordinates{x=45, y=12.0}, creationDate=2021-05-24, price=21, discount=23.0, type=USUAL, venue=Venue{id=6, name='123', capacity=123, type=PUB, address=Address{street='dsgdsfgk sdfhjk'}}}
+Ticket{id=2, name='First', coordinates=Coordinates{x=45, y=12.0}, creationDate=2021-05-24, price=21, discount=23.0, type=USUAL, venue=Venue{id=5, name='123', capacity=123, type=PUB, address=Address{street='dsgdsfgk sdfhjk'}}}
+', input='null', argTypes=null}
+2021-05-24 21:57:44,423 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53713 закрыто
+2021-05-24 21:57:59,099 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53725
+2021-05-24 21:58:02,941 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53725 закрыто
+2021-05-24 21:58:53,252 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53735
+2021-05-24 21:59:00,501 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53735 закрыто
+2021-05-24 22:01:47,441 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53748
+2021-05-24 22:01:51,289 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53748 закрыто
+2021-05-24 22:02:43,356 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 22:02:43,810 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 22:02:50,521 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53756
+2021-05-24 22:03:11,063 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53756 закрыто
+2021-05-24 22:03:11,805 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53759
+2021-05-24 22:03:53,066 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53759 закрыто
+2021-05-24 22:05:27,113 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53791
+2021-05-24 22:05:30,925 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53791 закрыто
+2021-05-24 22:08:59,205 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53817
+2021-05-24 22:09:16,414 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53817 закрыто
+2021-05-24 22:16:51,821 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53894
+2021-05-24 22:17:08,869 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53894 закрыто
+2021-05-24 22:19:21,630 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53922
+2021-05-24 22:19:27,161 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53922 закрыто
+2021-05-24 22:20:10,534 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53932
+2021-05-24 22:20:15,274 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53932 закрыто
+2021-05-24 22:20:46,281 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53946
+2021-05-24 22:20:54,303 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53946 закрыто
+2021-05-24 22:21:09,142 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53950
+2021-05-24 22:21:21,134 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53950 закрыто
+2021-05-24 22:24:18,901 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:53972
+2021-05-24 22:24:31,365 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:53972 закрыто
+2021-05-24 22:26:57,703 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54003
+2021-05-24 22:27:19,720 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54003 закрыто
+2021-05-24 22:27:20,662 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54007
+2021-05-24 22:27:32,921 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54007 закрыто
+2021-05-24 22:27:40,787 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54010
+2021-05-24 22:27:46,698 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54010 закрыто
+2021-05-24 22:27:47,196 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54020
+2021-05-24 22:27:51,689 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54020 закрыто
+2021-05-24 22:27:57,937 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54030
+2021-05-24 22:28:04,465 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54030 закрыто
+2021-05-24 22:28:19,898 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54036
+2021-05-24 22:28:26,614 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 22:28:27,170 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 22:28:30,799 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54041
+2021-05-24 22:28:41,292 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 22:28:41,745 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 22:28:47,732 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54047
+2021-05-24 22:28:58,134 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54047 закрыто
+2021-05-24 22:28:58,897 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54051
+2021-05-24 22:29:54,061 INFO r.i.s.k.l.s.Main [main] start
+2021-05-24 22:29:54,524 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-24 22:30:03,750 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54064
+2021-05-24 22:30:21,233 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54064 закрыто
+2021-05-24 22:30:35,520 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54070
+2021-05-24 22:30:43,063 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54070 закрыто
+2021-05-24 22:30:45,490 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54073
+2021-05-24 22:30:48,735 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54073 закрыто
+2021-05-24 22:31:31,357 INFO r.i.s.k.l.s.Client [Thread-1] Подключено /127.0.0.1:54076
+2021-05-24 22:31:58,807 INFO r.i.s.k.l.s.Client [Thread-1] соединение с /127.0.0.1:54076 закрыто
+2021-05-29 17:28:55,363 INFO r.i.s.k.l.s.Main [main] start
+2021-05-29 17:28:55,965 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-29 18:53:35,485 INFO r.i.s.k.l.s.Main [main] start
+2021-05-29 18:53:36,156 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-29 18:54:26,114 INFO r.i.s.k.l.s.Main [main] start
+2021-05-29 18:54:26,493 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189
+2021-05-29 18:54:37,376 INFO r.i.s.k.l.s.Main [main] start
+2021-05-29 18:54:37,824 INFO r.i.s.k.l.s.c.NetCommandManager [main] порт подключения:28189

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ticketCollection initDate="2021-05-24">
+    <tickets id="1">
+        <name>First</name>
+        <coordinates>
+            <x>45</x>
+            <y>12.0</y>
+        </coordinates>
+        <creationDate>2021-05-24</creationDate>
+        <price>21</price>
+        <discount>23.0</discount>
+        <type>USUAL</type>
+        <venue id="2">
+            <name>123</name>
+            <capacity>123</capacity>
+            <type>PUB</type>
+            <address>
+                <street>dsgdsfgk sdfhjk</street>
+            </address>
+        </venue>
+    </tickets>
+    <tickets id="3">
+        <name>First</name>
+        <coordinates>
+            <x>45</x>
+            <y>12.0</y>
+        </coordinates>
+        <creationDate>2021-05-24</creationDate>
+        <price>21</price>
+        <discount>23.0</discount>
+        <type>USUAL</type>
+        <venue id="6">
+            <name>123</name>
+            <capacity>123</capacity>
+            <type>PUB</type>
+            <address>
+                <street>dsgdsfgk sdfhjk</street>
+            </address>
+        </venue>
+    </tickets>
+    <tickets id="2">
+        <name>First</name>
+        <coordinates>
+            <x>45</x>
+            <y>12.0</y>
+        </coordinates>
+        <creationDate>2021-05-24</creationDate>
+        <price>21</price>
+        <discount>23.0</discount>
+        <type>USUAL</type>
+        <venue id="5">
+            <name>123</name>
+            <capacity>123</capacity>
+            <type>PUB</type>
+            <address>
+                <street>dsgdsfgk sdfhjk</street>
+            </address>
+        </venue>
+    </tickets>
+</ticketCollection>
