@@ -20,8 +20,8 @@ public class Connection implements Closeable {
     public static int INTERVAL = 5000;
 
     private Socket socket;
-    private InputStream is;
-    private OutputStream os;
+    private ObjectInputStream is;
+    private ObjectOutputStream os;
 
     /**
      * Устанавливает соединение с сервером по TCP
@@ -53,8 +53,8 @@ public class Connection implements Closeable {
         }
         if (!socket.isConnected())
             throw new IOException();
-        is = socket.getInputStream();
-        os = socket.getOutputStream();
+        is = new ObjectInputStream(socket.getInputStream());
+        os = new ObjectOutputStream(socket.getOutputStream());
     }
 
     public Connection(InetAddress ia, int port, Properties properties) throws IOException, InterruptedException {
@@ -69,15 +69,28 @@ public class Connection implements Closeable {
     public void sendRequest(ServerRequest request) throws IOException {
         StringWriter sw = new StringWriter();
         Parser.write(sw, ServerRequest.class, request);
-        os.write(sw.toString().getBytes(StandardCharsets.UTF_8));
+//        os.write(sw.toString().getBytes(StandardCharsets.UTF_8));
+
+//        ByteArrayInputStream bais = new ByteArrayInputStream();
+//        ObjectInputStream ois = new ObjectInputStream(bais);
+        new ObjectOutputStream(System.out).writeObject(request);
+        os.writeObject(request);
+
 //        System.err.println("Отправлено: " + request);
     }
 
 
     public ServerAnswer getAnswer() throws IOException, JAXBException {
         byte[] b = new byte[1024 * 1024];
-        int len = is.read(b);
-        ServerAnswer sa = Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
+//        int len = is.read(b);
+//        ServerAnswer sa = Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
+        ServerAnswer sa = null;
+        try {
+//            new ObjectInputStream(is).readObject();
+            sa = (ServerAnswer) is.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 //        System.err.println("Получено:" + sa);
         return sa;
     }

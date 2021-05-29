@@ -11,7 +11,7 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
     private String input = "";
-    private CommandArgument objArgs = new CommandArgument();
+    transient private CommandArgument objArgs = new CommandArgument();
 
     //for JAXB
     public ServerRequest() {

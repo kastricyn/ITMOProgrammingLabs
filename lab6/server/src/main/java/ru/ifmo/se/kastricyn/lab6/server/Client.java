@@ -9,13 +9,12 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
 import ru.ifmo.se.kastricyn.lab6.server.commandManager.NetCommandManager;
 
 import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.zip.InflaterOutputStream;
 
 public class Client {
     final static Logger log = LogManager.getLogger();
@@ -84,7 +83,12 @@ public class Client {
     protected void write(ServerAnswer sa) throws IOException {
         StringWriter sw = new StringWriter();
         Parser.write(sw, ServerAnswer.class, sa);
-        sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
+//        sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(byteArrayOutputStream);
+        oos.writeObject(sa);
+        sh.write(ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
+
         log.info("Отправлено " + sh.getRemoteAddress() + ":");
         log.debug(sa);
     }
@@ -92,7 +96,13 @@ public class Client {
     protected ServerRequest read(ByteBuffer bf) throws IOException, JAXBException {
         sh.read(bf);
         bf.flip();
-        ServerRequest request = Parser.get(new StringReader(new String(bf.array(), bf.position(), bf.remaining(), "UTF-8")), ServerRequest.class);
+//        ServerRequest request = Parser.get(new StringReader(new String(bf.array(), bf.position(), bf.remaining(), "UTF-8")), ServerRequest.class);
+        ServerRequest request = null;
+        try {
+            request = (ServerRequest) new ObjectInputStream(new ByteArrayInputStream(bf.array())).readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         bf.clear();
         log.info("Принято " + sh.getRemoteAddress() + ":");
         log.debug(request);

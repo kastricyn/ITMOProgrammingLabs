@@ -116,7 +116,8 @@ public class ClientCommandManager extends CommandManager {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
             } catch (SocketException |StringIndexOutOfBoundsException e) {
                 console.println("Соеденение утеряно, запустите программу заново");
-                return;
+                e.printStackTrace();
+//                return; debug
             } catch (JAXBException | IOException e) {
                 e.printStackTrace();
             }

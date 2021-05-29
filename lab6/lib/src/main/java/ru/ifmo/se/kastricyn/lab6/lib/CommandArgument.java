@@ -3,10 +3,12 @@ package ru.ifmo.se.kastricyn.lab6.lib;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
 
+import java.io.Serializable;
+
 /**
  * Содержит нестроковые аргументы для комманд
  */
-public class CommandArgument {
+public class CommandArgument implements Serializable {
     protected Ticket ticket;
     protected Venue venue;
     protected CommandManager commandManager;

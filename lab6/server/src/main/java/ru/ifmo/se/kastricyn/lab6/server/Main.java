@@ -71,7 +71,7 @@ public class Main {
             System.out.println("Программа звершена пользователем.");
         } finally {
             netConnections.interrupt();
+            log.info("stop");
         }
-        log.info("stop");
     }
 }

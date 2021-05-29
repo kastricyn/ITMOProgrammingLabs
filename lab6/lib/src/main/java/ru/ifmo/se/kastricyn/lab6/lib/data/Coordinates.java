@@ -2,12 +2,13 @@ package ru.ifmo.se.kastricyn.lab6.lib.data;
 
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Надо для {@link Ticket}
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     private Long x; //Значение поля должно быть больше -503, Поле не может быть null
     private Float y; //Поле не может быть null
 

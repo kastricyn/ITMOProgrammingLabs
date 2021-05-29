@@ -5,13 +5,14 @@ import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Нужен для {@link Ticket}
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Venue implements Comparable<Venue> {
+public class Venue implements Comparable<Venue>, Serializable {
     public static final int CAPACITY_MIN = 1;
     private static long nextId = 1; //id не может быть меньше 1
 
