@@ -12,7 +12,7 @@ import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 import java.util.Arrays;
 
 /**
- * Управление комманд, которые вводятся с консоли
+ * Управление коммандами, которые вводятся с консоли
  */
 public class ConsoleCommandManager extends CommandManager {
     private final Console console;

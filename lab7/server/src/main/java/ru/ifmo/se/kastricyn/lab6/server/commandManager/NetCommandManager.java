@@ -4,10 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.server.Client;
+import ru.ifmo.se.kastricyn.lab6.server.Properties;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab6.server.commands.*;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -15,13 +15,11 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
-import java.util.Properties;
 
 public class NetCommandManager extends CommandManager {
     static final Logger log = LogManager.getLogger();
 
-    //todo: read params from properties
-    static int PORT = 8189;
+    static int PORT = Properties.getProperties().getPort();
     private final TicketCollection ticketCollection;
     private final ServerSocketChannel ssc;
     private final ByteBuffer bf;
@@ -45,13 +43,6 @@ public class NetCommandManager extends CommandManager {
      * @param ticketCollection коллекция с которой будут работать команды
      */
     public static NetCommandManager getStandards(TicketCollection ticketCollection) throws IOException {
-        try {
-            Properties properties = new Properties();
-            properties.load(new FileReader("config"));
-            PORT = Integer.parseInt(properties.getProperty("port", "8189"));
-        } catch (Exception e) {
-            log.trace("config файл не найден");
-        }
         NetCommandManager ncm = new NetCommandManager(ticketCollection, PORT);
         ncm.addIfAbsent(new Add());
         ncm.addIfAbsent(new AddIfMax());
@@ -80,7 +71,7 @@ public class NetCommandManager extends CommandManager {
      * @param args        аргументы команды в строковом представлении
      */
     @Override
-    public void executeCommand(String commandName, String ... args) {
+    public void executeCommand(String commandName, String... args) {
         //не используется, здесь вместо этого используется Client.processing(....)
     }
 
