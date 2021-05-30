@@ -3,7 +3,5 @@
 */.*
 */out/
 */*.iml
-/Лекции/
-/Отчёты/
-/Условия лаб
-/SomeTask
+*/server/src/main/workdirectory/logs
+*/server/src/main/workdirectory/config
