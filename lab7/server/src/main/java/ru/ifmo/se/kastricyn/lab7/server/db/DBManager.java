@@ -16,7 +16,8 @@ import java.sql.Statement;
 import java.util.Arrays;
 
 public class DBManager implements DBTicketsI, DBUserI {
-    static final Logger log = LogManager.getLogger();
+    static final String DB_DRIVER = "org.postgresql.Driver";
+    static final Logger log = LogManager.getLogger(DBManager.class);
     static Properties properties = Properties.getProperties();
 
     /**
@@ -25,14 +26,17 @@ public class DBManager implements DBTicketsI, DBUserI {
     //todo nullable
     public static @Nullable Connection setConnection() {
         try {
-            Class.forName(properties.getDBDriver());
+            log.info("Попытка подключиться к БД.");
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             log.error("Не найден класс с драйвером БД: " + Arrays.toString(e.getStackTrace()));
         }
         try {
-            return DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(), properties.getDBPass());
+            Connection connection = DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(), properties.getDBPass());
+            log.info("Подключено к БД: " + properties.getDBUrl());
+            return connection;
         } catch (SQLException throwable) {
-            log.error(Arrays.toString(throwable.getStackTrace()));
+            log.error(throwable);
         }
         return null;
     }

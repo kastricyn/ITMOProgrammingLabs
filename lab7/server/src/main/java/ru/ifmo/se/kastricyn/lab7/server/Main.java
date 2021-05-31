@@ -7,9 +7,11 @@ import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.ConsoleCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
+import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -22,9 +24,11 @@ public class Main {
     public static void main(String @NotNull [] args) throws IOException {
         log.info("start");
         Properties.getProperties().load(Paths.get("config"));
+
         TicketCollection tickets = new TicketCollection();
         Scanner in = new Scanner(System.in);
 
+        Connection con = DBManager.setConnection();
 
         CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
         Thread netConnections = new Thread(netCommandManager);

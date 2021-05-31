@@ -41,10 +41,4 @@ public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Prop
         if (str == null) throw new NotFoundPropertyException();
         return str;
     }
-    @NotNull
-    public String getDBDriver() throws NotFoundPropertyException {
-        String str = prop.getProperty("db_driver");
-        if (str == null) throw new NotFoundPropertyException();
-        return str;
-    }
 }
