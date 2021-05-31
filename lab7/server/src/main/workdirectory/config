@@ -1,6 +1,7 @@
 port=28189
 
 # DB config
+db_driver="org.postgresql.Driver"
 db_url="pg"
 db_port=5432
 

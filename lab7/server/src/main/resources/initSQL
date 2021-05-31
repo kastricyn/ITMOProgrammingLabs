@@ -1,0 +1,42 @@
+CREATE TABLE IF NOT EXISTS s311734.users
+(
+    Id bigserial PRIMARY KEY,
+    Name varchar NOT NULL UNIQUE CHECK (Name <> ''),
+    Pass varchar,
+    PassSalt varchar
+);
+
+CREATE INDEX IF NOT EXISTS Name ON s311734.users (Name);
+
+CREATE TABLE IF NOT EXISTS s311734.COORDINATES
+(
+    id serial PRIMARY KEY,
+    X bigint NOT NULL CHECK(X>-503),
+    Y real NOT NULL
+);
+create type TicketType as enum ('usual', 'budgetary', 'cheap');
+create type VenueType as enum ('pub', 'loft', 'open_area', 'cinema', 'stadium');
+
+CREATE TABLE IF NOT EXISTS s311734.Venues
+(
+    Id bigserial PRIMARY KEY,
+    Name varchar NOT NULL CHECK (Name <> ''),
+    capacity int NOT NULL CHECK(capacity>0),
+    type VenueType NOT NULL,
+    address varchar NOT NULL UNIQUE CHECK (address <> '')
+);
+
+CREATE TABLE IF NOT EXISTS s311734.tickets (
+    Id bigserial PRIMARY KEY,
+    Name varchar NOT NULL CHECK (Name <> ''),
+    coordinates int NOT NULL,
+    CreationDate date NOT NULL,
+    Price integer CHECK(price >0),
+    discount decimal NOT NULL CHECK(discount>=0 AND discount <=100),
+    type TicketType,
+    venue bigint NOT NULL,
+    UserId bigint NOT NULL,
+    FOREIGN KEY (UserId) References s311734.users (Id),
+    FOREIGN KEY (coordinates) References s311734.COORDINATES (Id),
+    FOREIGN KEY (venue) References s311734.Venues (Id)
+);

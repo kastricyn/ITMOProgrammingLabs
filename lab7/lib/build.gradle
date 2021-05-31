@@ -6,3 +6,7 @@ mainClassName = "ru.ifmo.se.kastricyn.lab6.lib.Main"
 jar {
     manifest.attributes("Main-Class": mainClassName)
 }
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+}
