@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.exception.NotFoundPropertyException;
 
 public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Properties {
@@ -11,7 +11,7 @@ public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Prop
     }
 
     @NotNull
-    public static @org.jetbrains.annotations.NotNull Properties getProperties() {
+    public static Properties getProperties() {
         return properties;
     }
 
@@ -24,7 +24,6 @@ public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Prop
         return db_url;
     }
 
-    @NotNull
     public int getDBPort() {
         return Integer.parseInt(prop.getProperty("db_port", "5432"));
     }

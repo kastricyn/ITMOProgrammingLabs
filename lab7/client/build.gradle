@@ -1,7 +1,7 @@
 apply plugin: "application"
 
 version '1.0'
-mainClassName = "ru.ifmo.se.kastricyn.lab6.client.Main"
+mainClassName = "ru.ifmo.se.kastricyn.lab7.client.Main"
 
 dependencies {
     compile project(":lib")
