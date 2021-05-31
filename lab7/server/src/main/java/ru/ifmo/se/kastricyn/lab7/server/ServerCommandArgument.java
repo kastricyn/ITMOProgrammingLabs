@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.server;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandArgument;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
@@ -14,26 +16,26 @@ public class ServerCommandArgument extends CommandArgument {
     public ServerCommandArgument() {
     }
 
-    public ServerCommandArgument(CommandArgument cca) {
+    public ServerCommandArgument(@NotNull CommandArgument cca) {
         setTicket(cca.getTicket());
         setCommandManager(cca.getCommandManager());
         setVenue(cca.getVenue());
     }
 
     @Override
-    public ServerCommandArgument setCommandManager(CommandManager commandManager) {
+    public @NotNull ServerCommandArgument setCommandManager(CommandManager commandManager) {
         super.setCommandManager(commandManager);
         return this;
     }
 
     @Override
-    public ServerCommandArgument setTicket(Ticket ticket) {
+    public @NotNull ServerCommandArgument setTicket(@Nullable Ticket ticket) {
         super.setTicket(ticket == null ? null : new Ticket(ticket));
         return this;
     }
 
     @Override
-    public ServerCommandArgument setVenue(Venue venue) {
+    public @NotNull ServerCommandArgument setVenue(@Nullable Venue venue) {
         super.setVenue(venue == null ? null : new Venue(venue));
         return this;
     }
@@ -42,7 +44,7 @@ public class ServerCommandArgument extends CommandArgument {
         return ticketCollection;
     }
 
-    public ServerCommandArgument setTicketCollection(TicketCollection ticketCollection) {
+    public @NotNull ServerCommandArgument setTicketCollection(TicketCollection ticketCollection) {
         this.ticketCollection = ticketCollection;
         return this;
     }

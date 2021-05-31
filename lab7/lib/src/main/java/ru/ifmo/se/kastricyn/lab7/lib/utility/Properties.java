@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.lib.utility;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +21,7 @@ public abstract class Properties {
     protected Properties() {
     }
 
-    public Properties load(Path p) throws FileNotFoundException, IOException {
+    public @NotNull Properties load(@NotNull Path p) throws FileNotFoundException, IOException {
         prop.load(new FileReader(p.toFile()));
         return this;
     }

@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server.commandManager;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
@@ -27,7 +28,7 @@ public class ConsoleCommandManager extends CommandManager {
      * @param ticketCollection коллекция с которой будут работать команды
      * @param console          объект типа {@link Console} с помощью которого происходит взаимодействие с пользователем
      */
-    public static ConsoleCommandManager getStandards(TicketCollection ticketCollection, Console console) {
+    public static @NotNull ConsoleCommandManager getStandards(TicketCollection ticketCollection, Console console) {
         ConsoleCommandManager ccm = new ConsoleCommandManager(ticketCollection, console);
         ccm.addIfAbsent(new Add());
         ccm.addIfAbsent(new AddIfMax());
@@ -55,7 +56,7 @@ public class ConsoleCommandManager extends CommandManager {
      * @param commandName имя команды
      * @param args        аргументы команды в строковом представлении
      */
-    public void executeCommand(String commandName, String... args) {
+    public void executeCommand(@NotNull String commandName, String... args) {
         ServerAbstractCommand command = (ServerAbstractCommand) getCommand(commandName);
         if (command == null) {
             console.printlnErr("Такой команды не существует. Для вызова справки введите: help");

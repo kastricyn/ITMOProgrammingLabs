@@ -33,5 +33,5 @@ public interface DBTicketsI {
     /**
      * Возвращает коллецию билетов из БД.
      */
-    TicketCollection getTicketCollection();
+    @org.jetbrains.annotations.NotNull TicketCollection getTicketCollection();
 }

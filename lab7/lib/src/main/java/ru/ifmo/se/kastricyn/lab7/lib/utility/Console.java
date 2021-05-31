@@ -1,5 +1,8 @@
 package ru.ifmo.se.kastricyn.lab7.lib.utility;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -49,7 +52,7 @@ public class Console {
         this.err = err;
     }
 
-    public static String getStringFromStream(String before, Stream<?> stream) {
+    public static @NotNull String getStringFromStream(String before, @NotNull Stream<?> stream) {
         StringBuffer sb = new StringBuffer(1024).append(before).append("\n");
         stream.forEachOrdered(x -> sb.append(x).append("\n"));
         return sb.toString();
@@ -63,7 +66,7 @@ public class Console {
      * @return строку полученную от пользователя необходимого формата
      * @throws NoSuchElementException если пользователь завершил ввод
      */
-    public String getString(boolean possibleNull, boolean possibleEmpty) throws NoSuchElementException {
+    public @Nullable String getString(boolean possibleNull, boolean possibleEmpty) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
                 printHints("Введите строку");
@@ -85,7 +88,7 @@ public class Console {
      * @param possibleNull может ли строка быть null
      * @return непустую строку или null
      */
-    public String getString(boolean possibleNull) {
+    public @Nullable String getString(boolean possibleNull) {
         return getString(possibleNull, false);
     }
 
@@ -94,7 +97,7 @@ public class Console {
      *
      * @return непустую строку, не null
      */
-    public String getString() {
+    public @Nullable String getString() {
         return getString(false, false);
     }
 
@@ -107,7 +110,7 @@ public class Console {
      * @return null <code>null||</code> объект типа Long
      * @throws NoSuchElementException если пользователь завершил ввод
      */
-    public Long getLong(long min, long max, boolean possibleNull) throws NoSuchElementException {
+    public @Nullable Long getLong(long min, long max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
                 printHints("Введите целое число в границах [" + min + "; " + max + "]");
@@ -133,7 +136,7 @@ public class Console {
      * @param possibleNull можно ли вернуть null
      * @return null <code>null||</code> объект типа Long
      */
-    public Long getLong(boolean possibleNull) {
+    public @Nullable Long getLong(boolean possibleNull) {
         return getLong(Long.MIN_VALUE, Long.MAX_VALUE, possibleNull);
     }
 
@@ -171,7 +174,7 @@ public class Console {
      * @return null <code>null||</code> объект типа Integer
      * @throws NoSuchElementException если пользователь завершил ввод
      */
-    public Integer getInt(int min, int max, boolean possibleNull) throws NoSuchElementException {
+    public @Nullable Integer getInt(int min, int max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
                 printHints("Введите целое число в границах [" + min + "; " + max + "]");
@@ -197,7 +200,7 @@ public class Console {
      * @param possibleNull можно ли вернуть null
      * @return null <code>null||</code> объект типа Integer
      */
-    public Integer getInt(boolean possibleNull) {
+    public @Nullable Integer getInt(boolean possibleNull) {
         return getInt(Integer.MIN_VALUE, Integer.MAX_VALUE, possibleNull);
     }
 
@@ -235,7 +238,7 @@ public class Console {
      * @return null <code>null||</code> объект типа Float
      * @throws NoSuchElementException если пользователь завершил ввод
      */
-    public Float getFloat(float min, float max, boolean possibleNull) throws NoSuchElementException {
+    public @Nullable Float getFloat(float min, float max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
                 printHints("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
@@ -273,7 +276,7 @@ public class Console {
      * @return null <code>null||</code> объект типа Double
      * @throws NoSuchElementException если пользователь завершил ввод
      */
-    public Double getDouble(double min, double max, boolean possibleNull) throws NoSuchElementException {
+    public @Nullable Double getDouble(double min, double max, boolean possibleNull) throws NoSuchElementException {
         while (true) {
             if (interactiveMode) {
                 printHints("Введите число с плавающей точкой в границах [" + min + "; " + max + "]");
@@ -308,7 +311,7 @@ public class Console {
      *
      * @throws NoSuchElementException если пользователь завершил ввод
      */
-    public <T extends Enum<T>> T getEnumConstant(Class<T> eClass, boolean possibleNull) throws NoSuchElementException {
+    public <T extends Enum<T>> @Nullable T getEnumConstant(@NotNull Class<T> eClass, boolean possibleNull) throws NoSuchElementException {
         if (interactiveMode) {
             String str = Arrays.toString(eClass.getEnumConstants());
             str = str.substring(1, str.length() - 1);

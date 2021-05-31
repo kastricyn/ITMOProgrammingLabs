@@ -12,12 +12,12 @@ public class User {
     @NotNull
     private String name;
     private char[] password = "".toCharArray();
-    public User(long id, @NotNull String name, String password) {
+    public User(long id, @NotNull String name, @NotNull String password) {
         this.name = name;
         this.password = password.toCharArray();
     }
 
-    public User(Console console) {
+    public User(@NotNull Console console) {
         console.printHints("Поле name:");
         name = console.getString();
         console.printHints("Пароль (строка может быть пустой):");
@@ -32,12 +32,12 @@ public class User {
         return name;
     }
 
-    public User setName(@NotNull String name) {
+    public @NotNull User setName(@NotNull String name) {
         this.name = name;
         return this;
     }
 
-    public String getPassword() {
+    public @NotNull String getPassword() {
         return new String(password);
     }
 

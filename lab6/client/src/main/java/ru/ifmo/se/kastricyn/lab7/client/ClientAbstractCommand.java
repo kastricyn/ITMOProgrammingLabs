@@ -1,9 +1,11 @@
 package ru.ifmo.se.kastricyn.lab7.client;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.AbstractCommand;
 
 public abstract class ClientAbstractCommand extends AbstractCommand {
-    protected ClientCommandArgument objArgs;
+    protected @Nullable ClientCommandArgument objArgs;
 
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
@@ -17,7 +19,7 @@ public abstract class ClientAbstractCommand extends AbstractCommand {
     }
 
 
-    public ClientAbstractCommand setArguments(ClientCommandArgument args) {
+    public @NotNull ClientAbstractCommand setArguments(@Nullable ClientCommandArgument args) {
         if (args == null)
             throw new NullPointerException();
         objArgs = args;

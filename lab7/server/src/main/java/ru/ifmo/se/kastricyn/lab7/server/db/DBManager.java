@@ -2,6 +2,8 @@ package ru.ifmo.se.kastricyn.lab7.server.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 
 import java.sql.Connection;
@@ -19,7 +21,7 @@ public class DBManager {
      * Возвращает соединение с БД по параметрам из конфигурационного файла
      */
     //todo nullable
-    public static Connection setConnection() {
+    public static @Nullable Connection setConnection() {
         try {
             Class.forName(properties.getDBDriver());
         } catch (ClassNotFoundException e) {
@@ -33,7 +35,7 @@ public class DBManager {
         return null;
     }
 
-    public static void initialTable(Connection connection){
+    public static void initialTable(@NotNull Connection connection){
         try {
             Statement stat = connection.createStatement();
 

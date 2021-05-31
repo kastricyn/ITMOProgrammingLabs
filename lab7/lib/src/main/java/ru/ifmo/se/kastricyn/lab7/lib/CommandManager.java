@@ -1,6 +1,8 @@
 package ru.ifmo.se.kastricyn.lab7.lib;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.Serializable;
@@ -27,7 +29,7 @@ public abstract class CommandManager implements Runnable, Serializable {
      *
      * @param cmd команда
      */
-    public void addIfAbsent(AbstractCommand cmd) {
+    public void addIfAbsent(@NotNull AbstractCommand cmd) {
         commands.putIfAbsent(cmd.getName(), cmd);
     }
 
@@ -38,7 +40,7 @@ public abstract class CommandManager implements Runnable, Serializable {
         return commands.values().stream().map(AbstractCommand::toString);
     }
 
-    public Command getCommand(String commandName) {
+    public Command getCommand(@NotNull String commandName) {
         return commands.get(commandName.toLowerCase());
     }
 

@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.lib.data;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -18,10 +20,10 @@ public class Venue implements Comparable<Venue>, Serializable {
 
     @XmlAttribute
     private final long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private String name; //Поле не может быть null, Строка не может быть пустой
+    private @Nullable String name; //Поле не может быть null, Строка не может быть пустой
     private int capacity; //Значение поля должно быть больше 0
-    private VenueType type; //Поле не может быть null
-    private Address address; //Поле не может быть null
+    private @Nullable VenueType type; //Поле не может быть null
+    private @Nullable Address address; //Поле не может быть null
 
     public Venue(String name, int capacity, VenueType type, Address address) {
         initial(name, capacity, type, address);
@@ -47,12 +49,12 @@ public class Venue implements Comparable<Venue>, Serializable {
     /**
      * Конструктор для верного задания автоматически присваиваемых параметров
      */
-    public Venue(Venue venue) {
+    public Venue(@NotNull Venue venue) {
         initial(venue.getName(), venue.getCapacity(), venue.getType(), venue.getAddress());
         id = nextId++;
     }
 
-    public Venue(Console console) {
+    public Venue(@NotNull Console console) {
         id = nextId++;
         if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Venue\":");
@@ -108,7 +110,7 @@ public class Venue implements Comparable<Venue>, Serializable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "Venue{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
@@ -119,7 +121,7 @@ public class Venue implements Comparable<Venue>, Serializable {
     }
 
     @Override
-    public int compareTo(Venue o) {
+    public int compareTo(@NotNull Venue o) {
         if (equals(o))
             return 0;
         else
@@ -130,11 +132,11 @@ public class Venue implements Comparable<Venue>, Serializable {
         return id;
     }
 
-    public Address getAddress() {
+    public @Nullable Address getAddress() {
         return address;
     }
 
-    public Venue setAddress(Address address) {
+    public @NotNull Venue setAddress(@Nullable Address address) {
         if (address == null)
             throw new NullPointerException("Поле не может быть null");
         this.address = address;
@@ -145,7 +147,7 @@ public class Venue implements Comparable<Venue>, Serializable {
         return capacity;
     }
 
-    public Venue setCapacity(int capacity) {
+    public @NotNull Venue setCapacity(int capacity) {
         if (capacity < CAPACITY_MIN)
             throw new IllegalArgumentException("Значение поля capacity должно быть больше " + (CAPACITY_MIN - 1));
         this.capacity = capacity;
@@ -154,11 +156,11 @@ public class Venue implements Comparable<Venue>, Serializable {
 
     //All sets
 
-    public String getName() {
+    public @Nullable String getName() {
         return name;
     }
 
-    public Venue setName(String name) {
+    public @NotNull Venue setName(@Nullable String name) {
         if (name == null)
             throw new NullPointerException("Поле name не может быть null");
         if (name.equals(""))
@@ -167,11 +169,11 @@ public class Venue implements Comparable<Venue>, Serializable {
         return this;
     }
 
-    public VenueType getType() {
+    public @Nullable VenueType getType() {
         return type;
     }
 
-    public Venue setType(VenueType type) {
+    public @NotNull Venue setType(@Nullable VenueType type) {
         if (type == null)
             throw new NullPointerException("Поле не может быть null");
         this.type = type;

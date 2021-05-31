@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.client.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.client.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
@@ -50,7 +51,7 @@ public class Help extends ClientAbstractCommand {
                     Stream.concat(strings.stream(), ccm.getCommandsAsString()).distinct().sorted());
         } catch (SocketException e) {
             answer = "Соединение утеряно, попробуйте перезапустить программу.";
-        } catch (IOException | JAXBException e) {
+        } catch (@NotNull IOException | JAXBException e) {
             e.printStackTrace();
         }
     }

@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server.commands;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.ServerAbstractCommand;
@@ -34,7 +35,7 @@ public class ExecuteScript extends ServerAbstractCommand {
     // на клиенте отправляется на сервер
 
     @Override
-    public void execute(String... args) {
+    public void execute(String @NotNull ... args) {
         TicketCollection ticketCollection = objArgs.getTicketCollection();
 
         if (args.length != 1) {

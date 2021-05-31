@@ -1,10 +1,14 @@
 package ru.ifmo.se.kastricyn.lab7.lib.utility;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -22,7 +26,7 @@ public class Parser {
      * @throws JAXBException         если файл был изменён некорректным образом
      * @throws AccessDeniedException если файл недоступен для чтения
      */
-    public static <E> E get(Path p, Class<E> eClass) throws JAXBException, AccessDeniedException {
+    public static <E> @NotNull E get(@NotNull Path p, Class<E> eClass) throws JAXBException, AccessDeniedException {
         if (!Files.isReadable(p))
             throw new AccessDeniedException(p.toString());
         JAXBContext context = JAXBContext.newInstance(eClass);
@@ -38,7 +42,7 @@ public class Parser {
      * @throws JAXBException         если файл был изменён некорректным образом
      * @throws AccessDeniedException если файл недоступен для чтения
      */
-    public static <E> E get(Reader p, Class<E> eClass) throws JAXBException, AccessDeniedException {
+    public static <E> @NotNull E get(Reader p, Class<E> eClass) throws JAXBException, AccessDeniedException {
         JAXBContext context = JAXBContext.newInstance(eClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         E collection = (E) unmarshaller.unmarshal(p);
@@ -53,7 +57,7 @@ public class Parser {
      * @param p путь до файла в который будет сохраняться коллекция
      * @return пустую коллекцию, связанную с файлом, путь до которого был передан
      */
-    public static <E> E create(Path p, Class<E> eClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static <E> @NotNull E create(@NotNull Path p, @NotNull Class<E> eClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         E object = eClass.getConstructor(Path.class).newInstance(p);
         try {
             Files.createFile(p);
@@ -66,7 +70,7 @@ public class Parser {
         return object;
     }
 
-    public static <E> void write(Path p, Class<E> eClass, E object) {
+    public static <E> void write(@NotNull Path p, Class<E> eClass, E object) {
         try {
             JAXBContext context = JAXBContext.newInstance(eClass);
             Marshaller marshaller = context.createMarshaller();

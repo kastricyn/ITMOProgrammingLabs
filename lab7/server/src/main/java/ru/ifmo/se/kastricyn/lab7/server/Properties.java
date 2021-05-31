@@ -11,7 +11,7 @@ public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Prop
     }
 
     @NotNull
-    public static Properties getProperties() {
+    public static @org.jetbrains.annotations.NotNull Properties getProperties() {
         return properties;
     }
 

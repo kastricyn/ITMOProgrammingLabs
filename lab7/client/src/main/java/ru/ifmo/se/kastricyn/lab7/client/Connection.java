@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.client;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Parser;
@@ -29,7 +31,7 @@ public class Connection implements Closeable {
      * @throws IOException          если подкючение не установлено
      * @throws InterruptedException
      */
-    public Connection(SocketAddress sa, Properties properties) throws IOException, InterruptedException {
+    public Connection(SocketAddress sa, @NotNull Properties properties) throws IOException, InterruptedException {
         try {
             MAX_ATTEMPT = Integer.parseInt(properties.getProperty("max_attempt", "5"));
             MAX_TIMEOUT = Integer.parseInt(properties.getProperty("max_timeout", "3000"));
@@ -56,11 +58,11 @@ public class Connection implements Closeable {
         os = new ObjectOutputStream(socket.getOutputStream());
     }
 
-    public Connection(InetAddress ia, int port, Properties properties) throws IOException, InterruptedException {
+    public Connection(InetAddress ia, int port, @NotNull Properties properties) throws IOException, InterruptedException {
         this(new InetSocketAddress(ia, port), properties);
     }
 
-    public ServerAnswer getAnswer(ServerRequest request) throws IOException, JAXBException {
+    public @Nullable ServerAnswer getAnswer(ServerRequest request) throws IOException, JAXBException {
         sendRequest(request);
         return getAnswer();
     }
@@ -79,7 +81,7 @@ public class Connection implements Closeable {
     }
 
 
-    public ServerAnswer getAnswer() throws IOException, JAXBException {
+    public @Nullable ServerAnswer getAnswer() throws IOException, JAXBException {
         byte[] b = new byte[1024 * 1024];
 //        int len = is.read(b);
 //        ServerAnswer sa = Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);

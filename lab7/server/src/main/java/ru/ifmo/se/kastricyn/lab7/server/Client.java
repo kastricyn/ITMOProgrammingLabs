@@ -2,6 +2,8 @@ package ru.ifmo.se.kastricyn.lab7.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
@@ -20,7 +22,7 @@ public class Client {
     private SocketChannel sh;
     private Selector selector;
 
-    public Client(ServerSocketChannel ssc, Selector selector) throws IOException {
+    public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException {
         sh = ssc.accept();
         if (sh == null)
             return;
@@ -30,10 +32,10 @@ public class Client {
         log.info("Подключено " + sh.getRemoteAddress());
     }
 
-    public void reply(ByteBuffer bf, NetCommandManager cm) {
+    public void reply(@NotNull ByteBuffer bf, @NotNull NetCommandManager cm) {
         try {
             write(processing(read(bf), cm));
-        } catch (IOException | JAXBException e) {
+        } catch (@NotNull IOException | JAXBException e) {
             try {
                 log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
             } catch (IOException ioException) {
@@ -55,7 +57,7 @@ public class Client {
         }
     }
 
-    protected ServerAnswer processing(ServerRequest serverRequest, NetCommandManager cm) {
+    protected @NotNull ServerAnswer processing(@NotNull ServerRequest serverRequest, @NotNull NetCommandManager cm) {
         //получим команду по имени
         ServerAbstractCommand command = (ServerAbstractCommand) cm.getCommand(serverRequest.getInput().split("\\s", 2)[0]);
         //если команды нет, отправим ответ
@@ -91,7 +93,7 @@ public class Client {
         log.debug(sa);
     }
 
-    protected ServerRequest read(ByteBuffer bf) throws IOException, JAXBException {
+    protected @Nullable ServerRequest read(@NotNull ByteBuffer bf) throws IOException, JAXBException {
         sh.read(bf);
         bf.flip();
 //        ServerRequest request = Parser.get(new StringReader(new String(bf.array(), bf.position(), bf.remaining(), "UTF-8")), ServerRequest.class);

@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.lab7.server.commandManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.Client;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
@@ -22,7 +23,7 @@ public class NetCommandManager extends CommandManager {
     static int PORT = Properties.getProperties().getPort();
     private final TicketCollection ticketCollection;
     private final ServerSocketChannel ssc;
-    private final ByteBuffer bf;
+    private final @NotNull ByteBuffer bf;
     private final Selector selector;
 
     public NetCommandManager(TicketCollection ticketCollection, int port) throws IOException {
@@ -42,7 +43,7 @@ public class NetCommandManager extends CommandManager {
      *
      * @param ticketCollection коллекция с которой будут работать команды
      */
-    public static NetCommandManager getStandards(TicketCollection ticketCollection) throws IOException {
+    public static @NotNull NetCommandManager getStandards(TicketCollection ticketCollection) throws IOException {
         NetCommandManager ncm = new NetCommandManager(ticketCollection, PORT);
         ncm.addIfAbsent(new Add());
         ncm.addIfAbsent(new AddIfMax());
@@ -113,7 +114,7 @@ public class NetCommandManager extends CommandManager {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "порт подключения:" + PORT;
     }
 }
