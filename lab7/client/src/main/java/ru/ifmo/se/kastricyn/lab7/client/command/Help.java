@@ -37,6 +37,7 @@ public class Help extends ClientAbstractCommand {
         try {
             //получаем доступные команды от сервера
             ServerAnswer sa = ccm.getConnection().getAnswer(new ServerRequest("help"));
+            assert sa != null;
             String string = sa.getAnswer();
 
             // выделяем команды как строки в Set

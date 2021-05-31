@@ -9,6 +9,7 @@ import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Parser;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
+import ru.ifmo.se.kastricyn.lab7.server.commands.ServerAbstractCommand;
 
 import javax.xml.bind.JAXBException;
 import java.io.*;
@@ -64,6 +65,7 @@ public class Client {
         if (command == null)
             return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
         //устанавливаем аргументы
+        assert serverRequest.getObjArgs() != null;
         ServerCommandArgument ca = new ServerCommandArgument(serverRequest.getObjArgs())
                 .setCommandManager(cm).setTicketCollection(cm.getTicketCollection());
         command.setArguments(ca);

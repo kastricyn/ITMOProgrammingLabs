@@ -1,6 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.lib;
 
 import org.jetbrains.annotations.NotNull;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.CommandArgument;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 

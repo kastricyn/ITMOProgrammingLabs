@@ -26,9 +26,6 @@ public class ExecuteScript extends ClientAbstractCommand {
         setNeedArgumentType(ClientCommandManager.class);
     }
 
-    //TODO: загрузка скриптов с клиента (на клиенте обрабатывается команда execute_script, и каждая команда, которой нет
-    // на клиенте отправляется на сервер
-
     @Override
     public void execute(String @NotNull ... args) {
         if (args.length != 1) {

@@ -4,8 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.client.command.ExecuteScript;
 import ru.ifmo.se.kastricyn.lab7.client.command.Exit;
 import ru.ifmo.se.kastricyn.lab7.client.command.Help;
-import ru.ifmo.se.kastricyn.lab7.lib.CommandArgument;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.User;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.CommandArgument;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 public class ClientCommandManager extends CommandManager {
     private Console console;
     private Connection connection;
+    private User user;
 
     public ClientCommandManager(Connection connection, Console console) {
         this.connection = connection;
@@ -32,6 +34,15 @@ public class ClientCommandManager extends CommandManager {
         ccm.addIfAbsent(new Help());
         ccm.addIfAbsent(new ExecuteScript());
         return ccm;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public ClientCommandManager setUser(User user) {
+        this.user = user;
+        return this;
     }
 
     public Connection getConnection() {
@@ -56,7 +67,7 @@ public class ClientCommandManager extends CommandManager {
 
         ClientAbstractCommand command = (ClientAbstractCommand) getCommand(commandName);
         if (command == null) {
-            ServerRequest sr = new ServerRequest(input);
+            ServerRequest sr = new ServerRequest(input).setObjArgs(new CommandArgument().setUser(user));
             while (true) {
                 ServerAnswer sa = connection.getAnswer(sr);
                 switch (sa.getSat()) {
@@ -68,7 +79,7 @@ public class ClientCommandManager extends CommandManager {
                         return;
                     case NEED_ARGS:
                         console.printHints("Для этой команды необходимы дополнительные аргументы.");
-                        CommandArgument cca = new CommandArgument();
+                        CommandArgument cca = new CommandArgument().setUser(user);
                         for (Class eClass :
                                 sa.getArgTypes()) {
                             if (eClass == null)
@@ -77,6 +88,8 @@ public class ClientCommandManager extends CommandManager {
                                 cca.setTicket(new Ticket(console));
                             else if (eClass.equals(Venue.class))
                                 cca.setVenue(new Venue(console));
+                            else if (eClass.equals(User.class))
+                                cca.setUser(new User(console));
                         }
                         sr.setObjArgs(cca);
                         break;
@@ -96,6 +109,8 @@ public class ClientCommandManager extends CommandManager {
                 cca.setVenue(new Venue(console));
             else if (eClass.isInstance(this))
                 cca.setCommandManager(this);
+            else if (eClass.equals(User.class))
+                cca.setUser(new User(console));
         }
         command.setArguments(cca);
         command.execute(args);
@@ -115,7 +130,7 @@ public class ClientCommandManager extends CommandManager {
             String[] s = t.split("\\s", 2);
             try {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
-            } catch (@NotNull SocketException |StringIndexOutOfBoundsException e) {
+            } catch (@NotNull SocketException | StringIndexOutOfBoundsException e) {
                 console.println("Соеденение утеряно, запустите программу заново");
                 e.printStackTrace();
 //                return; debug

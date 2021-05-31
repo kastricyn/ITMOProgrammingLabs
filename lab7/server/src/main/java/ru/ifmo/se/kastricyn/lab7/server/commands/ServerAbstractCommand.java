@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.lab7.server;
+package ru.ifmo.se.kastricyn.lab7.server.commands;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +7,8 @@ import ru.ifmo.se.kastricyn.lab7.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
+import ru.ifmo.se.kastricyn.lab7.server.ServerCommandArgument;
+import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 public abstract class ServerAbstractCommand extends AbstractCommand {
     protected @Nullable ServerCommandArgument objArgs;

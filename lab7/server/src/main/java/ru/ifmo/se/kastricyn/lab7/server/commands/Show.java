@@ -1,7 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server.commands;
 
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
-import ru.ifmo.se.kastricyn.lab7.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 import java.util.stream.StreamSupport;
@@ -19,6 +18,7 @@ public class Show extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
 
         if (ticketCollection.isEmpty())

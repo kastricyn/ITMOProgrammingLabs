@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.LocalDateAdapter;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
+import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -36,6 +37,9 @@ public class TicketCollection implements Iterable<Ticket> {
     @XmlTransient
     private Path path;
 
+    @NotNull
+    private DBManager db;
+
     /**
      * создаёт пустую коллекцию
      */
@@ -50,6 +54,11 @@ public class TicketCollection implements Iterable<Ticket> {
         saved = true;
         initDate = LocalDate.now();
         this.path = p;
+    }
+
+    @NotNull
+    public DBManager getDb() {
+        return db;
     }
 
     /**
@@ -196,6 +205,15 @@ public class TicketCollection implements Iterable<Ticket> {
     }
 
     /**
+     * Удаляет элементы коллекции пользователя
+     *
+     * @param userId id пользователя
+     */
+    public void clear(long userId) {
+        tickets = tickets.stream().filter(x -> x.getUserId() != userId).collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    /**
      * Возвращает дату инициализации коллекции
      */
     public @NotNull LocalDate getInitDate() {
@@ -247,14 +265,14 @@ public class TicketCollection implements Iterable<Ticket> {
                 isDeleted = true;
             }
         }
-        if (isDeleted){
+        if (isDeleted) {
             System.out.println("Некоторые элементы не были импортированы, из-за неверных данных");
             log.warn("Некоторые элементы не были импортированы, из-за неверных данных");
         }
         try {
             Field nextId = Ticket.class.getDeclaredField("nextId");
             nextId.setAccessible(true);
-            nextId.setLong(Ticket.class, idTicket.stream().max(Long::compareTo).orElse(0L)+1);
+            nextId.setLong(Ticket.class, idTicket.stream().max(Long::compareTo).orElse(0L) + 1);
         } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }

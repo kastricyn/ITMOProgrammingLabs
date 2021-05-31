@@ -1,6 +1,8 @@
-package ru.ifmo.se.kastricyn.lab7.lib;
+package ru.ifmo.se.kastricyn.lab7.lib.connection;
 
 import org.jetbrains.annotations.NotNull;
+import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 
@@ -13,6 +15,16 @@ public class CommandArgument implements Serializable {
     protected Ticket ticket;
     protected Venue venue;
     protected CommandManager commandManager;
+    protected User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public CommandArgument setUser(User user) {
+        this.user = user;
+        return this;
+    }
 
     public CommandManager getCommandManager() {
         return commandManager;

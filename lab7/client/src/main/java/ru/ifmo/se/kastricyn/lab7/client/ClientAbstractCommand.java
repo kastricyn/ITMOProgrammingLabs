@@ -19,9 +19,7 @@ public abstract class ClientAbstractCommand extends AbstractCommand {
     }
 
 
-    public @NotNull ClientAbstractCommand setArguments(@Nullable ClientCommandArgument args) {
-        if (args == null)
-            throw new NullPointerException();
+    public @NotNull ClientAbstractCommand setArguments(@NotNull ClientCommandArgument args) {
         objArgs = args;
         return this;
     }

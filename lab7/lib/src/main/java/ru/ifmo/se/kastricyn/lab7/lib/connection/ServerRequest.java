@@ -2,7 +2,6 @@ package ru.ifmo.se.kastricyn.lab7.lib.connection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.ifmo.se.kastricyn.lab7.lib.CommandArgument;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

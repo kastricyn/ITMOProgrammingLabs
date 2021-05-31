@@ -97,7 +97,8 @@ public class Console {
      *
      * @return непустую строку, не null
      */
-    public @Nullable String getString() {
+
+    public @NotNull String getString() {
         return getString(false, false);
     }
 

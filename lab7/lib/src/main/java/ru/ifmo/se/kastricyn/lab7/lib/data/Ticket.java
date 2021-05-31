@@ -34,26 +34,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
     private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
     private TicketType type; //Поле может быть null
     private @Nullable Venue venue; //Поле не может быть null
-
     private long userId;
-
-    /**
-     * @return true, если все поля заданы верно, иначе могут быть @exception
-     */
-    public boolean isExisting() {
-        if (id < 1)
-            throw new IllegalStateException();
-        setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
-        coordinates.isExisting();
-        venue.isExisting();
-        if (creationDate == null)
-            throw new NullPointerException();
-        return true;
-    }
-
-    private void initial(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
-        setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
-    }
 
     public Ticket(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
         initial(name, coordinates, price, discount, type, venue);
@@ -127,6 +108,37 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         creationDate = LocalDate.now();
     }
 
+    public static long getNextAvailableId() {
+        return nextId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public Ticket setUserId(long userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    /**
+     * @return true, если все поля заданы верно, иначе могут быть @exception
+     */
+    public boolean isExisting() {
+        if (id < 1)
+            throw new IllegalStateException();
+        setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
+        coordinates.isExisting();
+        venue.isExisting();
+        if (creationDate == null)
+            throw new NullPointerException();
+        return true;
+    }
+
+    private void initial(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
+        setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -145,6 +157,8 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return name.compareTo(o.getName());
     }
 
+//All gets
+
     @Override
     public @NotNull String toString() {
         return "Ticket{" +
@@ -158,12 +172,6 @@ public class Ticket implements Comparable<Ticket>, Serializable {
                 ", type=" + type +
                 ", venue=" + venue +
                 '}';
-    }
-
-//All gets
-
-    public static long getNextAvailableId() {
-        return nextId;
     }
 
     public long getId() {
@@ -187,6 +195,13 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return discount;
     }
 
+    public @NotNull Ticket setDiscount(double discount) {
+        if (discount < DISCOUNT_MIN || discount > DISCOUNT_MAX)
+            throw new IllegalArgumentException("Значение поля discount должно быть больше " + DISCOUNT_MIN + ", Максимальное значение поля: " + DISCOUNT_MAX);
+        this.discount = discount;
+        return this;
+    }
+
     public @Nullable Coordinates getCoordinates() {
         return coordinates;
     }
@@ -202,11 +217,16 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return type;
     }
 
+    //All sets
+
+    public @NotNull Ticket setType(TicketType type) {
+        this.type = type;
+        return this;
+    }
+
     public @Nullable Integer getPrice() {
         return price;
     }
-
-    //All sets
 
     public @NotNull Ticket setPrice(@Nullable Integer price) {
         if (price == null)
@@ -229,18 +249,6 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         if (venue == null)
             throw new NullPointerException("поле venue не может быть null");
         this.venue = venue;
-        return this;
-    }
-
-    public @NotNull Ticket setDiscount(double discount) {
-        if (discount < DISCOUNT_MIN || discount > DISCOUNT_MAX)
-            throw new IllegalArgumentException("Значение поля discount должно быть больше " + DISCOUNT_MIN + ", Максимальное значение поля: " + DISCOUNT_MAX);
-        this.discount = discount;
-        return this;
-    }
-
-    public @NotNull Ticket setType(TicketType type) {
-        this.type = type;
         return this;
     }
 }

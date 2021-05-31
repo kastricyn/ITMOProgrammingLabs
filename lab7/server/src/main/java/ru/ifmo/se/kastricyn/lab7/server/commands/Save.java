@@ -1,12 +1,12 @@
 package ru.ifmo.se.kastricyn.lab7.server.commands;
 
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Parser;
-import ru.ifmo.se.kastricyn.lab7.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 /**
  * Команда сохранить коллекцию в файл, путь до которого передан при запуске программы
  */
+//todo delete this command
 public class Save extends ServerAbstractCommand {
 
     public Save() {

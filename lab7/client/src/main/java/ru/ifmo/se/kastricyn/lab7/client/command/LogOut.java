@@ -3,21 +3,19 @@ package ru.ifmo.se.kastricyn.lab7.client.command;
 import ru.ifmo.se.kastricyn.lab7.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.client.ClientCommandManager;
 
-public class Exit extends ClientAbstractCommand {
-
-    public Exit() {
-        super("exit", "завершение работы программы");
+public class LogOut extends ClientAbstractCommand {
+    public LogOut() {
+        super("log_out", "деавторизоваться");
         setNeedArgumentType(ClientCommandManager.class);
     }
 
     /**
      * @param args аргументы команды
-     * @throws IndexOutOfBoundsException if paramsIsValidate()!=true
      */
     @Override
     public void execute(String... args) {
         assert objArgs != null;
         ClientCommandManager ccm = objArgs.getCommandManager();
-        ccm.setWorkable(false);
+        ccm.setUser(null);
     }
 }

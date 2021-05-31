@@ -8,17 +8,17 @@ import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
  * Описывает пользователя системы: (id, name, password)
  */
 public class User {
-    private long id = 0;
+    private long id = -1;
     @NotNull
     private String name;
     private char[] password = "".toCharArray();
+
     public User(long id, @NotNull String name, @NotNull String password) {
         this.name = name;
         this.password = password.toCharArray();
     }
-
     public User(@NotNull Console console) {
-        console.printHints("Поле name:");
+        console.printHints("Поле login:");
         name = console.getString();
         console.printHints("Пароль (строка может быть пустой):");
         password = System.console().readPassword();
@@ -26,6 +26,11 @@ public class User {
 
     public long getId() {
         return id;
+    }
+
+    public User setId(long id) {
+        this.id = id;
+        return this;
     }
 
     public @NotNull String getName() {

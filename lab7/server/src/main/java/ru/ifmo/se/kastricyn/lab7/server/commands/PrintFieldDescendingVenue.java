@@ -2,7 +2,6 @@ package ru.ifmo.se.kastricyn.lab7.server.commands;
 
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
-import ru.ifmo.se.kastricyn.lab7.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 import java.util.Comparator;

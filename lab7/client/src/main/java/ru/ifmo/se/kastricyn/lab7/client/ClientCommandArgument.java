@@ -1,7 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.client;
 
 import org.jetbrains.annotations.NotNull;
-import ru.ifmo.se.kastricyn.lab7.lib.CommandArgument;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.CommandArgument;
 
 public class ClientCommandArgument extends CommandArgument {
     private ClientCommandManager commandManager;

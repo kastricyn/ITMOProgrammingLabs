@@ -1,6 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server.db;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
@@ -13,9 +13,9 @@ public interface DBTicketsI {
     /**
      * Добавляет в БД билет
      * @param t билет, который надо добавить
-     * @return true если добавлено, иначе false
+     * @return id под которым был добавлен билет, -1 если билет не был добавлен
      */
-    boolean addTicket(@NotNull Ticket t);
+    long addTicket(@NotNull Ticket t);
     /**
      * Обновляет в БД билет
      * @param id номер билетв
@@ -33,5 +33,10 @@ public interface DBTicketsI {
     /**
      * Возвращает коллецию билетов из БД.
      */
-    @org.jetbrains.annotations.NotNull TicketCollection getTicketCollection();
+    @NotNull TicketCollection getTicketCollection();
+
+    /**
+     * Удаляет все элементы пользователя
+     */
+    boolean clear(long userId);
 }

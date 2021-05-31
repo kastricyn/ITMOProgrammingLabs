@@ -1,15 +1,14 @@
 package ru.ifmo.se.kastricyn.lab7.server.commands;
 
-import ru.ifmo.se.kastricyn.lab7.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 /**
  * Команда очистить колекцию
  */
-public class Clear extends ServerAbstractCommand {
+public class Clear extends CommandWithAuth {
 
     public Clear() {
-        super("clear", "очистить коллекцию");
+        super("clear", "удалить все свои элементы");
 
         setNeedArgumentType(TicketCollection.class);
     }
@@ -17,13 +16,16 @@ public class Clear extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if (!auth())
+            return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
-        if (ticketCollection.isEmpty()) {
-            answer = "Колекция уже пуста";
-        } else {
-            ticketCollection.clear();
-            answer = "Колекция очищена";
-            ticketCollection.setSaved(false);
+        if (!ticketCollection.getDb().clear(user.getId())) {
+            answer = "Очистка не удалась";
+            return;
         }
+        ticketCollection.clear(user.getId());
+        answer = "Элементы ползователя с id=" + user.getId()+ " удалены.";
+        ticketCollection.setSaved(false);
+
     }
 }

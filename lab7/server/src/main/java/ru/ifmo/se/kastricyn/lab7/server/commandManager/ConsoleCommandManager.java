@@ -5,7 +5,6 @@ import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
-import ru.ifmo.se.kastricyn.lab7.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.server.ServerCommandArgument;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab7.server.commands.*;

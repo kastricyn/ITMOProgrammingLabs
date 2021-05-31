@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.lib;
 
+import ru.ifmo.se.kastricyn.lab7.lib.connection.CommandArgument;
+
 import java.util.Set;
 
 /**

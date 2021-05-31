@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
-// TODO: implements DBTicketsI, DBUserI
-public class DBManager {
+public class DBManager implements DBTicketsI, DBUserI {
     static final Logger log = LogManager.getLogger();
     static Properties properties = Properties.getProperties();
 
@@ -35,7 +34,7 @@ public class DBManager {
         return null;
     }
 
-    public static void initialTable(@NotNull Connection connection){
+    public static void initialTable(@NotNull Connection connection) {
         try {
             Statement stat = connection.createStatement();
 
@@ -44,4 +43,5 @@ public class DBManager {
         }
 
     }
+
 }
