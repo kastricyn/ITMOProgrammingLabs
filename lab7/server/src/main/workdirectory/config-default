@@ -2,7 +2,7 @@ port=28189
 
 # DB config
 db_driver="org.postgresql.Driver"
-db_url="pg"
+db_url="jdbc:postgresql://127.0.0.1:12345/studs"
 db_port=5432
 
 #DB user config

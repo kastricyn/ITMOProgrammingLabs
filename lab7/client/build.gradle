@@ -1,9 +1,13 @@
-apply plugin: "application"
-
+plugins {
+    id 'application'
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
 version '1.0'
 mainClassName = "ru.ifmo.se.kastricyn.lab7.client.Main"
 
 dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
     compile project(":lib")
 }
 

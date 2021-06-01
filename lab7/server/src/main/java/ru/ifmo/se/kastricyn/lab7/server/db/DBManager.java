@@ -23,7 +23,6 @@ public class DBManager implements DBTicketsI, DBUserI {
     /**
      * Возвращает соединение с БД по параметрам из конфигурационного файла
      */
-    //todo nullable
     public static @Nullable Connection setConnection() {
         try {
             log.info("Попытка подключиться к БД.");

@@ -1,8 +1,8 @@
-apply plugin: "idea"
-
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
 subprojects {
-    apply plugin: "java"
-
     tasks.withType(JavaCompile) {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -13,18 +13,4 @@ subprojects {
         mavenCentral()
     }
 
-    jar {
-        from {
-            configurations.compile.collect {
-                it.isDirectory() ? it : zipTree(it)
-            }
-            configurations.runtime.collect {
-                it.isDirectory() ? it : zipTree(it)
-            }
-        }
-    }
-
-    dependencies {
-        implementation 'org.jetbrains:annotations:20.1.0'
-    }
 }
