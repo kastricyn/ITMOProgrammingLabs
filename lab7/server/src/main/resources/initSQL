@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS s311734.users
 (
     Id bigserial PRIMARY KEY,
     Name varchar NOT NULL UNIQUE CHECK (Name <> ''),
-    Pass varchar,
-    PassSalt varchar
+    Password varchar,
+    PasswordSalt varchar
 );
 
 CREATE INDEX IF NOT EXISTS Name ON s311734.users (Name);

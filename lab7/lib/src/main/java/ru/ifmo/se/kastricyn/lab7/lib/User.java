@@ -11,12 +11,24 @@ public class User {
     private long id = -1;
     @NotNull
     private String name;
-    private char[] password = "".toCharArray();
+    private char[] password;
+
+    public User(long id, @NotNull String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public User(@NotNull String name, char[] password) {
+        this.name = name;
+        this.password = password;
+    }
 
     public User(long id, @NotNull String name, @NotNull String password) {
+        this.id = id;
         this.name = name;
         this.password = password.toCharArray();
     }
+
     public User(@NotNull Console console) {
         console.printHints("Поле login:");
         name = console.getString();
@@ -42,8 +54,7 @@ public class User {
         return this;
     }
 
-    public @NotNull String getPassword() {
-        return new String(password);
+    public char[] getPassword() {
+        return password;
     }
-
 }

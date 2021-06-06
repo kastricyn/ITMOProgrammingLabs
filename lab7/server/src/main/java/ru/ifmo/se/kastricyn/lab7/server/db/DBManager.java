@@ -10,6 +10,7 @@ import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Locale;
 
@@ -48,7 +49,7 @@ public class DBManager implements DBTicketsI, DBUserI {
         } catch (SQLException throwable) {
             log.error(throwable);
         }
-        log.warn("Вместо Сщттусешщт возвращён null");
+        log.warn("Вместо Connection возвращён null");
         return null;
     }
 
@@ -57,6 +58,7 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public @NotNull TicketCollection getTicketCollection() {
+        createTables();
         TicketCollection ticketCollection = new TicketCollection(this);
         int i = 0;
         try (Connection dbConnection = setConnection()) {
@@ -93,7 +95,7 @@ public class DBManager implements DBTicketsI, DBUserI {
         } catch (SQLException throwables) {
             log.error(throwables);
         }
-        if(i>0)
+        if (i > 0)
             log.warn("В коллекции было нарушено " + i + " элементов.");
         if (ticketCollection.check() || i > 0)
             if (new Console().requestConfirmation("Обнаружены ошибки в БД. Хотите пересоздать таблицы? \n Корректные " +
@@ -122,8 +124,8 @@ public class DBManager implements DBTicketsI, DBUserI {
                         "(\n" +
                         "    Id bigserial PRIMARY KEY,\n" +
                         "    Name varchar NOT NULL UNIQUE CHECK (Name <> ''),\n" +
-                        "    Pass varchar,\n" +
-                        "    PassSalt varchar\n" +
+                        "    Password varchar,\n" +
+                        "    PasswordSalt varchar\n" +
                         ");\n" +
                         "\n" +
                         "CREATE INDEX IF NOT EXISTS Name ON s311734.users (Name);\n" +
@@ -216,7 +218,7 @@ public class DBManager implements DBTicketsI, DBUserI {
     public boolean updateTicket(long id, @NotNull Ticket t) {
         try (Connection dbConnection = setConnection()) {
             assert dbConnection != null;
-            try (PreparedStatement stat = dbConnection.prepareStatement(addTicketQuery, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement stat = dbConnection.prepareStatement(updateTicketQuery, Statement.RETURN_GENERATED_KEYS)) {
                 stat.setString(1, t.getName());
                 stat.setLong(2, t.getCoordinates().getX());
                 stat.setFloat(3, t.getCoordinates().getY());
@@ -281,6 +283,7 @@ public class DBManager implements DBTicketsI, DBUserI {
         return false;
     }
 
+
     /**
      * Авторизует пользователя
      *
@@ -288,9 +291,10 @@ public class DBManager implements DBTicketsI, DBUserI {
      * @return возвращает пользователя из записи БД, если прошёл авторизацию, null иначе
      */
     @Override
-    public @NotNull User auth(User user) {
-        //todo
-        return null;
+    public @Nullable User auth(User user) {
+        if (checkPassword(user))
+            return new User(getId(user), user.getName());
+        else return null;
     }
 
     /**
@@ -301,32 +305,73 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean registerUser(User user) {
-
+        try (Connection connection = setConnection()) {
+            assert connection != null;
+            try (PreparedStatement statement =
+                         connection.prepareStatement("INSERT INTO users (name, password, passwordsalt) values (?, ?, " +
+                                 "?)")) {
+                statement.setString(1, user.getName());
+                String passwordsalt = String.valueOf((int) (Math.random() * 100000));
+                statement.setString(2, getStringFromPassword(user.getPassword(), passwordsalt));
+                statement.setString(3, passwordsalt);
+                statement.executeUpdate();
+                return true;
+            }
+        } catch (SQLException | NoSuchAlgorithmException e) {
+            log.error(e);
+        }
         return false;
     }
 
-    /**
-     * Проверяет пароль пользователя на совпадение с данными в БД
-     *
-     * @param user пользователь
-     * @return true, если пароль верный; иначе false
-     */
-    @Override
-    public boolean checkPassword(User user) {
 
+/**
+ * Проверяет пароль пользователя на совпадение с данными в БД
+ *
+ * @param user пользователь
+ * @return true, если пароль верный; иначе false
+ */
+@Override
+public boolean checkPassword(User user){
+        try(Connection connection=setConnection()){
+        assert connection!=null;
+        try(PreparedStatement statement=
+        connection.prepareStatement("SELECT password, passwordsalt FROM users WHERE name=?")){
+        statement.setString(1,user.getName());
+        ResultSet rs=statement.executeQuery();
+        if(rs.next()){
+        return rs.getString("password").equals(getStringFromPassword(user.getPassword(),
+        rs.getString("passwordsalt")));
+        }
+        }
+        }catch(SQLException|NoSuchAlgorithmException throwables){
+        log.error(throwables);
+        }
         return false;
-    }
+        }
 
-    /**
-     * Возвращает id пользователя
-     *
-     * @param user пользователь
-     * @return id пользователя, или -1 если пользователь не найден в базе
-     */
-    @Override
-    public long getId(User user) {
-        return 0;
-    }
+/**
+ * Возвращает id пользователя
+ *
+ * @param user пользователь
+ * @return id пользователя, или -1 если пользователь не найден в базе
+ */
+@Override
+public long getId(User user){
+        try(Connection connection=setConnection()){
+        assert connection!=null;
+        try(PreparedStatement statement=
+        connection.prepareStatement("SELECT id FROM users WHERE name=?")){
+        statement.setString(1,user.getName());
+        ResultSet rs=statement.executeQuery();
+        if(rs.next()){
+        return rs.getLong("id");
+        }
+        }
+        }catch(SQLException throwables){
+        log.error(throwables);
+        }
+        return-1;
+        }
 
 
-}
+        }

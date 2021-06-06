@@ -43,11 +43,11 @@ public interface DBUserI {
     /**
      * Возвращает отпечаток по исходнику, используя SHA-1
      * @param convertme исходник
-     * @param sold соль
+     * @param salt соль
      * @throws NoSuchAlgorithmException
      */
-    default String getStringFromPassword(char[] convertme, String sold) throws NoSuchAlgorithmException {
+    default String getStringFromPassword(char[] convertme, String salt) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        return Base64.getEncoder().encodeToString((md.digest(("006060.6.21.17:49" + new String(convertme) + sold).getBytes(StandardCharsets.UTF_8))));
+        return Base64.getEncoder().encodeToString((md.digest(("006060.6.21.17:49" + new String(convertme) + salt).getBytes(StandardCharsets.UTF_8))));
     }
 }
