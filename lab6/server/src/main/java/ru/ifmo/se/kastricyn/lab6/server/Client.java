@@ -77,7 +77,6 @@ public class Client {
         } else
             return new ServerAnswer(ServerAnswerType.NEED_ARGS).setInput(serverRequest.getInput())
                     .setArgTypes(command.getArgumentTypes());
-
     }
 
     protected void write(ServerAnswer sa) throws IOException {

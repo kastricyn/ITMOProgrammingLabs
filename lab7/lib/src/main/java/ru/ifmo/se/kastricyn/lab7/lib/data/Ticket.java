@@ -24,25 +24,20 @@ public class Ticket implements Comparable<Ticket>, Serializable {
 
     private static long nextId = 1;
 
-    @XmlAttribute
-    private final Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    // быть уникальным, Значение этого поля должно генерироваться автоматически
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
-    private final @Nullable LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private @Nullable String name; //Поле не может быть null, Строка не может быть пустой
-    private @Nullable Coordinates coordinates; //Поле не может быть null
+    private @NotNull final LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться
+    @XmlAttribute
+    private @NotNull Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно
+    // автоматически
+    private @NotNull String name; //Поле не может быть null, Строка не может быть пустой
+    private @NotNull Coordinates coordinates; //Поле не может быть null
+    private @Nullable TicketType type; //Поле может быть null
     private @Nullable Integer price; //Поле может быть null, Значение поля должно быть больше 0
     private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
-    private TicketType type; //Поле может быть null
-    private @Nullable Venue venue; //Поле не может быть null
-    private long userId;
-
-    public Ticket(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
-        initial(name, coordinates, price, discount, type, venue);
-        id = 0l;
-        creationDate = LocalDate.now();
-    }
-
-    public Ticket(long id, String name, Coordinates coordinates, @Nullable LocalDate creationDate, Integer price, double discount, TicketType type, Venue venue) {
+    private @NotNull Venue venue; //Поле не может быть null
+    public Ticket(long id, String name, Coordinates coordinates, @Nullable LocalDate creationDate, Integer price,
+                  double discount, TicketType type, Venue venue, long userId) {
         initial(name, coordinates, price, discount, type, venue);
         if (creationDate == null)
             throw new NullPointerException("Поле creationDate не может быть null");
@@ -51,16 +46,22 @@ public class Ticket implements Comparable<Ticket>, Serializable {
             throw new IllegalArgumentException("Значение поля id должно быть больше id предыдущего объекта этого типа/минимально возможного значения ("
                     + (nextId - 1) + ")");
         this.id = id;
+        this.userId = userId;
         nextId = id + 1;
     }
+    private long userId;
 
-    /**
-     * конструктор по умолчанию, для работы JAXB
-     */
-    private Ticket() {
+    public Ticket(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
+        initial(name, coordinates, price, discount, type, venue);
         id = 0l;
         creationDate = LocalDate.now();
     }
+
+    public Ticket setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
 
     @SuppressWarnings("deprecation")
     public Ticket(@NotNull Console console) {
@@ -178,7 +179,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return id;
     }
 
-    public @Nullable String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
@@ -202,7 +203,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return this;
     }
 
-    public @Nullable Coordinates getCoordinates() {
+    public @NotNull Coordinates getCoordinates() {
         return coordinates;
     }
 
@@ -213,7 +214,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return this;
     }
 
-    public TicketType getType() {
+    public @Nullable TicketType getType() {
         return type;
     }
 
@@ -237,11 +238,11 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return this;
     }
 
-    public @Nullable LocalDate getCreationDate() {
+    public @NotNull LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public @Nullable Venue getVenue() {
+    public @NotNull Venue getVenue() {
         return venue;
     }
 

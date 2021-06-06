@@ -7,15 +7,20 @@ version '1.0'
 mainClassName = "ru.ifmo.se.kastricyn.lab7.server.Main"
 
 dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     compile project(":lib")
     implementation 'org.jetbrains:annotations:20.1.0'
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
-    compile 'org.postgresql:postgresql:42.2.20'
+    implementation 'org.postgresql:postgresql:42.2.19'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
-
-
+test {
+    useJUnitPlatform()
+}
 jar {
     manifest.attributes("Main-Class": mainClassName)
 }

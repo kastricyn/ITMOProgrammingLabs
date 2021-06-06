@@ -5,57 +5,170 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.User;
-import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
+import ru.ifmo.se.kastricyn.lab7.lib.data.*;
+import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
+import java.sql.*;
+import java.util.Locale;
 
 public class DBManager implements DBTicketsI, DBUserI {
-    static final String DB_DRIVER = "org.postgresql.Driver";
     static final Logger log = LogManager.getLogger(DBManager.class);
+    private static final String addTicketQuery = "INSERT INTO tickets " + "(ticketname, ticketcoordinatex, " +
+            "ticketcoordinatey, " +
+            "ticketprice, ticketdiscount, tickettype, venuename, venuecapacity, venuetype, venueaddress, userid, " +
+            "ticketcreationdate) " +
+            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String updateTicketQuery = "UPDATE tickets\n" +
+            "SET ticketname        = ?," +
+            "    ticketcoordinatex = ?," +
+            "    ticketcoordinatey = ?," +
+            "    ticketprice       = ?," +
+            "    ticketdiscount    = ?," +
+            "    tickettype        = ?," +
+            "    venuename         = ?," +
+            "    venuecapacity     = ?," +
+            "    venuetype         = ?," +
+            "    venueaddress      = ?" +
+            "WHERE id = ?";
     static Properties properties = Properties.getProperties();
 
     /**
      * Возвращает соединение с БД по параметрам из конфигурационного файла
      */
-    public static @Nullable Connection setConnection() {
+    protected @Nullable Connection setConnection() {
         try {
-            log.info("Попытка подключиться к БД.");
-            Class.forName("org.postgresql.Driver");
+            Class.forName(properties.getDBDriver());
+            Connection dbConnection = DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(), properties.getDBPass());
+            log.info("Соединение установленно с: " + properties.getDBUrl());
+            return dbConnection;
         } catch (ClassNotFoundException e) {
-            log.error("Не найден класс с драйвером БД: " + Arrays.toString(e.getStackTrace()));
-        }
-        try {
-            Connection connection = DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(), properties.getDBPass());
-            log.info("Подключено к БД: " + properties.getDBUrl());
-            return connection;
+            log.error("Не найден класс с драйвером БД: " + e);
         } catch (SQLException throwable) {
             log.error(throwable);
         }
+        log.warn("Вместо Сщттусешщт возвращён null");
         return null;
     }
 
-    public static void initialTable(@NotNull Connection connection) {
-        try {
-            Statement stat = connection.createStatement();
+    /**
+     * Возвращает коллецию билетов из БД.
+     */
+    @Override
+    public @NotNull TicketCollection getTicketCollection() {
+        TicketCollection ticketCollection = new TicketCollection(this);
+        int i = 0;
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (Statement stat = dbConnection.createStatement()) {
+                String command = "SELECT * FROM tickets";
+                ResultSet rs = stat.executeQuery(command);
 
-        } catch (SQLException throwable) {
-            log.error("Не удалось создать таблицы по необходимости" + Arrays.toString(throwable.getStackTrace()));
+                while (rs.next()) {
+                    try {
+                        Ticket t = new Ticket(
+                                rs.getLong("id"),
+                                rs.getString("ticketname"),
+                                new Coordinates(rs.getLong("ticketcoordinatex"), rs.getFloat("ticketcoordinatey")),
+                                rs.getDate("ticketcreationdate").toLocalDate(),
+                                rs.getInt("ticketprice"),
+                                rs.getDouble("ticketdiscount"),
+                                TicketType.valueOf(rs.getString("tickettype").toUpperCase(Locale.ROOT)),
+                                new Venue(
+                                        rs.getLong("id"),
+                                        rs.getString("venuename"),
+                                        rs.getInt("venuecapacity"),
+                                        VenueType.valueOf(rs.getString("venuetype").toUpperCase(Locale.ROOT)),
+                                        new Address(rs.getString("venueaddress"))
+                                ),
+                                rs.getLong("userid")
+                        );
+                        ticketCollection.add(t);
+                    } catch (RuntimeException e) {
+                        i++;
+                    }
+                }
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
         }
-
+        if(i>0)
+            log.warn("В коллекции было нарушено " + i + " элементов.");
+        if (ticketCollection.check() || i > 0)
+            if (new Console().requestConfirmation("Обнаружены ошибки в БД. Хотите пересоздать таблицы? \n Корректные " +
+                    "данные будут сохранены (кроме индексации элементов).")) {
+                deleteTables();
+                createTables();
+                for (Ticket t :
+                        ticketCollection) {
+                    long id = addTicket(t);
+                    t.setId(id);
+                    t.getVenue().setId(id);
+                }
+            }
+        return ticketCollection;
     }
 
     /**
-     * Создаёт необходимые таблицы
+     * Создаёт необходимые таблицы, если они не существуют
      */
     @Override
     public void createTables() {
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (Statement stat = dbConnection.createStatement()) {
+                String command = "CREATE TABLE IF NOT EXISTS s311734.users\n" +
+                        "(\n" +
+                        "    Id bigserial PRIMARY KEY,\n" +
+                        "    Name varchar NOT NULL UNIQUE CHECK (Name <> ''),\n" +
+                        "    Pass varchar,\n" +
+                        "    PassSalt varchar\n" +
+                        ");\n" +
+                        "\n" +
+                        "CREATE INDEX IF NOT EXISTS Name ON s311734.users (Name);\n" +
+                        "\n" +
+                        "CREATE TABLE IF NOT EXISTS s311734.tickets (\n" +
+                        "    Id bigserial PRIMARY KEY,\n" +
+                        "    TicketName varchar NOT NULL CHECK (tickets.TicketName <> ''),\n" +
+                        "    TicketCoordinateX bigint NOT NULL CHECK(tickets.TicketCoordinateX>-503),\n" +
+                        "    TicketCoordinateY real NOT NULL,\n" +
+                        "    TicketCreationDate date NOT NULL DEFAULT current_timestamp,\n" +
+                        "    TicketPrice integer CHECK(tickets.TicketPrice >0),\n" +
+                        "    TicketDiscount decimal NOT NULL CHECK(TicketDiscount>=0 AND TicketDiscount <=100),\n" +
+                        "    TicketType varchar CHECK(TicketType in ('usual', 'budgetary', 'cheap')),\n" +
+                        "    VenueName varchar NOT NULL CHECK (tickets.VenueName <> ''),\n" +
+                        "    VenueCapacity int NOT NULL CHECK(VenueCapacity>0),\n" +
+                        "    VenueType varchar NOT NULL CHECK ( VenueType in ('pub', 'loft', 'open_area', 'cinema', 'stadium') ),\n" +
+                        "    VenueAddress varchar CHECK (VenueAddress <> ''),\n" +
+                        "    UserId bigint NOT NULL,\n" +
+                        "    FOREIGN KEY (UserId) References s311734.users (Id) ON DELETE CASCADE\n" +
+                        ");";
+                stat.executeUpdate(command);
+                log.info("Созданы таблицы");
+            }
+        } catch (SQLException throwables) {
+            // TODO: разобраться с обработкой SQLException
+            log.error(throwables);
+        }
+    }
 
+    /**
+     * Удаляет таблицы, если существуют
+     * Используетя для создания своих "правильных"
+     */
+    @Override
+    public void deleteTables() {
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (Statement stat = dbConnection.createStatement()) {
+                String command = "DROP TABLE IF EXISTS tickets, users CASCADE";
+                stat.executeUpdate(command);
+                log.info("Удалены таблицы");
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
+        }
     }
 
     /**
@@ -66,7 +179,30 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public long addTicket(@NotNull Ticket t) {
-        return 0;
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (PreparedStatement stat = dbConnection.prepareStatement(addTicketQuery, Statement.RETURN_GENERATED_KEYS)) {
+                stat.setString(1, t.getName());
+                stat.setLong(2, t.getCoordinates().getX());
+                stat.setFloat(3, t.getCoordinates().getY());
+                stat.setInt(4, t.getPrice());
+                stat.setDouble(5, t.getDiscount());
+                stat.setString(6, t.getType() == null ? null : t.getType().name().toLowerCase(Locale.ROOT));
+                stat.setString(7, t.getVenue().getName());
+                stat.setInt(8, t.getVenue().getCapacity());
+                stat.setString(9, t.getVenue().getType().name().toLowerCase(Locale.ROOT));
+                stat.setString(10, t.getVenue().getAddress().getStreet() == null ? null : t.getVenue().getAddress().getStreet().toLowerCase(Locale.ROOT));
+                stat.setLong(11, t.getUserId());
+                stat.setDate(12, Date.valueOf(t.getCreationDate()));
+                stat.executeUpdate();
+                ResultSet rs = stat.getResultSet();
+                if (rs.next())
+                    return rs.getLong(1);
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
+        }
+        return -1;
     }
 
     /**
@@ -78,6 +214,26 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean updateTicket(long id, @NotNull Ticket t) {
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (PreparedStatement stat = dbConnection.prepareStatement(addTicketQuery, Statement.RETURN_GENERATED_KEYS)) {
+                stat.setString(1, t.getName());
+                stat.setLong(2, t.getCoordinates().getX());
+                stat.setFloat(3, t.getCoordinates().getY());
+                stat.setInt(4, t.getPrice());
+                stat.setDouble(5, t.getDiscount());
+                stat.setString(6, t.getType() == null ? null : t.getType().name().toLowerCase(Locale.ROOT));
+                stat.setString(7, t.getVenue().getName());
+                stat.setInt(8, t.getVenue().getCapacity());
+                stat.setString(9, t.getVenue().getType().name().toLowerCase(Locale.ROOT));
+                stat.setString(10, t.getVenue().getAddress().getStreet() == null ? null : t.getVenue().getAddress().getStreet().toLowerCase(Locale.ROOT));
+                stat.setLong(11, id);
+                if (stat.executeUpdate() > 0)
+                    return true;
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
+        }
         return false;
     }
 
@@ -89,16 +245,20 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean deleteTicket(long id) {
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (PreparedStatement stat =
+                         dbConnection.prepareStatement("DELETE FROM tickets WHERE id=?")) {
+                stat.setLong(1, id);
+                stat.executeUpdate();
+                return true;
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
+        }
         return false;
     }
 
-    /**
-     * Возвращает коллецию билетов из БД.
-     */
-    @Override
-    public @NotNull TicketCollection getTicketCollection() {
-        return null;
-    }
 
     /**
      * Удаляет все элементы пользователя
@@ -107,6 +267,17 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean clear(long userId) {
+        try (Connection dbConnection = setConnection()) {
+            assert dbConnection != null;
+            try (PreparedStatement stat =
+                         dbConnection.prepareStatement("DELETE FROM tickets WHERE userid=?")) {
+                stat.setLong(1, userId);
+                stat.executeUpdate();
+                return true;
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
+        }
         return false;
     }
 
@@ -117,18 +288,20 @@ public class DBManager implements DBTicketsI, DBUserI {
      * @return возвращает пользователя из записи БД, если прошёл авторизацию, null иначе
      */
     @Override
-    public @Nullable User auth(User user) {
+    public @NotNull User auth(User user) {
+        //todo
         return null;
     }
 
     /**
-     * Добавляет нового пользователя в БД
+     * Регистрирует нового пользователя в БД
      *
      * @param user пользователь
      * @return true если добавлено, иначе false
      */
     @Override
-    public boolean addUser(User user) {
+    public boolean registerUser(User user) {
+
         return false;
     }
 
@@ -140,6 +313,7 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean checkPassword(User user) {
+
         return false;
     }
 
@@ -153,4 +327,6 @@ public class DBManager implements DBTicketsI, DBUserI {
     public long getId(User user) {
         return 0;
     }
+
+
 }

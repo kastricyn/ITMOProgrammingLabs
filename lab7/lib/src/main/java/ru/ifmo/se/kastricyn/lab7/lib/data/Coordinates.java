@@ -11,8 +11,8 @@ import java.util.Objects;
  * Надо для {@link Ticket}
  */
 public class Coordinates implements Serializable {
-    private @Nullable Long x; //Значение поля должно быть больше -503, Поле не может быть null
-    private @Nullable Float y; //Поле не может быть null
+    private @NotNull Long x; //Значение поля должно быть больше -503, Поле не может быть null
+    private @NotNull Float y; //Поле не может быть null
 
     private static final long X_MIN = -502;
 
@@ -70,7 +70,7 @@ public class Coordinates implements Serializable {
     }
 
     //All gets
-    public @Nullable Float getY() {
+    public @NotNull Float getY() {
         return y;
     }
 
@@ -83,7 +83,7 @@ public class Coordinates implements Serializable {
 
     //All sets
 
-    public @Nullable Long getX() {
+    public @NotNull Long getX() {
         return x;
     }
 

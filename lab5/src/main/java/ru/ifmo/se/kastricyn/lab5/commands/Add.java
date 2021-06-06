@@ -29,7 +29,7 @@ public class Add extends AbstractCommand {
     public void execute(String ... args) {
         Ticket t = new Ticket(new Console(in, shouldPrintHints));
         ticketCollection.add(t);
-        System.out.println("В коллекцю добавлен объект " + t);
+        System.out.println("В коллекцию добавлен объект " + t);
         ticketCollection.setSaved(false);
     }
 }

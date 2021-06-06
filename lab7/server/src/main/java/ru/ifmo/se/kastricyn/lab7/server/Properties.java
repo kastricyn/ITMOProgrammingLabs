@@ -17,15 +17,15 @@ public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Prop
 
     @NotNull
     public String getDBUrl() throws NotFoundPropertyException {
-        //todo
-        String db_url = prop.getProperty("db_url", "");
+        String db_url = prop.getProperty("db_url");
         if (db_url == null)
             throw new NotFoundPropertyException();
         return db_url;
     }
 
-    public int getDBPort() {
-        return Integer.parseInt(prop.getProperty("db_port", "5432"));
+    @NotNull
+    public String getDBDriver() throws NotFoundPropertyException {
+        return prop.getProperty("db_driver", "org.postgresql.Driver");
     }
 
     @NotNull
@@ -34,6 +34,7 @@ public final class Properties extends ru.ifmo.se.kastricyn.lab7.lib.utility.Prop
         if (db_login == null) throw new NotFoundPropertyException();
         return db_login;
     }
+
 
     @NotNull
     public String getDBPass() throws NotFoundPropertyException {

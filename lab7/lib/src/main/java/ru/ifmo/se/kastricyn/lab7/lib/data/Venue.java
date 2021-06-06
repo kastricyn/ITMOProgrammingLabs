@@ -19,11 +19,16 @@ public class Venue implements Comparable<Venue>, Serializable {
     private static long nextId = 1; //id не может быть меньше 1
 
     @XmlAttribute
-    private final long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private @Nullable String name; //Поле не может быть null, Строка не может быть пустой
+    private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private @NotNull String name; //Поле не может быть null, Строка не может быть пустой
+    private @NotNull VenueType type; //Поле не может быть null
     private int capacity; //Значение поля должно быть больше 0
-    private @Nullable VenueType type; //Поле не может быть null
-    private @Nullable Address address; //Поле не может быть null
+    private @NotNull Address address; //Поле не может быть null
+
+    public Venue setId(long id) {
+        this.id = id;
+        return this;
+    }
 
     public Venue(String name, int capacity, VenueType type, Address address) {
         initial(name, capacity, type, address);
@@ -132,7 +137,7 @@ public class Venue implements Comparable<Venue>, Serializable {
         return id;
     }
 
-    public @Nullable Address getAddress() {
+    public @NotNull Address getAddress() {
         return address;
     }
 
@@ -156,7 +161,7 @@ public class Venue implements Comparable<Venue>, Serializable {
 
     //All sets
 
-    public @Nullable String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
@@ -169,7 +174,7 @@ public class Venue implements Comparable<Venue>, Serializable {
         return this;
     }
 
-    public @Nullable VenueType getType() {
+    public @NotNull VenueType getType() {
         return type;
     }
 

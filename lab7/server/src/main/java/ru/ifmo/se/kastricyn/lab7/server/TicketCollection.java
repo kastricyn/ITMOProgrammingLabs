@@ -11,7 +11,6 @@ import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.lang.reflect.Field;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayDeque;
 import java.util.Comparator;
@@ -34,26 +33,19 @@ public class TicketCollection implements Iterable<Ticket> {
     @XmlTransient
     private boolean saved;
     private ArrayDeque<Ticket> tickets;
-    @XmlTransient
-    private Path path;
 
     @NotNull
-    private DBManager db;
+    private final DBManager db;
 
     /**
      * создаёт пустую коллекцию
      */
-    public TicketCollection() {
-        tickets = new ArrayDeque<>();
-        saved = true;
-        initDate = LocalDate.now();
-    }
 
-    public TicketCollection(Path p) {
+    public TicketCollection(@NotNull DBManager db) {
         tickets = new ArrayDeque<>();
         saved = true;
         initDate = LocalDate.now();
-        this.path = p;
+        this.db = db;
     }
 
     @NotNull
@@ -189,20 +181,6 @@ public class TicketCollection implements Iterable<Ticket> {
         return this;
     }
 
-    /**
-     * Возвращает файл, связанный с коллекцией
-     */
-    public Path getPath() {
-        return path;
-    }
-
-    /**
-     * устанавливает путь по которому будет сохраняться коллекция
-     */
-    public @NotNull TicketCollection setPath(Path path) {
-        this.path = path;
-        return this;
-    }
 
     /**
      * Удаляет элементы коллекции пользователя
@@ -241,8 +219,9 @@ public class TicketCollection implements Iterable<Ticket> {
     /**
      * Проверяет коллекцию. Используется после восстановления коллекции из файла.
      * Удаляет элементы, которые были изменены в файле за допустимые пределы.
+     * Возвращает true если что-то было удалено, иначе false.
      */
-    public void check() {
+    public boolean check() {
         HashSet<Long> idTicket = new HashSet<>();
         HashSet<Long> idVenue = new HashSet<>();
         Iterator<Ticket> iterator = iterator();
@@ -266,8 +245,7 @@ public class TicketCollection implements Iterable<Ticket> {
             }
         }
         if (isDeleted) {
-            System.out.println("Некоторые элементы не были импортированы, из-за неверных данных");
-            log.warn("Некоторые элементы не были импортированы, из-за неверных данных");
+            return true;
         }
         try {
             Field nextId = Ticket.class.getDeclaredField("nextId");
@@ -276,5 +254,7 @@ public class TicketCollection implements Iterable<Ticket> {
         } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+        return false;
     }
+
 }

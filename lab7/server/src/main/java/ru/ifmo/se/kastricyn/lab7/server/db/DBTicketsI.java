@@ -6,9 +6,15 @@ import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 public interface DBTicketsI {
     /**
-     * Создаёт необходимые таблицы
+     * Создаёт необходимые таблицы, если они не существуют
      */
     void createTables();
+
+    /**
+     * Удаляет таблицы, если существуют
+     * Используетя для создания своих "правильных"
+     */
+    void deleteTables();
 
     /**
      * Добавляет в БД билет

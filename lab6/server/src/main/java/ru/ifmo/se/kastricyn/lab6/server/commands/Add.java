@@ -4,15 +4,12 @@ import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
 
-import java.util.ArrayList;
-
 /**
  * Команда добавить эллемент в коллекцию
  */
 public class Add extends ServerAbstractCommand {
     public Add() {
         super("add", "добавить новый элемент в коллекцию");
-        ArrayList<Class> argsType = new ArrayList<>();
         setNeedArgumentType(TicketCollection.class, Ticket.class);
     }
 

@@ -24,7 +24,7 @@ public class Register extends ServerAbstractCommand {
     public void execute(String... args) {
         assert objArgs != null;
         DBUserI db = objArgs.getTicketCollection().getDb();
-        if (db.addUser(objArgs.getUser()))
+        if (db.registerUser(objArgs.getUser()))
             answer = "Новый пользователь зарегистрирован";
         else if (db.getId(objArgs.getUser()) != -1)
             answer = "Пользователь с таким логином уже существует";
