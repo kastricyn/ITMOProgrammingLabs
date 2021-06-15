@@ -26,7 +26,7 @@ public class AddIfMax extends CommandWithAuth {
             return;
         assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
-        Ticket maxTicket = objArgs.getTicket().setUserId(user.getId());
+        Ticket maxTicket = objArgs.getTicket().setUserId(objArgs.getUser().getId());
         Optional<Ticket> t = StreamSupport.stream(ticketCollection.spliterator(), true).max(Comparator.naturalOrder());
         if (t.isPresent())
             if (t.get().compareTo(maxTicket) < 0) {

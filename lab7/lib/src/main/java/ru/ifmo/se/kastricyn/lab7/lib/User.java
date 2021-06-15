@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -58,5 +59,14 @@ public class User implements Serializable {
 
     public char[] getPassword() {
         return password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password=" + Arrays.toString(password) +
+                '}';
     }
 }

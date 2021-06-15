@@ -20,6 +20,7 @@ public class ServerCommandArgument extends CommandArgument {
         setTicket(cca.getTicket());
         setCommandManager(cca.getCommandManager());
         setVenue(cca.getVenue());
+        setUser(cca.getUser());
     }
 
     @Override

@@ -69,6 +69,7 @@ public abstract class AbstractCommand implements Command {
      * возвращает true, если у команды указаны верные параметры, инчае false
      */
     public boolean objectsArgsIsValidate() {
+        //todo рефлексию бы сюда
         return (!argTypes.contains(Ticket.class) || objArgs.getTicket() != null) &&
                 (!argTypes.contains(Venue.class) || objArgs.getVenue() != null) &&
                 (!argTypes.contains(CommandManager.class) || objArgs.getCommandManager() != null);

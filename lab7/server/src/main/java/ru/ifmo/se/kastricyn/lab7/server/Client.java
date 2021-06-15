@@ -1,59 +1,64 @@
 package ru.ifmo.se.kastricyn.lab7.server;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequestType;
+import ru.ifmo.se.kastricyn.lab7.lib.utility.ByteInputStream;
+import ru.ifmo.se.kastricyn.lab7.lib.utility.ByteOutputStream;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.commands.ServerAbstractCommand;
 
-import javax.xml.bind.JAXBException;
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Client {
     final static Logger log = LogManager.getLogger();
 
+    private ByteBuffer bf = ByteBuffer.wrap(new byte[10240]);
+    private ObjectInputStream ois;
+    private ByteOutputStream bos = new ByteOutputStream();
+    private ObjectOutputStream oos;
+    private ByteInputStream bis = new ByteInputStream();
     private SocketChannel sh;
-    private Selector selector;
 
-    public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException {
+    public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException, InterruptedException, ClassNotFoundException {
         sh = ssc.accept();
         if (sh == null)
             return;
         sh.configureBlocking(false);
         sh.register(selector, SelectionKey.OP_READ, this);
+        sh.finishConnect();
+        System.out.println(sh.getRemoteAddress());
+        ServerRequest request = read();
+        if (ServerRequestType.INITIALIZATION.equals(request.getType()))
+            write(new ServerAnswer(ServerAnswerType.OK));
         log.info("Подключено " + sh.getRemoteAddress());
     }
 
-    public void reply(@NotNull ByteBuffer bf, @NotNull NetCommandManager cm) {
+    public void reply(@NotNull NetCommandManager cm) throws IOException, InterruptedException, ClassNotFoundException {
         try {
-            write(processing(read(bf), cm));
-        } catch (@NotNull IOException | JAXBException e) {
-//            try {
-//                log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
-//            } catch (IOException ioException) {
-//                log.error(ioException.getMessage());
-//            }
-//            try {
-//                sh.close();
-//            } catch (IOException ioException) {
-//                log.error(ioException.getMessage());
-//            }
-            log.error(e);
-            return;
-        }
-        if (sh.isConnected()) {
-            try {
-                sh.register(selector, SelectionKey.OP_READ, this);
-            } catch (ClosedChannelException e) {
-                log.warn(e.getMessage());
-            }
+            write(processing(read(), cm));
+        } catch (IOException e) {
+            oos.close();
+            bos.close();
+            ois.close();
+            bis.close();
+            sh.close();
+            log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
         }
     }
 
@@ -77,36 +82,35 @@ public class Client {
             return new ServerAnswer(ServerAnswerType.OK).setAnswer(command.getAnswer());
         } else
             return new ServerAnswer(ServerAnswerType.NEED_ARGS).setInput(serverRequest.getInput())
-                    .setArgTypes(command.getArgumentTypes());
+                    .setArgTypes(command.getArgumentTypes().stream()
+                            .filter(x -> !(x.equals(TicketCollection.class)||x.equals(CommandManager.class)))
+                            .collect(Collectors.toSet()));
 
     }
-    //это сервер
-    protected void write(ServerAnswer sa) throws IOException {
-//        StringWriter sw = new StringWriter();
-//        Parser.write(sw, ServerAnswer.class, sa);
-//        sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-             ObjectOutputStream oos = new ObjectOutputStream(byteArrayOutputStream);) {
-            oos.writeObject(sa);
-            oos.flush();
-            sh.write(ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 
-        }
+    //это сервер
+    @SuppressWarnings("deprecation")
+    protected void write(ServerAnswer sa) throws IOException {
+        if (oos == null)
+            oos = new ObjectOutputStream(bos);
+        oos.writeObject(sa);
+        oos.flush();
+        sh.write(ByteBuffer.wrap(bos.toByteArray()));
+        bos.reset();
         log.debug("Отправлено " + sh.getRemoteAddress() + ":");
         log.debug(sa);
     }
 
-    protected @Nullable ServerRequest read(@NotNull ByteBuffer bf) throws IOException, JAXBException {
-        sh.read(bf);
-        ServerRequest request = null;
-        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bf.array());
-             ObjectInputStream ois = new ObjectInputStream(byteArrayInputStream)) {
-            request = (ServerRequest) ois.readObject();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    protected ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
         bf.clear();
+        do {
+            System.out.println(bf.position());
+            Thread.sleep(50);
+        } while ((sh.read(bf) > 0));
+        bis.setBuf(bf.array());
+        if (ois == null)
+            ois = new ObjectInputStream(bis);
+        ServerRequest request = (ServerRequest) ois.readObject();
         log.debug("Принято " + sh.getRemoteAddress() + ":");
         log.debug(request);
         return request;

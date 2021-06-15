@@ -23,7 +23,8 @@ public class Add extends CommandWithAuth {
             return;
         assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
-        Ticket t = objArgs.getTicket().setUserId(user.getId());
+        Ticket t = objArgs.getTicket();
+        t.setUserId(objArgs.getUser().getId());
         long ticketId = ticketCollection.getDb().addTicket(t);
         if(ticketId==-1){
             answer = "Добавление не удалось";

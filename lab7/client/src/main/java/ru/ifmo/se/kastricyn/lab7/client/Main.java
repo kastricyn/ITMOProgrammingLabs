@@ -23,7 +23,6 @@ public class Main {
         Console console = new Console();
 
         try (Connection connect = new Connection(INET_ADDRESS, property.getPort(), property.getJavaProperties())) {
-            console.println("Соединение установлено");
             ClientCommandManager manager = ClientCommandManager.getStandards(connect, console);
             manager.run();
 

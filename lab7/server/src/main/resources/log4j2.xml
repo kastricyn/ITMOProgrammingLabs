@@ -6,10 +6,17 @@
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
         </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+
+        </Console>
     </Appenders>
     <Loggers>
         <Root level="all">
             <AppenderRef ref="MyFile"/>
+            <AppenderRef level="error" ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>

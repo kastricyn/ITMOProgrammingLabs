@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.lab7.client.command;
 
-import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.client.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.AbstractCommand;
@@ -9,7 +8,6 @@ import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.NotNeedAuth;
 
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.HashSet;
@@ -55,7 +53,7 @@ public class Help extends ClientAbstractCommand implements NotNeedAuth {
                             ccm.getCommands().filter(x -> ccm.getUser() != null || x instanceof NotNeedAuth).map(AbstractCommand::toString)).distinct().sorted());
         } catch (SocketException e) {
             answer = "Соединение утеряно, попробуйте перезапустить программу.";
-        } catch (@NotNull IOException | JAXBException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -13,13 +13,33 @@ import java.io.Serializable;
 public class ServerRequest implements Serializable {
     private String input = "";
     private @Nullable CommandArgument objArgs = new CommandArgument();
+    private ServerRequestType type;
 
     //for JAXB
     public ServerRequest() {
     }
 
+    public ServerRequest(ServerRequest sr) {
+        this.input = sr.input;
+        this.objArgs = sr.objArgs;
+        this.type = sr.type;
+    }
+
+    public ServerRequest(ServerRequestType type) {
+        this.type = type;
+    }
+
     public ServerRequest(String commandName) {
         this.input = commandName;
+    }
+
+    public ServerRequestType getType() {
+        return type;
+    }
+
+    public ServerRequest setType(ServerRequestType type) {
+        this.type = type;
+        return this;
     }
 
     @Override

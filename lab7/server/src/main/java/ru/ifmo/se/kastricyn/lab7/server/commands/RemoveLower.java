@@ -20,6 +20,7 @@ public class RemoveLower extends CommandWithAuth {
     public void execute(String... args) {
         if (!auth())
             return;
+        assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
         Ticket minTicket = objArgs.getTicket();
 
@@ -29,7 +30,7 @@ public class RemoveLower extends CommandWithAuth {
         while (iterator.hasNext()) {
             t = iterator.next();
             if (t.compareTo(minTicket) < 0) {
-                if (ticketCollection.getDb().deleteTicket(t.getId()) && t.getUserId() == user.getId()) {
+                if (ticketCollection.getDb().deleteTicket(t.getId()) && t.getUserId() == objArgs.getUser().getId()) {
                     iterator.remove();
                     i++;
                 }

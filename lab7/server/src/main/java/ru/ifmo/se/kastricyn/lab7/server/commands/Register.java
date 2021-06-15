@@ -5,15 +5,12 @@ import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 import ru.ifmo.se.kastricyn.lab7.server.db.DBUserI;
 
-import java.util.ArrayList;
-
 /**
  * Команды регистрирует нового пользователя
  */
 public class Register extends ServerAbstractCommand {
     public Register() {
         super("register", "зарегистрировать нового пользователя");
-        ArrayList<Class> argsType = new ArrayList<>();
         setNeedArgumentType(TicketCollection.class, User.class);
     }
 

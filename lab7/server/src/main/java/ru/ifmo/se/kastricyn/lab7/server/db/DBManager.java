@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.lib.data.*;
+import ru.ifmo.se.kastricyn.lab7.lib.exception.DBConnectionException;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
@@ -38,7 +39,7 @@ public class DBManager implements DBTicketsI, DBUserI {
     /**
      * Возвращает соединение с БД по параметрам из конфигурационного файла
      */
-    protected @Nullable Connection setConnection() {
+    protected @NotNull Connection setConnection() throws SQLException {
         try {
             Class.forName(properties.getDBDriver());
             Connection dbConnection = DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(), properties.getDBPass());
@@ -46,11 +47,8 @@ public class DBManager implements DBTicketsI, DBUserI {
             return dbConnection;
         } catch (ClassNotFoundException e) {
             log.error("Не найден класс с драйвером БД: " + e);
-        } catch (SQLException throwable) {
-            log.error(throwable);
         }
-        log.warn("Вместо Connection возвращён null");
-        return null;
+        throw new DBConnectionException();
     }
 
     /**
@@ -66,7 +64,6 @@ public class DBManager implements DBTicketsI, DBUserI {
             try (Statement stat = dbConnection.createStatement()) {
                 String command = "SELECT * FROM tickets";
                 ResultSet rs = stat.executeQuery(command);
-
                 while (rs.next()) {
                     try {
                         Ticket t = new Ticket(
@@ -76,12 +73,14 @@ public class DBManager implements DBTicketsI, DBUserI {
                                 rs.getDate("ticketcreationdate").toLocalDate(),
                                 rs.getInt("ticketprice"),
                                 rs.getDouble("ticketdiscount"),
-                                TicketType.valueOf(rs.getString("tickettype").toUpperCase(Locale.ROOT)),
+                                rs.getString("tickettype") == null ? null : TicketType.valueOf(rs.getString
+                                        ("tickettype").toUpperCase(Locale.ROOT)),
                                 new Venue(
                                         rs.getLong("id"),
                                         rs.getString("venuename"),
                                         rs.getInt("venuecapacity"),
-                                        VenueType.valueOf(rs.getString("venuetype").toUpperCase(Locale.ROOT)),
+                                        rs.getString("venuetype") == null ? null :
+                                                VenueType.valueOf(rs.getString("venuetype").toUpperCase(Locale.ROOT)),
                                         new Address(rs.getString("venueaddress"))
                                 ),
                                 rs.getLong("userid")
@@ -197,7 +196,7 @@ public class DBManager implements DBTicketsI, DBUserI {
                 stat.setLong(11, t.getUserId());
                 stat.setDate(12, Date.valueOf(t.getCreationDate()));
                 stat.executeUpdate();
-                ResultSet rs = stat.getResultSet();
+                ResultSet rs = stat.getGeneratedKeys();
                 if (rs.next())
                     return rs.getLong(1);
             }
@@ -285,6 +284,7 @@ public class DBManager implements DBTicketsI, DBUserI {
 
     /**
      * Авторизует пользователя
+     *
      * @param user пользователь, которого необходимо авторизовать
      * @return useer(id, name) пользователя из записи БД, если прошёл авторизацию, иначе null
      */

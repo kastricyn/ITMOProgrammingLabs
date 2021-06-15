@@ -31,6 +31,7 @@ public class ServerAnswer implements Serializable {
 
     public @NotNull ServerAnswer setArgTypes(Set<Class> argTypes) {
         this.argTypes = argTypes;
+
         return this;
     }
 

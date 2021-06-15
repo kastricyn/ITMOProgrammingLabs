@@ -1,9 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.client;
 
 import org.jetbrains.annotations.NotNull;
-import ru.ifmo.se.kastricyn.lab7.client.command.ExecuteScript;
-import ru.ifmo.se.kastricyn.lab7.client.command.Exit;
-import ru.ifmo.se.kastricyn.lab7.client.command.Help;
+import ru.ifmo.se.kastricyn.lab7.client.command.*;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.CommandArgument;
@@ -13,7 +11,6 @@ import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.Arrays;
@@ -30,9 +27,11 @@ public class ClientCommandManager extends CommandManager {
 
     public static @NotNull ClientCommandManager getStandards(Connection connection, Console console) {
         ClientCommandManager ccm = new ClientCommandManager(connection, console);
+        ccm.addIfAbsent(new ExecuteScript());
         ccm.addIfAbsent(new Exit());
         ccm.addIfAbsent(new Help());
-        ccm.addIfAbsent(new ExecuteScript());
+        ccm.addIfAbsent(new LogIn());
+        ccm.addIfAbsent(new LogOut());
         return ccm;
     }
 
@@ -55,8 +54,7 @@ public class ClientCommandManager extends CommandManager {
      * @param commandName что ввёл пользователь
      * @param args        аргументы команды в строковом представлении
      */
-    public void executeCommand(@NotNull String commandName, String @NotNull ... args) throws JAXBException, IOException {
-
+    public void executeCommand(@NotNull String commandName, String @NotNull ... args) throws IOException, ClassNotFoundException {
         String input = commandName;
         StringBuilder inputBuilder = new StringBuilder(commandName);
         for (String a :
@@ -69,7 +67,7 @@ public class ClientCommandManager extends CommandManager {
         if (command == null) {
             ServerRequest sr = new ServerRequest(input).setObjArgs(new CommandArgument().setUser(user));
             while (true) {
-                ServerAnswer sa = connection.getAnswer(sr);
+                ServerAnswer sa = connection.getAnswer(new ServerRequest(sr));
                 switch (sa.getSat()) {
                     case OK:
                         console.println(sa.getAnswer());
@@ -88,7 +86,7 @@ public class ClientCommandManager extends CommandManager {
                                 cca.setTicket(new Ticket(console));
                             else if (eClass.equals(Venue.class))
                                 cca.setVenue(new Venue(console));
-                            else if (eClass.equals(User.class))
+                            else if (eClass.equals(User.class) && sr.getObjArgs().getUser() == null)
                                 cca.setUser(new User(console));
                         }
                         sr.setObjArgs(cca);
@@ -132,9 +130,10 @@ public class ClientCommandManager extends CommandManager {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
             } catch (@NotNull SocketException | StringIndexOutOfBoundsException e) {
                 console.println("Соеденение утеряно, запустите программу заново");
+                //todo delete
                 e.printStackTrace();
 //                return; debug
-            } catch (@NotNull JAXBException | IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }

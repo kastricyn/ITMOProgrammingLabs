@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab7.server.ServerCommandArgument;
@@ -43,6 +44,7 @@ public abstract class ServerAbstractCommand extends AbstractCommand {
         return (!argTypes.contains(Ticket.class) || objArgs.getTicket() != null) &&
                 (!argTypes.contains(Venue.class) || objArgs.getVenue() != null) &&
                 (!argTypes.contains(CommandManager.class) || objArgs.getCommandManager() != null) &&
-                (!argTypes.contains(TicketCollection.class) || objArgs.getTicketCollection() != null);
+                (!argTypes.contains(TicketCollection.class) || objArgs.getTicketCollection() != null) &&
+                (!argTypes.contains(User.class) || objArgs.getUser() != null);
     }
 }

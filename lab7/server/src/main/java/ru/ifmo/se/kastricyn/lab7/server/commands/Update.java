@@ -27,8 +27,8 @@ public class Update extends CommandWithAuth {
         long id = -1;
         try {
             id = Long.parseLong(args[0]);
-            if (ticketCollection.getElement(id).getUserId() != user.getId()) {
-                answer = "Манипуляция возможна только о своими объектами.";
+            if (ticketCollection.getElement(id).getUserId() != objArgs.getUser().getId()) {
+                answer = "Манипуляция возможна только над своими объектами.";
                 return;
             }
             if(!ticketCollection.getDb().updateTicket(id, t)){

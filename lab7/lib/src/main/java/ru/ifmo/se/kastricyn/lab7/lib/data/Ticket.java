@@ -26,7 +26,8 @@ public class Ticket implements Comparable<Ticket>, Serializable {
 
     // быть уникальным, Значение этого поля должно генерироваться автоматически
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
-    private @NotNull final LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться
+    private @NotNull
+    final LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться
     @XmlAttribute
     private @NotNull Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно
     // автоматически
@@ -36,6 +37,8 @@ public class Ticket implements Comparable<Ticket>, Serializable {
     private @Nullable Integer price; //Поле может быть null, Значение поля должно быть больше 0
     private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
     private @NotNull Venue venue; //Поле не может быть null
+    private long userId;
+
     public Ticket(long id, String name, Coordinates coordinates, @Nullable LocalDate creationDate, Integer price,
                   double discount, TicketType type, Venue venue, long userId) {
         initial(name, coordinates, price, discount, type, venue);
@@ -49,19 +52,12 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         this.userId = userId;
         nextId = id + 1;
     }
-    private long userId;
 
     public Ticket(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
         initial(name, coordinates, price, discount, type, venue);
         id = 0l;
         creationDate = LocalDate.now();
     }
-
-    public Ticket setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
 
     @SuppressWarnings("deprecation")
     public Ticket(@NotNull Console console) {
@@ -96,6 +92,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         }
 
     }
+
 
     /**
      * Конструктор билета для верного задания автоматических параметров
@@ -158,8 +155,6 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return name.compareTo(o.getName());
     }
 
-//All gets
-
     @Override
     public @NotNull String toString() {
         return "Ticket{" +
@@ -175,8 +170,15 @@ public class Ticket implements Comparable<Ticket>, Serializable {
                 '}';
     }
 
+//All gets
+
     public long getId() {
         return id;
+    }
+
+    public Ticket setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public @NotNull String getName() {

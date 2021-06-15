@@ -11,7 +11,6 @@ import ru.ifmo.se.kastricyn.lab7.server.commands.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -23,7 +22,6 @@ public class NetCommandManager extends CommandManager {
     static int PORT = Properties.getProperties().getPort();
     private final TicketCollection ticketCollection;
     private final ServerSocketChannel ssc;
-    private final @NotNull ByteBuffer bf;
     private final Selector selector;
 
     public NetCommandManager(TicketCollection ticketCollection, int port) throws IOException {
@@ -34,7 +32,6 @@ public class NetCommandManager extends CommandManager {
 
         selector = Selector.open();
         ssc.register(selector, SelectionKey.OP_ACCEPT);
-        bf = ByteBuffer.allocate(1024 * 1024);
         log.info(toString());
     }
 
@@ -101,14 +98,13 @@ public class NetCommandManager extends CommandManager {
                         }
                         if (key.isReadable()) {
                             if (key.attachment() instanceof Client) {
-                                ((Client) key.attachment()).reply(bf, this);
+                                ((Client) key.attachment()).reply(this);
                             }
-                            bf.clear();
                         }
                     }
 
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException | ClassNotFoundException e) {
                 log.error(e.getMessage());
             }
         }

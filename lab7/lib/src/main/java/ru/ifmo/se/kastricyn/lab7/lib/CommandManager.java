@@ -3,7 +3,6 @@ package ru.ifmo.se.kastricyn.lab7.lib;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public abstract class CommandManager implements Runnable, Serializable {
      * Исполняет команду, имя которой передано в первом аргументе, если она доступна в менеджере команд
      *
      */
-    public abstract void executeCommand(String commandName, String... args) throws JAXBException, IOException;
+    public abstract void executeCommand(String commandName, String... args) throws IOException, ClassNotFoundException;
 
     /**
      * Обрабатывает команды, пока они поступают от пользователя.

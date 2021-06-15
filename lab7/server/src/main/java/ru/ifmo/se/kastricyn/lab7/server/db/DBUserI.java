@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public interface DBUserI {
-    static final String needAuth = "Необходимо авторизоваться";
+    String needAuth = "Необходимо авторизоваться";
 
     /**
      * Авторизует пользователя

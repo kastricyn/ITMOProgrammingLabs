@@ -1,12 +1,9 @@
 package ru.ifmo.se.kastricyn.lab7.server.commands;
 
 
-import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.server.db.DBUserI;
 
 public abstract class CommandWithAuth extends ServerAbstractCommand {
-    protected User user;
-
     /**
      * конструктор класса наследника, принимает на вход параметры, необходимые для реализации конкретной команды
      * вызвается из конструктора класса наследника
@@ -18,9 +15,19 @@ public abstract class CommandWithAuth extends ServerAbstractCommand {
         super(name, description);
     }
 
+    /**
+     * Авторизует пользователя, устанавливает в objArgs.user = user (id, name)
+     *
+     * @return true, если переданный пользователь авторизован; false если пользователь не найден или пароль не верен
+     */
     protected boolean auth() {
         assert objArgs != null;
-        if (objArgs.getUser() == null || objArgs.getTicketCollection().getDb().auth(objArgs.getUser()) == null) {
+        if (objArgs.getUser() == null) {
+            answer = DBUserI.needAuth;
+            return false;
+        }
+        objArgs.setUser(objArgs.getTicketCollection().getDb().auth(objArgs.getUser()));
+        if (objArgs.getUser() == null) {
             answer = DBUserI.needAuth;
             return false;
         } else return true;

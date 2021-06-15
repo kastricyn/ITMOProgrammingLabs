@@ -23,8 +23,8 @@ public class RemoveById extends CommandWithAuth {
         TicketCollection ticketCollection = objArgs.getTicketCollection();
         try {
             long ticketId = Long.parseLong(args[0]);
-            if (ticketCollection.getElement(ticketId).getUserId() != user.getId()) {
-                answer = "Манипуляция возможна только о своими объектами.";
+            if (ticketCollection.getElement(ticketId).getUserId() != objArgs.getUser().getId()) {
+                answer = "Манипуляция возможна только над своими объектами.";
                 return;
             }
             if (!ticketCollection.getDb().deleteTicket(ticketId)) {
