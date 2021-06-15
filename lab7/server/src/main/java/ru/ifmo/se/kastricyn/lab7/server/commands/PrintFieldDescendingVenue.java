@@ -10,7 +10,7 @@ import java.util.stream.StreamSupport;
 /**
  * Команда вывести значения поля venue всех элементов в порядке убывания
  */
-public class PrintFieldDescendingVenue extends ServerAbstractCommand {
+public class PrintFieldDescendingVenue extends CommandWithAuth {
 
     public PrintFieldDescendingVenue() {
         super("print_field_descending_venue", "вывести значения поля venue всех элементов в порядке убывания");
@@ -20,6 +20,8 @@ public class PrintFieldDescendingVenue extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(!auth())
+            return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
 
         answer = Console.getStringFromStream("Поля venue всех элементов в порядке убывания:\n",

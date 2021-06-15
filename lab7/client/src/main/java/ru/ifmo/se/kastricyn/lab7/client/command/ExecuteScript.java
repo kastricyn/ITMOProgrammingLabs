@@ -48,6 +48,7 @@ public class ExecuteScript extends ClientAbstractCommand {
         }
 
         try (Scanner scriptIn = new Scanner(path)) {
+            assert objArgs != null;
             ClientCommandManager ccm = objArgs.getCommandManager();
 
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());

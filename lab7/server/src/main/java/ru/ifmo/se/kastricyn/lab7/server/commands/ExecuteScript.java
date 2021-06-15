@@ -18,7 +18,7 @@ import java.util.Stack;
  * путь до скрипта должен передаваться как аргумент команды
  * Рекцрсивное выполнение скриптов не поддерживается
  */
-public class ExecuteScript extends ServerAbstractCommand {
+public class ExecuteScript extends CommandWithAuth {
     private static Stack<Path> openedScripts;
 
     static {
@@ -35,6 +35,8 @@ public class ExecuteScript extends ServerAbstractCommand {
 
     @Override
     public void execute(String @NotNull ... args) {
+        if(!auth())
+            return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
 
         if (args.length != 1) {

@@ -15,7 +15,11 @@ import java.nio.file.Path;
  * </code>
  * и необходимыми методами
  */
-public abstract class Properties {
+public class Properties {
+    public java.util.Properties getJavaProperties() {
+        return prop;
+    }
+
     protected final java.util.Properties prop = new java.util.Properties();
 
     protected Properties() {

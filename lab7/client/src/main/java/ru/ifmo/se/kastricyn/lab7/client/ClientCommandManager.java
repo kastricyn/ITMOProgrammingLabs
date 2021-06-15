@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class ClientCommandManager extends CommandManager {
     private Console console;
     private Connection connection;
-    private User user;
+    private User user = null;
 
     public ClientCommandManager(Connection connection, Console console) {
         this.connection = connection;

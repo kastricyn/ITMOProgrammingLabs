@@ -8,7 +8,7 @@ import java.util.stream.StreamSupport;
 /**
  * Команда вывести элементы коллекции в порядке возрастания
  */
-public class PrintAscending extends ServerAbstractCommand {
+public class PrintAscending extends CommandWithAuth {
 
     public PrintAscending() {
         super("print_ascending", "вывести элементы коллекции в порядке возрастания");
@@ -19,6 +19,8 @@ public class PrintAscending extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(!auth())
+            return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
         if (ticketCollection.isEmpty()) {
             answer = "Коллекция пуста";

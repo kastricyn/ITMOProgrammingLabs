@@ -12,7 +12,7 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
     private String input = "";
-    transient private @Nullable CommandArgument objArgs = new CommandArgument();
+    private @Nullable CommandArgument objArgs = new CommandArgument();
 
     //for JAXB
     public ServerRequest() {

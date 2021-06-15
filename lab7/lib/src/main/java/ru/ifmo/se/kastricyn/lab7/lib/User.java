@@ -3,11 +3,13 @@ package ru.ifmo.se.kastricyn.lab7.lib;
 import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
+import java.io.Serializable;
+
 
 /**
  * Описывает пользователя системы: (id, name, password)
  */
-public class User {
+public class User implements Serializable {
     private long id = -1;
     @NotNull
     private String name;
@@ -33,7 +35,7 @@ public class User {
         console.printHints("Поле login:");
         name = console.getString();
         console.printHints("Пароль (строка может быть пустой):");
-        password = System.console().readPassword();
+        password = console.readPassword();
     }
 
     public long getId() {

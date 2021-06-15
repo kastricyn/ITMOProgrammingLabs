@@ -15,10 +15,12 @@ public class LogIn extends ServerAbstractCommand {
      */
     @Override
     public void execute(String... args) {
+
         assert objArgs != null;
         DBUserI db = objArgs.getTicketCollection().getDb();
-        if (db.checkPassword(objArgs.getUser()))
-            answer = "Вы авторизованы как " + objArgs.getUser().getName() + ", ваш id: " + db.getId(objArgs.getUser());
+        User user = db.auth(objArgs.getUser());
+        if (user!=null)
+            answer = "Вы авторизованы как " + user.getName() + ", ваш id: " + user.getId();
         else
             answer = "Логин или пароль не верны";
     }

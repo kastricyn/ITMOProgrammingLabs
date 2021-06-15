@@ -8,7 +8,7 @@ import java.util.stream.StreamSupport;
 /**
  * Команда вывести в стандартный поток вывода все элементы коллекции в строковом представлении
  */
-public class Show extends ServerAbstractCommand {
+public class Show extends CommandWithAuth {
 
     public Show() {
         super("show", "вывести в стандартный поток вывода все элементы коллекции в строковом представлении");
@@ -18,6 +18,8 @@ public class Show extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(!auth())
+            return;
         assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
 

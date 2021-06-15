@@ -34,10 +34,10 @@ public abstract class CommandManager implements Runnable, Serializable {
     }
 
     /**
-     * Возвращает поток из команд в строковом представлении
+     * Возвращает поток из команд
      */
-    public Stream<String> getCommandsAsString() {
-        return commands.values().stream().map(AbstractCommand::toString);
+    public Stream<AbstractCommand> getCommands() {
+        return commands.values().stream();
     }
 
     public Command getCommand(@NotNull String commandName) {

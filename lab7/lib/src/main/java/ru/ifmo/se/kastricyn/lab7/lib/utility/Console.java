@@ -399,4 +399,9 @@ public class Console {
     public void println(String str) {
         out.println(str);
     }
+
+    public char[] readPassword(){
+        return in.nextLine().toCharArray();
+//   todo     return System.console().readPassword();
+    }
 }

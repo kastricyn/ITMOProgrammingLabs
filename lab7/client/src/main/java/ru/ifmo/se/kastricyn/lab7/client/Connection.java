@@ -4,10 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
-import ru.ifmo.se.kastricyn.lab7.lib.utility.Parser;
 
 import javax.xml.bind.JAXBException;
-import java.io.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -21,8 +23,6 @@ public class Connection implements Closeable {
     public static int INTERVAL = 5000;
 
     private Socket socket;
-    private ObjectInputStream is;
-    private ObjectOutputStream os;
 
     /**
      * Устанавливает соединение с сервером по TCP
@@ -54,8 +54,7 @@ public class Connection implements Closeable {
         }
         if (!socket.isConnected())
             throw new IOException();
-        is = new ObjectInputStream(socket.getInputStream());
-        os = new ObjectOutputStream(socket.getOutputStream());
+
     }
 
     public Connection(InetAddress ia, int port, @NotNull Properties properties) throws IOException, InterruptedException {
@@ -66,41 +65,36 @@ public class Connection implements Closeable {
         sendRequest(request);
         return getAnswer();
     }
-
+    //это клиент
     public void sendRequest(ServerRequest request) throws IOException {
-        StringWriter sw = new StringWriter();
-        Parser.write(sw, ServerRequest.class, request);
+//        StringWriter sw = new StringWriter();
 //        os.write(sw.toString().getBytes(StandardCharsets.UTF_8));
 
 //        ByteArrayInputStream bais = new ByteArrayInputStream();
 //        ObjectInputStream ois = new ObjectInputStream(bais);
-        new ObjectOutputStream(System.out).writeObject(request);
-        os.writeObject(request);
+        try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
+            oos.writeObject(request);
+            oos.flush();
+        }
 
-//        System.err.println("Отправлено: " + request);
+        System.err.println("Отправлено: " + request);
     }
 
 
     public @Nullable ServerAnswer getAnswer() throws IOException, JAXBException {
-        byte[] b = new byte[1024 * 1024];
-//        int len = is.read(b);
-//        ServerAnswer sa = Parser.get(new StringReader(new String(b, 0, len, "UTF-8")), ServerAnswer.class);
         ServerAnswer sa = null;
-        try {
-//            new ObjectInputStream(is).readObject();
-            sa = (ServerAnswer) is.readObject();
+        try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+            sa = (ServerAnswer) ois.readObject();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        System.err.println("Получено:" + sa);
+        System.err.println("Получено:" + sa);
         return sa;
     }
 
 
     @Override
     public void close() throws IOException {
-        is.close();
-        os.close();
         socket.close();
     }
 }

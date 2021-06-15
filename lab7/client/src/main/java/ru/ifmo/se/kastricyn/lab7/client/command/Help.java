@@ -3,9 +3,11 @@ package ru.ifmo.se.kastricyn.lab7.client.command;
 import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.client.ClientCommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
+import ru.ifmo.se.kastricyn.lab7.lib.utility.NotNeedAuth;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -16,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-public class Help extends ClientAbstractCommand {
+public class Help extends ClientAbstractCommand implements NotNeedAuth {
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
      * вызвается из конструктора класса наследника
@@ -49,7 +51,8 @@ public class Help extends ClientAbstractCommand {
                 strings.add(matcher.group(0));
 
             answer = Console.getStringFromStream("Доступны следующие команды:",
-                    Stream.concat(strings.stream(), ccm.getCommandsAsString()).distinct().sorted());
+                    Stream.concat(strings.stream(),
+                            ccm.getCommands().filter(x -> ccm.getUser() != null || x instanceof NotNeedAuth).map(AbstractCommand::toString)).distinct().sorted());
         } catch (SocketException e) {
             answer = "Соединение утеряно, попробуйте перезапустить программу.";
         } catch (@NotNull IOException | JAXBException e) {

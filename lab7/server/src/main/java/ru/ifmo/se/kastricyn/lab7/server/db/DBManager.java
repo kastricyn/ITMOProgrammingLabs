@@ -147,7 +147,7 @@ public class DBManager implements DBTicketsI, DBUserI {
                         "    FOREIGN KEY (UserId) References s311734.users (Id) ON DELETE CASCADE\n" +
                         ");";
                 stat.executeUpdate(command);
-                log.info("Созданы таблицы");
+                log.info("Таблицы созданы или уже были");
             }
         } catch (SQLException throwables) {
             // TODO: разобраться с обработкой SQLException
@@ -166,7 +166,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             try (Statement stat = dbConnection.createStatement()) {
                 String command = "DROP TABLE IF EXISTS tickets, users CASCADE";
                 stat.executeUpdate(command);
-                log.info("Удалены таблицы");
+                log.info("Таблицы удалены или их не было");
             }
         } catch (SQLException throwables) {
             log.error(throwables);
@@ -283,15 +283,13 @@ public class DBManager implements DBTicketsI, DBUserI {
         return false;
     }
 
-
     /**
      * Авторизует пользователя
-     *
      * @param user пользователь, которого необходимо авторизовать
-     * @return возвращает пользователя из записи БД, если прошёл авторизацию, null иначе
+     * @return useer(id, name) пользователя из записи БД, если прошёл авторизацию, иначе null
      */
     @Override
-    public @Nullable User auth(User user) {
+    public @Nullable User auth(@NotNull User user) {
         if (checkPassword(user))
             return new User(getId(user), user.getName());
         else return null;
@@ -304,7 +302,7 @@ public class DBManager implements DBTicketsI, DBUserI {
      * @return true если добавлено, иначе false
      */
     @Override
-    public boolean registerUser(User user) {
+    public boolean registerUser(@NotNull User user) {
         try (Connection connection = setConnection()) {
             assert connection != null;
             try (PreparedStatement statement =
@@ -324,54 +322,54 @@ public class DBManager implements DBTicketsI, DBUserI {
     }
 
 
-/**
- * Проверяет пароль пользователя на совпадение с данными в БД
- *
- * @param user пользователь
- * @return true, если пароль верный; иначе false
- */
-@Override
-public boolean checkPassword(User user){
-        try(Connection connection=setConnection()){
-        assert connection!=null;
-        try(PreparedStatement statement=
-        connection.prepareStatement("SELECT password, passwordsalt FROM users WHERE name=?")){
-        statement.setString(1,user.getName());
-        ResultSet rs=statement.executeQuery();
-        if(rs.next()){
-        return rs.getString("password").equals(getStringFromPassword(user.getPassword(),
-        rs.getString("passwordsalt")));
-        }
-        }
-        }catch(SQLException|NoSuchAlgorithmException throwables){
-        log.error(throwables);
+    /**
+     * Проверяет пароль пользователя на совпадение с данными в БД
+     *
+     * @param user user(name, password)
+     * @return true, если пароль верный; иначе false
+     */
+    @Override
+    public boolean checkPassword(@NotNull User user) {
+        try (Connection connection = setConnection()) {
+            assert connection != null;
+            try (PreparedStatement statement =
+                         connection.prepareStatement("SELECT password, passwordsalt FROM users WHERE name=?")) {
+                statement.setString(1, user.getName());
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("password").equals(getStringFromPassword(user.getPassword(),
+                            rs.getString("passwordsalt")));
+                }
+            }
+        } catch (SQLException | NoSuchAlgorithmException throwables) {
+            log.error(throwables);
         }
         return false;
-        }
+    }
 
-/**
- * Возвращает id пользователя
- *
- * @param user пользователь
- * @return id пользователя, или -1 если пользователь не найден в базе
- */
-@Override
-public long getId(User user){
-        try(Connection connection=setConnection()){
-        assert connection!=null;
-        try(PreparedStatement statement=
-        connection.prepareStatement("SELECT id FROM users WHERE name=?")){
-        statement.setString(1,user.getName());
-        ResultSet rs=statement.executeQuery();
-        if(rs.next()){
-        return rs.getLong("id");
+    /**
+     * Возвращает id пользователя
+     *
+     * @param user пользователь
+     * @return id пользователя, или -1 если пользователь не найден в базе
+     */
+    @Override
+    public long getId(@NotNull User user) {
+        try (Connection connection = setConnection()) {
+            assert connection != null;
+            try (PreparedStatement statement =
+                         connection.prepareStatement("SELECT id FROM users WHERE name=?")) {
+                statement.setString(1, user.getName());
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    return rs.getLong("id");
+                }
+            }
+        } catch (SQLException throwables) {
+            log.error(throwables);
         }
-        }
-        }catch(SQLException throwables){
-        log.error(throwables);
-        }
-        return-1;
-        }
+        return -1;
+    }
 
 
-        }
+}

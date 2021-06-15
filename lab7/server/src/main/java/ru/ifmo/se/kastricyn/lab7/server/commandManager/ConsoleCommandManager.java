@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.lab7.server.commandManager;
 
 import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
@@ -42,9 +43,10 @@ public class ConsoleCommandManager extends CommandManager {
         ccm.addIfAbsent(new PrintFieldDescendingVenue());
         ccm.addIfAbsent(new RemoveById());
         ccm.addIfAbsent(new RemoveLower());
-        ccm.addIfAbsent(new Save());
         ccm.addIfAbsent(new Show());
         ccm.addIfAbsent(new Update());
+        ccm.addIfAbsent(new Register());
+        ccm.addIfAbsent(new LogIn());
         return ccm;
     }
 
@@ -72,6 +74,9 @@ public class ConsoleCommandManager extends CommandManager {
                 ca.setVenue(new Venue(console));
             else if (eClass.isInstance(this))
                 ca.setCommandManager(this);
+            else if (eClass.equals(User.class)){
+                ca.setUser(new User(console));
+            }
         }
         command.setArguments(ca);
         command.execute(args);

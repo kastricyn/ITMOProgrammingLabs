@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswerType;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
-import ru.ifmo.se.kastricyn.lab7.lib.utility.Parser;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.commands.ServerAbstractCommand;
 
@@ -28,7 +27,6 @@ public class Client {
         if (sh == null)
             return;
         sh.configureBlocking(false);
-        this.selector = selector;
         sh.register(selector, SelectionKey.OP_READ, this);
         log.info("Подключено " + sh.getRemoteAddress());
     }
@@ -37,16 +35,17 @@ public class Client {
         try {
             write(processing(read(bf), cm));
         } catch (@NotNull IOException | JAXBException e) {
-            try {
-                log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
-            } catch (IOException ioException) {
-                log.error(ioException.getMessage());
-            }
-            try {
-                sh.close();
-            } catch (IOException ioException) {
-                log.error(ioException.getMessage());
-            }
+//            try {
+//                log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
+//            } catch (IOException ioException) {
+//                log.error(ioException.getMessage());
+//            }
+//            try {
+//                sh.close();
+//            } catch (IOException ioException) {
+//                log.error(ioException.getMessage());
+//            }
+            log.error(e);
             return;
         }
         if (sh.isConnected()) {
@@ -81,32 +80,34 @@ public class Client {
                     .setArgTypes(command.getArgumentTypes());
 
     }
-
+    //это сервер
     protected void write(ServerAnswer sa) throws IOException {
-        StringWriter sw = new StringWriter();
-        Parser.write(sw, ServerAnswer.class, sa);
+//        StringWriter sw = new StringWriter();
+//        Parser.write(sw, ServerAnswer.class, sa);
 //        sh.write(ByteBuffer.wrap(sw.toString().getBytes(StandardCharsets.UTF_8)));
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(byteArrayOutputStream);
-        oos.writeObject(sa);
-        sh.write(ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(byteArrayOutputStream);) {
+            oos.writeObject(sa);
+            oos.flush();
+            sh.write(ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 
-        log.info("Отправлено " + sh.getRemoteAddress() + ":");
+        }
+        log.debug("Отправлено " + sh.getRemoteAddress() + ":");
         log.debug(sa);
     }
 
     protected @Nullable ServerRequest read(@NotNull ByteBuffer bf) throws IOException, JAXBException {
         sh.read(bf);
-        bf.flip();
-//        ServerRequest request = Parser.get(new StringReader(new String(bf.array(), bf.position(), bf.remaining(), "UTF-8")), ServerRequest.class);
         ServerRequest request = null;
-        try {
-            request = (ServerRequest) new ObjectInputStream(new ByteArrayInputStream(bf.array())).readObject();
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bf.array());
+             ObjectInputStream ois = new ObjectInputStream(byteArrayInputStream)) {
+            request = (ServerRequest) ois.readObject();
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         bf.clear();
-        log.info("Принято " + sh.getRemoteAddress() + ":");
+        log.debug("Принято " + sh.getRemoteAddress() + ":");
         log.debug(request);
         return request;
     }

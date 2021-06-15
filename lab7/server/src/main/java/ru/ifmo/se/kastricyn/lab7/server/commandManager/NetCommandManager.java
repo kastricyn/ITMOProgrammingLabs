@@ -58,6 +58,8 @@ public class NetCommandManager extends CommandManager {
         ncm.addIfAbsent(new RemoveLower());
         ncm.addIfAbsent(new Show());
         ncm.addIfAbsent(new Update());
+        ncm.addIfAbsent(new LogIn());
+        ncm.addIfAbsent(new Register());
         return ncm;
     }
 

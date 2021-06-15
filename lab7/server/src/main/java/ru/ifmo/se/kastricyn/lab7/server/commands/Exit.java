@@ -1,7 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server.commands;
 
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
-import ru.ifmo.se.kastricyn.lab7.server.ServerCommandArgument;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 /**
@@ -19,11 +18,8 @@ public class Exit extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        assert objArgs != null;
         CommandManager cm = objArgs.getCommandManager();
-        Save s = new Save();
-        s.setArguments(new ServerCommandArgument().setTicketCollection(objArgs.getTicketCollection()));
-        s.execute();
-        answer = s.getAnswer();
         cm.setWorkable(false);
     }
 

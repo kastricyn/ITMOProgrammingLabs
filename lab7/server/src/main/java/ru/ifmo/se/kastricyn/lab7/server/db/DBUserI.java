@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab7.server.db;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.User;
 
@@ -14,31 +15,31 @@ public interface DBUserI {
     /**
      * Авторизует пользователя
      * @param user пользователь, которого необходимо авторизовать
-     * @return id пользователя из записи БД, если прошёл авторизацию, -1 иначе
+     * @return useer(id, name) пользователя из записи БД, если прошёл авторизацию, иначе null
      */
     @Nullable
-    User auth(User user);
+    User auth(@NotNull User user);
 
     /**
      * Добавляет нового пользователя в БД
      * @param user пользователь
      * @return true если добавлено, иначе false
      */
-    boolean registerUser(User user);
+    boolean registerUser(@NotNull User user);
 
     /**
      * Проверяет пароль пользователя на совпадение с данными в БД
      * @param user пользователь
      * @return true, если пароль верный; иначе false
      */
-    boolean checkPassword(User user);
+    boolean checkPassword(@NotNull User user);
 
     /**
      * Возвращает id пользователя
      * @param user пользователь
      * @return id пользователя, или -1 если пользователь не найден в базе
      */
-    long getId(User user);
+    long getId(@NotNull User user);
 
     /**
      * Возвращает отпечаток по исходнику, используя SHA-1

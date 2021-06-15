@@ -5,7 +5,7 @@ import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 /**
  * Команда вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)
  */
-public class Info extends ServerAbstractCommand {
+public class Info extends CommandWithAuth {
 
     public Info() {
         super("info", "вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)");
@@ -16,6 +16,8 @@ public class Info extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(!auth())
+            return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
 
         answer = "Информация о коллекции:\n"

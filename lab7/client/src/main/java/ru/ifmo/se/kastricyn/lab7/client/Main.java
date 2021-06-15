@@ -3,11 +3,10 @@ package ru.ifmo.se.kastricyn.lab7.client;
 import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
-import java.util.Properties;
 
 /**
  * Main-class
@@ -15,25 +14,15 @@ import java.util.Properties;
 public class Main {
     //todo: properties
     public static InetAddress INET_ADDRESS = InetAddress.getLoopbackAddress();
-    public static int PORT;
-    static @NotNull Properties property = new Properties();
 
     /**
      * @param args путь до файла с конфигами, если не работает, то будут подставлены значения по умоланию
      */
-    public static void main(String @NotNull [] args) {
+    public static void main(String @NotNull [] args) throws IOException {
+        Properties property = (Properties) Properties.getProperties().load(Paths.get("config"));
         Console console = new Console();
-        if (args.length > 0)
-            try (FileInputStream fis = new FileInputStream(args[0])) {
-                property.load(fis);
-            } catch (IOException e) {
-                console.printlnErr("Файл с конфигурациями не доступен, будут использованы значения поумолчанию.");
-            }
 
-
-        PORT = Integer.parseInt(property.getProperty("port", "8189"));
-
-        try (Connection connect = new Connection(INET_ADDRESS, PORT, property)) {
+        try (Connection connect = new Connection(INET_ADDRESS, property.getPort(), property.getJavaProperties())) {
             console.println("Соединение установлено");
             ClientCommandManager manager = ClientCommandManager.getStandards(connect, console);
             manager.run();

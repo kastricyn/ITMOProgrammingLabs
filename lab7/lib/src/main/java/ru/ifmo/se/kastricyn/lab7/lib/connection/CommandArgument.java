@@ -1,6 +1,5 @@
 package ru.ifmo.se.kastricyn.lab7.lib.connection;
 
-import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.User;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
@@ -54,11 +53,12 @@ public class CommandArgument implements Serializable {
     }
 
     @Override
-    public @NotNull String toString() {
+    public String toString() {
         return "CommandArgument{" +
                 "ticket=" + ticket +
                 ", venue=" + venue +
                 ", commandManager=" + commandManager +
+                ", user=" + user +
                 '}';
     }
 }

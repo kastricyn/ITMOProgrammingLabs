@@ -20,12 +20,10 @@ public abstract class CommandWithAuth extends ServerAbstractCommand {
 
     protected boolean auth() {
         assert objArgs != null;
-        user = objArgs.getTicketCollection().getDb().auth(objArgs.getUser());
-        if (user == null) {
+        if (objArgs.getUser() == null || objArgs.getTicketCollection().getDb().auth(objArgs.getUser()) == null) {
             answer = DBUserI.needAuth;
             return false;
-        }
-        else return true;
+        } else return true;
     }
 
 }

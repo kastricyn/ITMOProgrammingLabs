@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 /**
  * Команда вывести элементы, значение поля venue которых равно заданному
  */
-public class FilterByVenue extends ServerAbstractCommand {
+public class FilterByVenue extends CommandWithAuth {
 
 
     public FilterByVenue() {
@@ -23,6 +23,9 @@ public class FilterByVenue extends ServerAbstractCommand {
 
     @Override
     public void execute(String... args) {
+        if(!auth())
+            return;
+        assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
         Venue venue = objArgs.getVenue();
 
