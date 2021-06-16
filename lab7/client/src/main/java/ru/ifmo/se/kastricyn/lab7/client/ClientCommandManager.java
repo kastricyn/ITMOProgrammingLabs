@@ -131,7 +131,7 @@ public class ClientCommandManager extends CommandManager {
             } catch (@NotNull SocketException | StringIndexOutOfBoundsException e) {
                 console.println("Соеденение утеряно, запустите программу заново");
                 //todo delete
-                e.printStackTrace();
+//                e.printStackTrace();
 //                return; debug
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

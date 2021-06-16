@@ -42,7 +42,7 @@ public class Client {
         sh.configureBlocking(false);
         sh.register(selector, SelectionKey.OP_READ, this);
         sh.finishConnect();
-        System.out.println(sh.getRemoteAddress());
+//        System.out.println(sh.getRemoteAddress());
         ServerRequest request = read();
         if (ServerRequestType.INITIALIZATION.equals(request.getType()))
             write(new ServerAnswer(ServerAnswerType.OK));
@@ -104,7 +104,7 @@ public class Client {
     protected ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
         bf.clear();
         do {
-            System.out.println(bf.position());
+//            System.out.println(bf.position());
             Thread.sleep(50);
         } while ((sh.read(bf) > 0));
         bis.setBuf(bf.array());

@@ -79,7 +79,7 @@ public class Connection implements Closeable {
     public void sendRequest(ServerRequest request) throws IOException {
             oos.writeObject(request);
             oos.flush();
-        System.err.println("Отправлено: " + request);
+//        System.err.println("Отправлено: " + request);
     }
 
 
