@@ -105,7 +105,7 @@ public abstract class AbstractCommand implements Command {
      */
     @Override
     public @NotNull String toString() {
-        return name + "\n - " + description;
+        return name + "\t\t - " + description;
     }
 
     /**

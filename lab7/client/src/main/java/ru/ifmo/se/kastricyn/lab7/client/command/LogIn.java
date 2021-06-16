@@ -13,7 +13,7 @@ import java.net.SocketException;
 
 public class LogIn extends ClientAbstractCommand implements NotNeedAuth {
     public LogIn() {
-        super("log_in", "войти");
+        super("log_in", "войти/сменить пользователя");
         setNeedArgumentType(ClientCommandManager.class, User.class);
     }
 

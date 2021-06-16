@@ -16,7 +16,11 @@ public class LogOut extends ClientAbstractCommand {
     public void execute(String... args) {
         assert objArgs != null;
         ClientCommandManager ccm = objArgs.getCommandManager();
-        ccm.setUser(null);
-        answer = "Вы вышли.";
+        if (ccm.getUser() == null)
+            answer = "Было бы неплохо сначала войти";
+        else {
+            answer = "Вы вышли.";
+            ccm.setUser(null);
+        }
     }
 }

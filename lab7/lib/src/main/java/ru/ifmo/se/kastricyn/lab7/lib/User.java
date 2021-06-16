@@ -1,6 +1,7 @@
 package ru.ifmo.se.kastricyn.lab7.lib;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class User implements Serializable {
     private long id = -1;
     @NotNull
     private String name;
+    @Nullable
     private char[] password;
 
     public User(long id, @NotNull String name) {
@@ -56,7 +58,7 @@ public class User implements Serializable {
         this.name = name;
         return this;
     }
-
+    @Nullable
     public char[] getPassword() {
         return password;
     }

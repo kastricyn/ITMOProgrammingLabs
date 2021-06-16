@@ -6,7 +6,7 @@ import ru.ifmo.se.kastricyn.lab7.server.db.DBUserI;
 
 public class LogIn extends ServerAbstractCommand {
     public LogIn() {
-        super("log_in", "войти");
+        super("log_in", "войти/сменить пользователя");
         setNeedArgumentType(TicketCollection.class, User.class);
     }
 

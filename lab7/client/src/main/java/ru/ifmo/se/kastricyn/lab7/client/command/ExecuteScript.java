@@ -28,6 +28,11 @@ public class ExecuteScript extends ClientAbstractCommand {
 
     @Override
     public void execute(String @NotNull ... args) {
+        assert objArgs != null;
+        if(objArgs.getCommandManager().getUser()==null){
+            answer = "Необходимо авторизоваться";
+            return;
+        }
         if (args.length != 1) {
             answer = "Данная команда должна принимать один аргумет - путь до файла.";
             return;
@@ -54,6 +59,7 @@ public class ExecuteScript extends ClientAbstractCommand {
             openedScripts.push(Paths.get(args[0]).toAbsolutePath());
             ClientCommandManager cm = ClientCommandManager.getStandards(ccm.getConnection(), new Console(scriptIn,
                     false));
+            cm.setUser(ccm.getUser());
             //todo проверить new commandManager для клиента и сервера разные
             cm.run();
 

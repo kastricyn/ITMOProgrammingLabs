@@ -3,6 +3,8 @@ package ru.ifmo.se.kastricyn.lab7.client.command;
 import ru.ifmo.se.kastricyn.lab7.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.client.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.AbstractCommand;
+import ru.ifmo.se.kastricyn.lab7.lib.User;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.CommandArgument;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
@@ -32,11 +34,13 @@ public class Help extends ClientAbstractCommand implements NotNeedAuth {
      */
     @Override
     public void execute(String... args) {
+        assert objArgs != null;
         ClientCommandManager ccm = objArgs.getCommandManager();
 
         try {
             //получаем доступные команды от сервера
-            ServerAnswer sa = ccm.getConnection().getAnswer(new ServerRequest("help"));
+            ServerAnswer sa =
+                    ccm.getConnection().getAnswer(new ServerRequest("help").setObjArgs(new CommandArgument().setUser(ccm.getUser() == null ? new User(-1, "") : ccm.getUser())));
             assert sa != null;
             String string = sa.getAnswer();
 
