@@ -20,7 +20,7 @@ public abstract class CommandWithAuth extends ServerAbstractCommand {
      *
      * @return true, если переданный пользователь авторизован; false если пользователь не найден или пароль не верен
      */
-    protected boolean auth() {
+    protected synchronized boolean auth() {
         assert objArgs != null;
         if (objArgs.getUser() == null) {
             answer = DBUserI.needAuth;

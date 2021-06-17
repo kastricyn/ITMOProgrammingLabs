@@ -11,19 +11,14 @@ import java.util.Objects;
  * Надо для {@link Venue}
  */
 public class Address implements Comparable<Address>, Serializable {
-    private @Nullable String street; //Строка не может быть пустой, Поле может быть null
+    private volatile @Nullable String street; //Строка не может быть пустой, Поле может быть null
 
-    /**
-     * конструктор по умолчанию, для работы JAXB
-     */
-    private Address() {
-    }
 
     /**
      *
      * @return true, если все поля заданы верно, иначе могут быть @exception
      */
-    public boolean isExisting(){
+    public synchronized boolean isExisting(){
         setStreet(street);
         return true;
     }

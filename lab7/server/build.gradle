@@ -9,6 +9,7 @@ mainClassName = "ru.ifmo.se.kastricyn.lab7.server.Main"
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
     compile project(":lib")
+    compile project(":client")
     implementation 'org.jetbrains:annotations:20.1.0'
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'

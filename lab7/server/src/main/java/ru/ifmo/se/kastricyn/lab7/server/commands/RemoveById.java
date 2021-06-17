@@ -16,7 +16,7 @@ public class RemoveById extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if (!auth())
             return;
         assert objArgs != null;
@@ -32,7 +32,6 @@ public class RemoveById extends CommandWithAuth {
                 return;
             }
             ticketCollection.remove(ticketId);
-            ticketCollection.setSaved(false);
             answer = "Элемент удалён";
         } catch (@NotNull NumberFormatException | IndexOutOfBoundsException e) {
             answer = "Команда принимает на вход аргумент - целочисленный id элемента коллекции";

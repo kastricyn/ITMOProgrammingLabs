@@ -18,7 +18,7 @@ public class Add extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if(!auth())
             return;
         assert objArgs != null;
@@ -32,7 +32,6 @@ public class Add extends CommandWithAuth {
         }
         ticketCollection.add(t);
         answer = "В коллекцю добавлен объект " + t.toString();
-        ticketCollection.setSaved(false);
     }
 
 }

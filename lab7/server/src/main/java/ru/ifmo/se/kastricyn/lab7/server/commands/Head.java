@@ -14,10 +14,13 @@ public class Head extends CommandWithAuth {
     }
 
     @Override
-    public void execute(String... args) {
-        if(!auth())
+    public synchronized void execute(String... args) {
+        if (!auth())
             return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
-        answer = ticketCollection.isEmpty() ? "Коллекция пуста" : ticketCollection.peekFirst().toString();
+        synchronized (ticketCollection) {
+            answer = ticketCollection.isEmpty() ? "Коллекция пуста" :
+                    ticketCollection.peekFirst().toString();
+        }
     }
 }

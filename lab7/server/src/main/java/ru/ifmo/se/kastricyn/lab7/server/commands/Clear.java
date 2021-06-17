@@ -15,7 +15,7 @@ public class Clear extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if (!auth())
             return;
         assert objArgs != null;
@@ -26,7 +26,6 @@ public class Clear extends CommandWithAuth {
         }
         ticketCollection.clear(objArgs.getUser().getId());
         answer = "Элементы ползователя с id=" + objArgs.getUser().getId()+ " удалены.";
-        ticketCollection.setSaved(false);
 
     }
 }

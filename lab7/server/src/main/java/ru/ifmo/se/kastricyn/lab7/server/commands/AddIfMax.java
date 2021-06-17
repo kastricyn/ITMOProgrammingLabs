@@ -21,7 +21,7 @@ public class AddIfMax extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if(!auth())
             return;
         assert objArgs != null;
@@ -41,6 +41,5 @@ public class AddIfMax extends CommandWithAuth {
         else
             answer = "Коллекция пуста (=> наибольшего эллемента нет), используйте команду add.";
 
-        ticketCollection.setSaved(false);
     }
 }

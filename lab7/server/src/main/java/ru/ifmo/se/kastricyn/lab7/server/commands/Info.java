@@ -15,7 +15,7 @@ public class Info extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if(!auth())
             return;
         TicketCollection ticketCollection = objArgs.getTicketCollection();

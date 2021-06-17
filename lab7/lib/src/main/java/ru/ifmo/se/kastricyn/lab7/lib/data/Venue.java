@@ -19,11 +19,12 @@ public class Venue implements Comparable<Venue>, Serializable {
     private static long nextId = 1; //id не может быть меньше 1
 
     @XmlAttribute
-    private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
-    private @NotNull String name; //Поле не может быть null, Строка не может быть пустой
-    private @NotNull VenueType type; //Поле не может быть null
-    private int capacity; //Значение поля должно быть больше 0
-    private @NotNull Address address; //Поле не может быть null
+    private volatile long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение
+    // этого поля должно генерироваться автоматически
+    private volatile @NotNull String name; //Поле не может быть null, Строка не может быть пустой
+    private volatile @NotNull VenueType type; //Поле не может быть null
+    private volatile int capacity; //Значение поля должно быть больше 0
+    private volatile @NotNull Address address; //Поле не может быть null
 
     public Venue setId(long id) {
         this.id = id;
@@ -89,7 +90,7 @@ public class Venue implements Comparable<Venue>, Serializable {
     /**
      * @return true, если все поля заданы верно, иначе могут быть @exception или false
      */
-    public boolean isExisting() {
+    public synchronized boolean isExisting() {
         setName(name).setCapacity(capacity).setType(type).setAddress(address);
         address.isExisting();
         if (id < 1)
@@ -97,7 +98,7 @@ public class Venue implements Comparable<Venue>, Serializable {
         return true;
     }
 
-    private void initial(String name, int capacity, VenueType type, Address address) {
+    private synchronized void initial(String name, int capacity, VenueType type, Address address) {
         setName(name).setCapacity(capacity).setType(type).setAddress(address);
     }
 

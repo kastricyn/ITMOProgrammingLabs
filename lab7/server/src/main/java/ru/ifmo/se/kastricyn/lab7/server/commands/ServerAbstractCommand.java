@@ -12,7 +12,7 @@ import ru.ifmo.se.kastricyn.lab7.server.ServerCommandArgument;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
 public abstract class ServerAbstractCommand extends AbstractCommand {
-    protected @Nullable ServerCommandArgument objArgs;
+    protected volatile @Nullable ServerCommandArgument objArgs;
 
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды

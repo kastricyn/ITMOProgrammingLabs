@@ -22,19 +22,20 @@ public class FilterByVenue extends CommandWithAuth {
     }
 
     @Override
-    public void execute(String... args) {
-        if(!auth())
+    public synchronized void execute(String... args) {
+        if (!auth())
             return;
         assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
         Venue venue = objArgs.getVenue();
 
+        synchronized (ticketCollection) {
+            Supplier<Stream<Ticket>> v = () -> StreamSupport.stream(ticketCollection.spliterator(), true).filter(x -> x.getVenue().equals(venue));
+            if (v.get().findAny().isPresent()) {
+                answer = Console.getStringFromStream("Элементы имеющие введённый venue:", v.get());
 
-        Supplier<Stream<Ticket>> v = () -> StreamSupport.stream(ticketCollection.spliterator(), true).filter(x -> x.getVenue().equals(venue));
-        if (v.get().findAny().isPresent()) {
-            answer = Console.getStringFromStream("Элементы имеющие введённый venue:", v.get());
-
-        } else
-            answer = "В коллекции нет элементов, имеющие введённый venue.";
+            } else
+                answer = "В коллекции нет элементов, имеющие введённый venue.";
+        }
     }
 }

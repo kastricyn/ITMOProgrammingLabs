@@ -2,13 +2,8 @@ package ru.ifmo.se.kastricyn.lab7.lib.data;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.ifmo.se.kastricyn.lab7.lib.LocalDateAdapter;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -16,7 +11,6 @@ import java.util.Objects;
 /**
  * Класс представляющий элемент коллекции
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Ticket implements Comparable<Ticket>, Serializable {
     public static final int PRICE_MIN = 1;
     public static final double DISCOUNT_MIN = 0;
@@ -25,19 +19,17 @@ public class Ticket implements Comparable<Ticket>, Serializable {
     private static long nextId = 1;
 
     // быть уникальным, Значение этого поля должно генерироваться автоматически
-    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private @NotNull
     final LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться
-    @XmlAttribute
-    private @NotNull Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно
-    // автоматически
-    private @NotNull String name; //Поле не может быть null, Строка не может быть пустой
-    private @NotNull Coordinates coordinates; //Поле не может быть null
-    private @Nullable TicketType type; //Поле может быть null
-    private @Nullable Integer price; //Поле может быть null, Значение поля должно быть больше 0
-    private double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
-    private @NotNull Venue venue; //Поле не может быть null
-    private long userId;
+    private volatile @NotNull Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля
+    // должно автоматически
+    private volatile @NotNull String name; //Поле не может быть null, Строка не может быть пустой
+    private volatile @NotNull Coordinates coordinates; //Поле не может быть null
+    private volatile @Nullable TicketType type; //Поле может быть null
+    private volatile @Nullable Integer price; //Поле может быть null, Значение поля должно быть больше 0
+    private volatile double discount; //Значение поля должно быть больше 0, Максимальное значение поля: 100
+    private volatile @NotNull Venue venue; //Поле не может быть null
+    private volatile long userId;
 
     public Ticket(long id, String name, Coordinates coordinates, @Nullable LocalDate creationDate, Integer price,
                   double discount, TicketType type, Venue venue, long userId) {
@@ -122,7 +114,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
     /**
      * @return true, если все поля заданы верно, иначе могут быть @exception
      */
-    public boolean isExisting() {
+    public synchronized boolean isExisting() {
         if (id < 1)
             throw new IllegalStateException();
         setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
@@ -133,7 +125,8 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return true;
     }
 
-    private void initial(String name, Coordinates coordinates, Integer price, double discount, TicketType type, Venue venue) {
+    private synchronized void initial(String name, Coordinates coordinates, Integer price, double discount, TicketType type,
+                          Venue venue) {
         setName(name).setCoordinates(coordinates).setPrice(price).setDiscount(discount).setType(type).setVenue(venue);
     }
 

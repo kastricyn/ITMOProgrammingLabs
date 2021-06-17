@@ -4,46 +4,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.ifmo.se.kastricyn.lab7.lib.LocalDateAdapter;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Представляет коллекцию Ticket-ов
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class TicketCollection implements Iterable<Ticket> {
-    @XmlTransient
     final static Logger log = LogManager.getLogger();
 
-    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
-    @XmlAttribute
     private final @NotNull LocalDate initDate;
-    @XmlTransient
-    private boolean saved;
-    private ArrayDeque<Ticket> tickets;
-
     @NotNull
     private final DBManager db;
+    private volatile List<Ticket> tickets;
 
     /**
      * создаёт пустую коллекцию
      */
 
     public TicketCollection(@NotNull DBManager db) {
-        tickets = new ArrayDeque<>();
-        saved = true;
+        tickets = Collections.synchronizedList(new LinkedList<>());
         initDate = LocalDate.now();
         this.db = db;
     }
@@ -91,13 +76,15 @@ public class TicketCollection implements Iterable<Ticket> {
      * @throws IllegalArgumentException если в коллекции не нашлось элемента с таким id
      */
     public Ticket remove(long id) throws IllegalArgumentException {
-        Iterator<Ticket> iterator = tickets.iterator();
-        Ticket t;
-        while (iterator.hasNext()) {
-            t = iterator.next();
-            if (t.getId() == id) {
-                iterator.remove();
-                return t;
+        synchronized (tickets) {
+            Iterator<Ticket> iterator = tickets.iterator();
+            Ticket t;
+            while (iterator.hasNext()) {
+                t = iterator.next();
+                if (t.getId() == id) {
+                    iterator.remove();
+                    return t;
+                }
             }
         }
         throw new IllegalArgumentException("В коллекции нет элемента с таким индексом");
@@ -124,8 +111,10 @@ public class TicketCollection implements Iterable<Ticket> {
      * @throws IllegalArgumentException если в коллекции не нашлось элемета с таким id
      */
     public Ticket getElement(long id) throws IllegalArgumentException {
-        return tickets.stream().filter(x -> x.getId() == id).findAny().orElseThrow(
-                () -> new IllegalArgumentException("В коллекции нет элемента с таким индексом"));
+        synchronized (tickets) {
+            return tickets.stream().filter(x -> x.getId() == id).findAny().orElseThrow(
+                    () -> new IllegalArgumentException("В коллекции нет элемента с таким индексом"));
+        }
     }
 
     /**
@@ -142,7 +131,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * Возвращает первый элемент, но не удаляет его
      */
     public Ticket peekFirst() {
-        return tickets.peekFirst();
+        return tickets.get(0);
     }
 
     /**
@@ -177,7 +166,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param cmp компаратор по которому будет проходит сортировка
      */
     public @NotNull TicketCollection sort(Comparator<Ticket> cmp) {
-        tickets = tickets.stream().sorted(cmp).collect(Collectors.toCollection(ArrayDeque::new));
+        tickets.sort(cmp);
         return this;
     }
 
@@ -188,7 +177,8 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param userId id пользователя
      */
     public void clear(long userId) {
-        tickets = tickets.stream().filter(x -> x.getUserId() != userId).collect(Collectors.toCollection(ArrayDeque::new));
+        tickets =
+                Collections.synchronizedList(tickets.stream().filter(x -> x.getUserId() != userId).collect(Collectors.toList()));
     }
 
     /**
@@ -199,24 +189,6 @@ public class TicketCollection implements Iterable<Ticket> {
     }
 
     /**
-     * Проверяет сохранена ли коллекция в файл
-     *
-     * @return true, если сохранена, иначе false
-     */
-    public boolean isSaved() {
-        return saved;
-    }
-
-    /**
-     * Устанавливает параметр сохранения коллекции
-     *
-     * @param saved true - считать коллекцию сохранённой, иначе false
-     */
-    public void setSaved(boolean saved) {
-        this.saved = saved;
-    }
-
-    /**
      * Проверяет коллекцию. Используется после восстановления коллекции из файла.
      * Удаляет элементы, которые были изменены в файле за допустимые пределы.
      * Возвращает true если что-то было удалено, иначе false.
@@ -224,35 +196,37 @@ public class TicketCollection implements Iterable<Ticket> {
     public boolean check() {
         HashSet<Long> idTicket = new HashSet<>();
         HashSet<Long> idVenue = new HashSet<>();
-        Iterator<Ticket> iterator = iterator();
-        boolean isDeleted = false;
-        while (iterator.hasNext()) {
-            Ticket t = iterator.next();
-            try {
-                t.isExisting();
-                long idT = t.getId();
-                long idV = t.getVenue().getId();
-                if (idTicket.contains(idT) || idVenue.contains(idV)) {
+        synchronized (tickets) {
+            Iterator<Ticket> iterator = iterator();
+            boolean isDeleted = false;
+            while (iterator.hasNext()) {
+                Ticket t = iterator.next();
+                try {
+                    t.isExisting();
+                    long idT = t.getId();
+                    long idV = t.getVenue().getId();
+                    if (idTicket.contains(idT) || idVenue.contains(idV)) {
+                        iterator.remove();
+                        isDeleted = true;
+                        continue;
+                    }
+                    idTicket.add(idT);
+                    idVenue.add(idV);
+                } catch (RuntimeException e) {
                     iterator.remove();
                     isDeleted = true;
-                    continue;
                 }
-                idTicket.add(idT);
-                idVenue.add(idV);
-            } catch (RuntimeException e) {
-                iterator.remove();
-                isDeleted = true;
             }
-        }
-        if (isDeleted) {
-            return true;
-        }
-        try {
-            Field nextId = Ticket.class.getDeclaredField("nextId");
-            nextId.setAccessible(true);
-            nextId.setLong(Ticket.class, idTicket.stream().max(Long::compareTo).orElse(0L) + 1);
-        } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            if (isDeleted) {
+                return true;
+            }
+            try {
+                Field nextId = Ticket.class.getDeclaredField("nextId");
+                nextId.setAccessible(true);
+                nextId.setLong(Ticket.class, idTicket.stream().max(Long::compareTo).orElse(0L) + 1);
+            } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

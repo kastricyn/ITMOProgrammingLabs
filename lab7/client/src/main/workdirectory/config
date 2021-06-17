@@ -1,4 +1,4 @@
 port=28189
-max_timeout=10000
-interval=20000
+max_timeout=7000
+interval=10000
 max_attempt=10

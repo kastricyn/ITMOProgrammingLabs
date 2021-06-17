@@ -4,8 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab7.lib.exception.DBConnectionException;
-import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
-import ru.ifmo.se.kastricyn.lab7.server.commandManager.ConsoleCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 
@@ -34,8 +32,7 @@ public class Main {
             netConnections.start();
             System.out.println("Данные для подключения: " + netCommandManager);
 
-            CommandManager consoleCommandManager = ConsoleCommandManager.getStandards(tickets, new Console(in));
-            consoleCommandManager.run();
+            ru.ifmo.se.kastricyn.lab7.client.Main.main(new String[1]);
 
         } catch (DBConnectionException e) {
             log.error("Не удаётся подключиться к БД, к сожалению, программа не может работать без БД.");

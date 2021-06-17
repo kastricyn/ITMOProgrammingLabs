@@ -17,9 +17,9 @@ public abstract class AbstractCommand implements Command {
     protected final String name;
     protected final String description;
     protected final Set<Class> argTypes = new HashSet<>();
-    protected String answer = "";
+    protected volatile String answer = "";
 
-    protected CommandArgument objArgs = new CommandArgument();
+    protected volatile CommandArgument objArgs = new CommandArgument();
 
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
@@ -48,7 +48,7 @@ public abstract class AbstractCommand implements Command {
      * @param argTypes типы аргументов команд
      * @return команду с аргументами
      */
-    protected @NotNull AbstractCommand setNeedArgumentType(Class @NotNull ... argTypes) {
+    protected synchronized @NotNull AbstractCommand setNeedArgumentType(Class @NotNull ... argTypes) {
         this.argTypes.clear();
         this.argTypes.addAll(Arrays.stream(argTypes).collect(Collectors.toSet()));
         return this;

@@ -17,7 +17,7 @@ public class Update extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if(!auth())
             return;
         assert objArgs != null;
@@ -44,6 +44,5 @@ public class Update extends CommandWithAuth {
             return;
         }
         answer = "Объект обновлён";
-        ticketCollection.setSaved(false);
     }
 }

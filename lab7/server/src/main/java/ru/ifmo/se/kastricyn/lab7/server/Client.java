@@ -23,17 +23,21 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Client {
     final static Logger log = LogManager.getLogger();
-
-    private ByteBuffer bf = ByteBuffer.wrap(new byte[10240]);
+    private final static ExecutorService writer = Executors.newCachedThreadPool();
+    private final static ExecutorService reader = Executors.newFixedThreadPool(16);
+    private final ByteBuffer bf = ByteBuffer.wrap(new byte[10240]);
     private ObjectInputStream ois;
-    private ByteOutputStream bos = new ByteOutputStream();
+    private final ByteOutputStream bos = new ByteOutputStream();
     private ObjectOutputStream oos;
-    private ByteInputStream bis = new ByteInputStream();
-    private SocketChannel sh;
+    private final ByteInputStream bis = new ByteInputStream();
+    private final SocketChannel sh;
 
     public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException, InterruptedException, ClassNotFoundException {
         sh = ssc.accept();
@@ -49,10 +53,13 @@ public class Client {
         log.info("Подключено " + sh.getRemoteAddress());
     }
 
-    public void reply(@NotNull NetCommandManager cm) throws IOException, InterruptedException, ClassNotFoundException {
+    public void reply(@NotNull NetCommandManager cm) throws InterruptedException, IOException {
         try {
-            write(processing(read(), cm));
-        } catch (IOException e) {
+            ServerRequest sr = reader.submit(new ReadTask(this)).get();
+            writer.submit(()->{write(processing(sr, cm)); return null;});
+        } catch (ExecutionException e) {
+            reader.shutdown();
+            writer.shutdown();
             oos.close();
             bos.close();
             ois.close();
@@ -62,46 +69,54 @@ public class Client {
         }
     }
 
-    protected @NotNull ServerAnswer processing(@NotNull ServerRequest serverRequest, @NotNull NetCommandManager cm) {
+    protected @NotNull synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
+                                                   @NotNull NetCommandManager cm) {
         //получим команду по имени
-        ServerAbstractCommand command = (ServerAbstractCommand) cm.getCommand(serverRequest.getInput().split("\\s", 2)[0]);
-        //если команды нет, отправим ответ
-        if (command == null)
-            return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
-        //устанавливаем аргументы
-        assert serverRequest.getObjArgs() != null;
-        ServerCommandArgument ca = new ServerCommandArgument(serverRequest.getObjArgs())
-                .setCommandManager(cm).setTicketCollection(cm.getTicketCollection());
-        command.setArguments(ca);
-        // проверяем аргументы и запускаем команду
-        if (command.objectsArgsIsValidate()) {
-            String[] input = serverRequest.getInput().split("\\s");
-            if (input.length > 1)
-                command.execute(Arrays.copyOfRange(input, 1, input.length));
-            else command.execute();
-            return new ServerAnswer(ServerAnswerType.OK).setAnswer(command.getAnswer());
-        } else
-            return new ServerAnswer(ServerAnswerType.NEED_ARGS).setInput(serverRequest.getInput())
-                    .setArgTypes(command.getArgumentTypes().stream()
-                            .filter(x -> !(x.equals(TicketCollection.class)||x.equals(CommandManager.class)))
-                            .collect(Collectors.toSet()));
-
+        ServerAbstractCommand command = null;
+        try {
+            command = ((ServerAbstractCommand) cm.getCommand(serverRequest.getInput().split("\\s",
+                    2)[0])).getClass().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            log.error(e.getStackTrace());
+        }
+        synchronized (command) {
+            //если команды нет, отправим ответ
+            if (command == null)
+                return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
+            //устанавливаем аргументы
+            assert serverRequest.getObjArgs() != null;
+            ServerCommandArgument ca = new ServerCommandArgument(serverRequest.getObjArgs())
+                    .setCommandManager(cm).setTicketCollection(cm.getTicketCollection());
+            command.setArguments(ca);
+            // проверяем аргументы и запускаем команду
+            if (command.objectsArgsIsValidate()) {
+                String[] input = serverRequest.getInput().split("\\s");
+                if (input.length > 1)
+                    command.execute(Arrays.copyOfRange(input, 1, input.length));
+                else command.execute();
+                return new ServerAnswer(ServerAnswerType.OK).setAnswer(command.getAnswer());
+            } else
+                return new ServerAnswer(ServerAnswerType.NEED_ARGS).setInput(serverRequest.getInput())
+                        .setArgTypes(command.getArgumentTypes().stream()
+                                .filter(x -> !(x.equals(TicketCollection.class) || x.equals(CommandManager.class)))
+                                .collect(Collectors.toSet()));
+        }
     }
 
     //это сервер
     @SuppressWarnings("deprecation")
-    protected void write(ServerAnswer sa) throws IOException {
-        if (oos == null)
-            oos = new ObjectOutputStream(bos);
-        oos.writeObject(sa);
-        oos.flush();
-        sh.write(ByteBuffer.wrap(bos.toByteArray()));
-        bos.reset();
-        log.debug("Отправлено " + sh.getRemoteAddress() + ":");
-        log.debug(sa);
+    protected synchronized void write(ServerAnswer sa) throws IOException {
+            if (oos == null)
+                oos = new ObjectOutputStream(bos);
+            oos.writeObject(sa);
+            oos.flush();
+            sh.write(ByteBuffer.wrap(bos.toByteArray()));
+            bos.reset();
+            log.debug("Отправлено " + sh.getRemoteAddress() + ":");
+            log.debug(sa);
     }
 
-    protected ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
+    protected synchronized ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
         bf.clear();
         do {
 //            System.out.println(bf.position());

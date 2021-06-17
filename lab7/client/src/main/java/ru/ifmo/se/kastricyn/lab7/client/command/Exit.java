@@ -2,8 +2,9 @@ package ru.ifmo.se.kastricyn.lab7.client.command;
 
 import ru.ifmo.se.kastricyn.lab7.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab7.client.ClientCommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.utility.NotNeedAuth;
 
-public class Exit extends ClientAbstractCommand {
+public class Exit extends ClientAbstractCommand implements NotNeedAuth {
 
     public Exit() {
         super("exit", "завершение работы программы");

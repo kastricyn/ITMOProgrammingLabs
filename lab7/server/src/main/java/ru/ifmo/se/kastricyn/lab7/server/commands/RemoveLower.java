@@ -17,28 +17,27 @@ public class RemoveLower extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         if (!auth())
             return;
         assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
         Ticket minTicket = objArgs.getTicket();
+        synchronized (ticketCollection) {
+            Iterator<Ticket> iterator = ticketCollection.iterator();
+            Ticket t;
+            int i = 0;
+            while (iterator.hasNext()) {
+                t = iterator.next();
+                if (t.compareTo(minTicket) < 0) {
+                    if (ticketCollection.getDb().deleteTicket(t.getId()) && t.getUserId() == objArgs.getUser().getId()) {
+                        iterator.remove();
+                        i++;
+                    }
 
-        Iterator<Ticket> iterator = ticketCollection.iterator();
-        Ticket t;
-        int i = 0;
-        while (iterator.hasNext()) {
-            t = iterator.next();
-            if (t.compareTo(minTicket) < 0) {
-                if (ticketCollection.getDb().deleteTicket(t.getId()) && t.getUserId() == objArgs.getUser().getId()) {
-                    iterator.remove();
-                    i++;
                 }
-
             }
+            answer = "Из коллекции удалено " + i + " объектов.";
         }
-        answer = "Из коллекции удалено " + i + " объектов.";
-        if (i > 0)
-            ticketCollection.setSaved(false);
     }
 }

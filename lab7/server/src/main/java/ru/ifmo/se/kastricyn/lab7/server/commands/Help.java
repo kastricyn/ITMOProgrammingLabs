@@ -17,7 +17,7 @@ public class Help extends CommandWithAuth {
     }
 
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         assert objArgs != null;
         CommandManager commandManager = objArgs.getCommandManager();
         boolean auth = auth();

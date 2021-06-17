@@ -11,10 +11,10 @@ import java.io.Serializable;
  * Содержит нестроковые аргументы для комманд
  */
 public class CommandArgument implements Serializable {
-    protected Ticket ticket;
-    protected Venue venue;
-    protected CommandManager commandManager;
-    protected User user;
+    protected volatile Ticket ticket;
+    protected volatile Venue venue;
+    protected volatile CommandManager commandManager;
+    protected volatile User user;
 
     public User getUser() {
         return user;

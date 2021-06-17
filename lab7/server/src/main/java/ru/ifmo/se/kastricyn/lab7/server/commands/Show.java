@@ -17,18 +17,19 @@ public class Show extends CommandWithAuth {
 
 
     @Override
-    public void execute(String... args) {
-        if(!auth())
+    public synchronized void execute(String... args) {
+        if (!auth())
             return;
         assert objArgs != null;
         TicketCollection ticketCollection = objArgs.getTicketCollection();
-
-        if (ticketCollection.isEmpty())
-            answer = "Коллекция пуста";
-        else {
-            ticketCollection.sort();
-            answer = Console.getStringFromStream("Коллекция:",
-                    StreamSupport.stream(ticketCollection.sort().spliterator(), true));
+        synchronized (ticketCollection) {
+            if (ticketCollection.isEmpty())
+                answer = "Коллекция пуста";
+            else {
+                ticketCollection.sort();
+                answer = Console.getStringFromStream("Коллекция:",
+                        StreamSupport.stream(ticketCollection.sort().spliterator(), true));
+            }
         }
     }
 }

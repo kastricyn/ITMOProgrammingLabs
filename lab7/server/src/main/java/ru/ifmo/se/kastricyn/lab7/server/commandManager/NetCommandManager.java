@@ -15,6 +15,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveAction;
 
 public class NetCommandManager extends CommandManager {
     static final Logger log = LogManager.getLogger();
@@ -81,9 +83,12 @@ public class NetCommandManager extends CommandManager {
      */
     @Override
     public void run() {
+        ForkJoinPool executorService = new ForkJoinPool();
         while (isWorkable()) {
-            if (Thread.interrupted())
+            if (Thread.interrupted()) {
+                executorService.shutdown();
                 return;
+            }
             try {
                 if (selector.select() == 0) {
                     continue;
@@ -97,15 +102,27 @@ public class NetCommandManager extends CommandManager {
                             new Client(ssc, selector);
                         }
                         if (key.isReadable()) {
+                            NetCommandManager cm = this;
                             if (key.attachment() instanceof Client) {
-                                ((Client) key.attachment()).reply(this);
+                                executorService.invoke(new RecursiveAction() {
+                                    @Override
+                                    protected void compute() {
+                                        try {
+                                            ((Client) key.attachment()).reply(cm);
+                                        } catch (InterruptedException | IOException e) {
+                                            log.warn(e.getStackTrace());
+                                        }
+                                    }
+                                });
+
                             }
                         }
                     }
-
                 }
-            } catch (IOException | InterruptedException | ClassNotFoundException e) {
-                log.error(e.getMessage());
+            } catch (IOException | RuntimeException | InterruptedException e) {
+                log.warn(e.getStackTrace());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
 

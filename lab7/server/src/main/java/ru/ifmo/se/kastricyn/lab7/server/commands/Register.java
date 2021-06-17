@@ -18,7 +18,7 @@ public class Register extends ServerAbstractCommand {
      * @param args аргументы команды
      */
     @Override
-    public void execute(String... args) {
+    public synchronized void execute(String... args) {
         assert objArgs != null;
         DBUserI db = objArgs.getTicketCollection().getDb();
         if (db.registerUser(objArgs.getUser()))
