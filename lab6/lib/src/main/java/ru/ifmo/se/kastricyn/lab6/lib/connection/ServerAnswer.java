@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.lib.connection;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,7 +29,7 @@ public class ServerAnswer implements Serializable {
         return argTypes;
     }
 
-    public ServerAnswer setArgTypes(Set<Class> argTypes) {
+    public @NotNull ServerAnswer setArgTypes(Set<Class> argTypes) {
         this.argTypes = argTypes;
         return this;
     }
@@ -36,7 +38,7 @@ public class ServerAnswer implements Serializable {
         return input;
     }
 
-    public ServerAnswer setInput(String input) {
+    public @NotNull ServerAnswer setInput(String input) {
         this.input = input;
         return this;
     }
@@ -45,7 +47,7 @@ public class ServerAnswer implements Serializable {
         return sat;
     }
 
-    public ServerAnswer setSat(ServerAnswerType sat) {
+    public @NotNull ServerAnswer setSat(ServerAnswerType sat) {
         this.sat = sat;
         return this;
     }
@@ -54,13 +56,13 @@ public class ServerAnswer implements Serializable {
         return answer;
     }
 
-    public ServerAnswer setAnswer(String answer) {
+    public @NotNull ServerAnswer setAnswer(String answer) {
         this.answer = answer;
         return this;
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "ServerAnswer{" +
                 "sat=" + sat +
                 ", answer='" + answer + '\'' +

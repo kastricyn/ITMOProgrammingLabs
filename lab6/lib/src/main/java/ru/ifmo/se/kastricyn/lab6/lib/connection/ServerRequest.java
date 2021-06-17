@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.lib.connection;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandArgument;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,7 +13,7 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
     private String input = "";
-    private CommandArgument objArgs = new CommandArgument();
+    transient private @Nullable CommandArgument objArgs = new CommandArgument();
 
     //for JAXB
     public ServerRequest() {
@@ -22,14 +24,14 @@ public class ServerRequest implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "ServerRequest{" +
                 "input='" + input + '\'' +
                 ", objArgs=" + objArgs +
                 '}';
     }
 
-    public CommandArgument getObjArgs() {
+    public @Nullable CommandArgument getObjArgs() {
         return objArgs;
     }
 
@@ -38,14 +40,14 @@ public class ServerRequest implements Serializable {
      *
      * @throws NullPointerException если cca=null
      */
-    public ServerRequest setObjArgs(CommandArgument cca) {
+    public @NotNull ServerRequest setObjArgs(@Nullable CommandArgument cca) {
         if (cca == null)
             throw new NullPointerException();
         objArgs = cca;
         return this;
     }
 
-    public ServerRequest clearArgs() {
+    public @NotNull ServerRequest clearArgs() {
         objArgs = new CommandArgument();
         return this;
     }
@@ -54,7 +56,7 @@ public class ServerRequest implements Serializable {
         return input;
     }
 
-    public ServerRequest setInput(String input) {
+    public @NotNull ServerRequest setInput(String input) {
         this.input = input;
         return this;
     }

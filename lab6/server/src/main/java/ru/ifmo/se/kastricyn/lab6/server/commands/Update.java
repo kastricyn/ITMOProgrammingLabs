@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.server.commands;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.server.ServerAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.server.TicketCollection;
@@ -25,7 +26,7 @@ public class Update extends ServerAbstractCommand {
         try {
             id = Long.parseLong(args[0]);
             ticketCollection.update(id, t);
-        } catch (NumberFormatException | IndexOutOfBoundsException Ie) {
+        } catch (@NotNull NumberFormatException | IndexOutOfBoundsException Ie) {
             answer = "Команда принимает на вход только одно число типа long - id элемента коллекции";
             return;
         } catch (IllegalArgumentException e) {

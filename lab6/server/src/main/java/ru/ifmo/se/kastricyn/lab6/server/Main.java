@@ -2,6 +2,7 @@ package ru.ifmo.se.kastricyn.lab6.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Parser;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 public class Main {
     static final Logger log = LogManager.getLogger(Main.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String @NotNull [] args) throws IOException {
         log.info("start");
         if (args.length != 1) {
             System.out.println("Программа принимает на вход ровно один аргумент - путь до файла.\n" +
@@ -71,7 +72,7 @@ public class Main {
             System.out.println("Программа звершена пользователем.");
         } finally {
             netConnections.interrupt();
+            log.info("stop");
         }
-        log.info("stop");
     }
 }

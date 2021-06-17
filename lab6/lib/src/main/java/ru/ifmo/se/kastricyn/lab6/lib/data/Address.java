@@ -1,5 +1,7 @@
 package ru.ifmo.se.kastricyn.lab6.lib.data;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
 
 import java.io.Serializable;
@@ -9,7 +11,7 @@ import java.util.Objects;
  * Надо для {@link Venue}
  */
 public class Address implements Comparable<Address>, Serializable {
-    private String street; //Строка не может быть пустой, Поле может быть null
+    private @Nullable String street; //Строка не может быть пустой, Поле может быть null
 
     /**
      * конструктор по умолчанию, для работы JAXB
@@ -40,7 +42,7 @@ public class Address implements Comparable<Address>, Serializable {
      *
      * @param console объект типа Console, методами которго будут получены данные от пользователя с учётом ограничений
      */
-    public Address(Console console) {
+    public Address(@NotNull Console console) {
         if (console.isInteractiveMode()) {
             System.out.println("Создаём объект типа \"Address\":");
             System.out.println("Введите пожалуйста улицу:");
@@ -69,7 +71,7 @@ public class Address implements Comparable<Address>, Serializable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "Address{" +
                 "street='" + street + '\'' +
                 '}';
@@ -79,7 +81,7 @@ public class Address implements Comparable<Address>, Serializable {
      *
      * @return поле street
      */
-    public String getStreet() {
+    public @Nullable String getStreet() {
         return street;
     }
 
@@ -89,7 +91,7 @@ public class Address implements Comparable<Address>, Serializable {
      * @return обновлённый объект типа Address
      * @exception IllegalArgumentException если street.isEmpty() возвращает true
      */
-    public Address setStreet(String street) {
+    public @NotNull Address setStreet(@Nullable String street) {
         if (street != null && street.isEmpty())
             throw new IllegalArgumentException();
         this.street = street;
@@ -102,7 +104,7 @@ public class Address implements Comparable<Address>, Serializable {
      * @return
      */
     @Override
-    public int compareTo(Address o) {
+    public int compareTo(@NotNull Address o) {
         if(o.getStreet()==null && street==null)
             return 0;
         if (o.getStreet() == null)

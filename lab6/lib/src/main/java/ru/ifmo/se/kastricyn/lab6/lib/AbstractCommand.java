@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
 
@@ -36,7 +37,7 @@ public abstract class AbstractCommand implements Command {
      * возвращает типы нестроковых необходимых аргументов команды
      */
     @Override
-    public Set<Class> getArgumentTypes() {
+    public @NotNull Set<Class> getArgumentTypes() {
         return argTypes;
     }
 
@@ -46,14 +47,14 @@ public abstract class AbstractCommand implements Command {
      * @param argTypes типы аргументов команд
      * @return команду с аргументами
      */
-    protected AbstractCommand setNeedArgumentType(Class... argTypes) {
+    protected @NotNull AbstractCommand setNeedArgumentType(Class @NotNull ... argTypes) {
         this.argTypes.clear();
         this.argTypes.addAll(Arrays.stream(argTypes).collect(Collectors.toSet()));
         return this;
     }
 
     @Override
-    public AbstractCommand setArguments(CommandArgument args) {
+    public @NotNull AbstractCommand setArguments(CommandArgument args) {
         objArgs = args;
         return this;
     }
@@ -101,7 +102,7 @@ public abstract class AbstractCommand implements Command {
      * description</code>
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return name + "\n - " + description;
     }
 

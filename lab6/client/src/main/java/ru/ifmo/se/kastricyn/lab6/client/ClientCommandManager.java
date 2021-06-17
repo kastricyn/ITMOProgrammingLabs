@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.client;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab6.client.command.ExecuteScript;
 import ru.ifmo.se.kastricyn.lab6.client.command.Exit;
 import ru.ifmo.se.kastricyn.lab6.client.command.Help;
@@ -25,7 +26,7 @@ public class ClientCommandManager extends CommandManager {
         this.console = console;
     }
 
-    public static ClientCommandManager getStandards(Connection connection, Console console) {
+    public static @NotNull ClientCommandManager getStandards(Connection connection, Console console) {
         ClientCommandManager ccm = new ClientCommandManager(connection, console);
         ccm.addIfAbsent(new Exit());
         ccm.addIfAbsent(new Help());
@@ -43,7 +44,7 @@ public class ClientCommandManager extends CommandManager {
      * @param commandName что ввёл пользователь
      * @param args        аргументы команды в строковом представлении
      */
-    public void executeCommand(String commandName, String... args) throws JAXBException, IOException {
+    public void executeCommand(@NotNull String commandName, String @NotNull ... args) throws JAXBException, IOException {
 
         String input = commandName;
         StringBuilder inputBuilder = new StringBuilder(commandName);
@@ -114,10 +115,11 @@ public class ClientCommandManager extends CommandManager {
             String[] s = t.split("\\s", 2);
             try {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
-            } catch (SocketException |StringIndexOutOfBoundsException e) {
+            } catch (@NotNull SocketException |StringIndexOutOfBoundsException e) {
                 console.println("Соеденение утеряно, запустите программу заново");
-                return;
-            } catch (JAXBException | IOException e) {
+                e.printStackTrace();
+//                return; debug
+            } catch (@NotNull JAXBException | IOException e) {
                 e.printStackTrace();
             }
         }

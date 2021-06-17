@@ -1,13 +1,15 @@
 package ru.ifmo.se.kastricyn.lab6.server;
 
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab6.lib.AbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Venue;
 
 public abstract class ServerAbstractCommand extends AbstractCommand {
-    protected ServerCommandArgument objArgs;
+    protected @Nullable ServerCommandArgument objArgs;
 
     /**
      * конструктор класса наседника, принимает на вход параметры, необходимые для реализации конкретной команды
@@ -20,7 +22,7 @@ public abstract class ServerAbstractCommand extends AbstractCommand {
         super(name, description);
     }
 
-    public ServerAbstractCommand setArguments(ServerCommandArgument args) {
+    public @NotNull ServerAbstractCommand setArguments(@Nullable ServerCommandArgument args) {
         if (args == null)
             throw new NullPointerException();
         objArgs = args;

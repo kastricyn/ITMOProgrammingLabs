@@ -1,5 +1,6 @@
 package ru.ifmo.se.kastricyn.lab6.client.command;
 
+import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab6.client.ClientAbstractCommand;
 import ru.ifmo.se.kastricyn.lab6.client.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab6.lib.utility.Console;
@@ -29,7 +30,7 @@ public class ExecuteScript extends ClientAbstractCommand {
     // на клиенте отправляется на сервер
 
     @Override
-    public void execute(String... args) {
+    public void execute(String @NotNull ... args) {
         if (args.length != 1) {
             answer = "Данная команда должна принимать один аргумет - путь до файла.";
             return;

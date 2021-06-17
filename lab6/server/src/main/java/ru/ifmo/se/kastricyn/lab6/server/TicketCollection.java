@@ -2,6 +2,8 @@ package ru.ifmo.se.kastricyn.lab6.server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab6.lib.LocalDateAdapter;
 import ru.ifmo.se.kastricyn.lab6.lib.data.Ticket;
 
@@ -10,9 +12,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Представляет коллекцию Ticket-ов
@@ -25,7 +29,7 @@ public class TicketCollection implements Iterable<Ticket> {
 
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     @XmlAttribute
-    private final LocalDate initDate;
+    private final @NotNull LocalDate initDate;
     @XmlTransient
     private boolean saved;
     private ArrayDeque<Ticket> tickets;
@@ -54,7 +58,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * @param e элемент, который добавляют
      * @return true, если коллекция изменилась, иначе false
      */
-    public boolean add(Ticket e) {
+    public boolean add(@NotNull Ticket e) {
         return tickets.add(e);
     }
 
@@ -66,7 +70,7 @@ public class TicketCollection implements Iterable<Ticket> {
      * @throws NullPointerException     если <code>newTicket==null</code>
      * @throws IllegalArgumentException если в коллекции нет элемента с таким id
      */
-    public void update(long id, Ticket newTicket) throws NullPointerException, IllegalArgumentException {
+    public void update(long id, @Nullable Ticket newTicket) throws NullPointerException, IllegalArgumentException {
         if (newTicket == null)
             throw new NullPointerException();
         Ticket tmp = getElement(id);
@@ -108,7 +112,7 @@ public class TicketCollection implements Iterable<Ticket> {
     /**
      * Возвращает iterator по коллекции
      */
-    public Iterator<Ticket> iterator() {
+    public @NotNull Iterator<Ticket> iterator() {
         return tickets.iterator();
     }
 
@@ -161,7 +165,7 @@ public class TicketCollection implements Iterable<Ticket> {
     /**
      * Сортирует коллекцию по умолчанию
      */
-    public TicketCollection sort() {
+    public @NotNull TicketCollection sort() {
         sort(Ticket::compareTo);
         return this;
     }
@@ -171,7 +175,7 @@ public class TicketCollection implements Iterable<Ticket> {
      *
      * @param cmp компаратор по которому будет проходит сортировка
      */
-    public TicketCollection sort(Comparator<Ticket> cmp) {
+    public @NotNull TicketCollection sort(Comparator<Ticket> cmp) {
         tickets = tickets.stream().sorted(cmp).collect(Collectors.toCollection(ArrayDeque::new));
         return this;
     }
@@ -186,7 +190,7 @@ public class TicketCollection implements Iterable<Ticket> {
     /**
      * устанавливает путь по которому будет сохраняться коллекция
      */
-    public TicketCollection setPath(Path path) {
+    public @NotNull TicketCollection setPath(Path path) {
         this.path = path;
         return this;
     }
@@ -194,7 +198,7 @@ public class TicketCollection implements Iterable<Ticket> {
     /**
      * Возвращает дату инициализации коллекции
      */
-    public LocalDate getInitDate() {
+    public @NotNull LocalDate getInitDate() {
         return initDate;
     }
 
@@ -251,7 +255,7 @@ public class TicketCollection implements Iterable<Ticket> {
             Field nextId = Ticket.class.getDeclaredField("nextId");
             nextId.setAccessible(true);
             nextId.setLong(Ticket.class, idTicket.stream().max(Long::compareTo).orElse(0L)+1);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (@NotNull NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

@@ -1,0 +1,18 @@
+plugins {
+    id 'application'
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
+version '1.0'
+mainClassName = "ru.ifmo.se.kastricyn.lab7.client.Main"
+
+dependencies {
+    compile project(":lib")
+
+    implementation 'org.jetbrains:annotations:20.1.0'
+}
+
+jar {
+    manifest.attributes("Main-Class": mainClassName)
+}
+

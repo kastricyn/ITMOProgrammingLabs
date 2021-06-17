@@ -1,8 +1,11 @@
 package ru.ifmo.se.kastricyn.lab6.lib;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
@@ -10,7 +13,7 @@ import java.util.stream.Stream;
  * Исполнитель команд. Класс реализует управление коммандами, доступными для пользователя.
  * Разные объекты этого класса могут по-разному исполнять комманды.
  */
-public abstract class CommandManager implements Runnable {
+public abstract class CommandManager implements Runnable, Serializable {
     protected HashMap<String, AbstractCommand> commands;
     protected boolean workable = true;
 
@@ -26,7 +29,7 @@ public abstract class CommandManager implements Runnable {
      *
      * @param cmd команда
      */
-    public void addIfAbsent(AbstractCommand cmd) {
+    public void addIfAbsent(@NotNull AbstractCommand cmd) {
         commands.putIfAbsent(cmd.getName(), cmd);
     }
 
@@ -37,14 +40,13 @@ public abstract class CommandManager implements Runnable {
         return commands.values().stream().map(AbstractCommand::toString);
     }
 
-    public Command getCommand(String commandName) {
+    public Command getCommand(@NotNull String commandName) {
         return commands.get(commandName.toLowerCase());
     }
 
     /**
      * Исполняет команду, имя которой передано в первом аргументе, если она доступна в менеджере команд
      *
-     * @param input имя команды
      */
     public abstract void executeCommand(String commandName, String... args) throws JAXBException, IOException;
 
