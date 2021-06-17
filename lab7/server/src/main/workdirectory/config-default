@@ -8,3 +8,8 @@ db_port=12345
 #DB user config
 db_login=
 db_pass=
+
+#Client part
+max_timeout=10000
+interval=10000
+max_attempt=10

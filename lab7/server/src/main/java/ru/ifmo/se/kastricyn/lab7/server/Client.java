@@ -33,11 +33,11 @@ public class Client {
     private final static ExecutorService writer = Executors.newCachedThreadPool();
     private final static ExecutorService reader = Executors.newFixedThreadPool(16);
     private final ByteBuffer bf = ByteBuffer.wrap(new byte[10240]);
-    private ObjectInputStream ois;
     private final ByteOutputStream bos = new ByteOutputStream();
-    private ObjectOutputStream oos;
     private final ByteInputStream bis = new ByteInputStream();
     private final SocketChannel sh;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
 
     public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException, InterruptedException, ClassNotFoundException {
         sh = ssc.accept();
@@ -56,7 +56,10 @@ public class Client {
     public void reply(@NotNull NetCommandManager cm) throws InterruptedException, IOException {
         try {
             ServerRequest sr = reader.submit(new ReadTask(this)).get();
-            writer.submit(()->{write(processing(sr, cm)); return null;});
+            writer.submit(() -> {
+                write(processing(sr, cm));
+                return null;
+            });
         } catch (ExecutionException e) {
             reader.shutdown();
             writer.shutdown();
@@ -69,8 +72,9 @@ public class Client {
         }
     }
 
-    protected @NotNull synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
-                                                   @NotNull NetCommandManager cm) {
+    protected @NotNull
+    synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
+                                         @NotNull NetCommandManager cm) {
         //получим команду по имени
         ServerAbstractCommand command = null;
         try {
@@ -106,14 +110,14 @@ public class Client {
     //это сервер
     @SuppressWarnings("deprecation")
     protected synchronized void write(ServerAnswer sa) throws IOException {
-            if (oos == null)
-                oos = new ObjectOutputStream(bos);
-            oos.writeObject(sa);
-            oos.flush();
-            sh.write(ByteBuffer.wrap(bos.toByteArray()));
-            bos.reset();
-            log.debug("Отправлено " + sh.getRemoteAddress() + ":");
-            log.debug(sa);
+        if (oos == null)
+            oos = new ObjectOutputStream(bos);
+        oos.writeObject(sa);
+        oos.flush();
+        sh.write(ByteBuffer.wrap(bos.toByteArray()));
+        bos.reset();
+        log.debug("Отправлено " + sh.getRemoteAddress() + ":");
+        log.debug(sa);
     }
 
     protected synchronized ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
