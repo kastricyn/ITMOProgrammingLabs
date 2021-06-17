@@ -38,7 +38,6 @@ public class Client {
     private final SocketChannel sh;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-
     public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException, InterruptedException, ClassNotFoundException {
         sh = ssc.accept();
         if (sh == null)
@@ -53,6 +52,14 @@ public class Client {
         log.info("Подключено " + sh.getRemoteAddress());
     }
 
+    public static ExecutorService getWriter() {
+        return writer;
+    }
+
+    public static ExecutorService getReader() {
+        return reader;
+    }
+
     public void reply(@NotNull NetCommandManager cm) throws InterruptedException, IOException {
         try {
             ServerRequest sr = reader.submit(new ReadTask(this)).get();
@@ -61,8 +68,7 @@ public class Client {
                 return null;
             });
         } catch (ExecutionException e) {
-            reader.shutdown();
-            writer.shutdown();
+
             oos.close();
             bos.close();
             ois.close();
@@ -75,18 +81,19 @@ public class Client {
     protected @NotNull
     synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
                                          @NotNull NetCommandManager cm) {
-        //получим команду по имени
         ServerAbstractCommand command = null;
-        try {
+        try {//получим команду по имени
             command = ((ServerAbstractCommand) cm.getCommand(serverRequest.getInput().split("\\s",
-                    2)[0])).getClass().newInstance();
+                    2)[0]));
+            //если команды нет, отправим ответ
+            if (command == null)
+                return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
+            command = command.getClass().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             log.error(e.getStackTrace());
         }
         synchronized (command) {
-            //если команды нет, отправим ответ
-            if (command == null)
-                return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
+
             //устанавливаем аргументы
             assert serverRequest.getObjArgs() != null;
             ServerCommandArgument ca = new ServerCommandArgument(serverRequest.getObjArgs())

@@ -400,8 +400,12 @@ public class Console {
         out.println(str);
     }
 
-    public char[] readPassword(){
-        return in.nextLine().toCharArray();
-//   todo     return System.console().readPassword();
+    public char[] readPassword() {
+        if (System.console() == null) {
+            printHints("Для возможности введения пароля запустите приложение из консоли. Пароль по-умолчанию: " +
+                    "\"password\"");
+            return "password".toCharArray();
+        }
+        return System.console().readPassword();
     }
 }

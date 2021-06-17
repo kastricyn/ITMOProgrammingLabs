@@ -86,6 +86,8 @@ public class NetCommandManager extends CommandManager {
         ForkJoinPool executorService = new ForkJoinPool();
         while (isWorkable()) {
             if (Thread.interrupted()) {
+                Client.getReader().shutdown();
+                Client.getWriter().shutdown();
                 executorService.shutdown();
                 return;
             }
