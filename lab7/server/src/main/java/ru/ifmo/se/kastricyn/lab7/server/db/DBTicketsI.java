@@ -8,7 +8,7 @@ public interface DBTicketsI {
     /**
      * Создаёт необходимые таблицы, если они не существуют
      */
-    void createTables();
+    void createTablesIfNotExists();
 
     /**
      * Удаляет таблицы, если существуют
