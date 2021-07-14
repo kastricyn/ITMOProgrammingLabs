@@ -19,9 +19,9 @@ import java.util.concurrent.atomic.LongAdder;
 public class DBManager implements DBTicketsI, DBUserI {
     static final Logger log = LogManager.getLogger(DBManager.class);
     static final Properties properties = Properties.getProperties();
-    private @NotNull LongAdder numberOfStatements = new LongAdder();
-    private @Nullable
-    volatile Connection connect;
+    private @NotNull
+    final LongAdder numberOfStatements = new LongAdder();
+    private @NotNull volatile Connection connect = setConnection();
 
     @NotNull
     private static Ticket getTicket(@NotNull ResultSet rs) throws SQLException {
@@ -106,16 +106,14 @@ public class DBManager implements DBTicketsI, DBUserI {
      * Возвращает новое, только что созданное, соединение с БД по параметрам из конфигурационного файла
      */
     protected @NotNull
-    Connection setConnection() throws SQLException {
-        if (connect != null && !connect.isClosed())
-            connect.close();
+    synchronized Connection setConnection() {
         try {
             Class.forName(properties.getDBDriver());
             connect = DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(),
                     properties.getDBPass());
             log.info("Соединение установленно с: " + properties.getDBUrl());
             return connect;
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             log.error("Не найден класс с драйвером БД: " + e);
         }
         throw new DBConnectionException();
@@ -127,18 +125,20 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     protected @NotNull
     Connection getConnection() throws SQLException {
-        if (connect != null && connect.isValid(500)) {
-            while (connect != null && connect.isValid(500) && connect.getMetaData().getMaxStatements() >= numberOfStatements.sum()) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    System.err.println("Подавленно исключение: ");
-                    e.printStackTrace();
+        synchronized (connect) {
+            if (connect.isValid(500)) {
+                while (connect.isValid(500) && connect.getMetaData().getMaxStatements() >= numberOfStatements.sum()) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        System.err.println("Подавленно исключение: ");
+                        e.printStackTrace();
+                    }
                 }
-            }
-            return connect;
-        } else
-            return setConnection();
+                return connect;
+            } else
+                return setConnection();
+        }
     }
 
     /**
@@ -149,29 +149,28 @@ public class DBManager implements DBTicketsI, DBUserI {
         createTablesIfNotExists();
         TicketCollection ticketCollection = new TicketCollection(this); //check
         int i = 0;
-        synchronized (ticketCollection) {
-            try {
-                numberOfStatements.increment();
-                Connection dbConnection = getConnection();
-                try (Statement stat = dbConnection.createStatement()) {
-                    String command = "SELECT * FROM tickets";
-                    ResultSet rs = stat.executeQuery(command);
-                    while (rs.next()) {
-                        try {
-                            Ticket t = getTicket(rs);
-                            ticketCollection.add(t);
-                        } catch (RuntimeException e) {
-                            i++;
-                        }
+        try {
+            numberOfStatements.increment();
+            Connection dbConnection = getConnection();
+            try (Statement stat = dbConnection.createStatement()) {
+                String command = "SELECT * FROM tickets";
+                ResultSet rs = stat.executeQuery(command);
+                while (rs.next()) {
+                    try {
+                        Ticket t = getTicket(rs);
+                        ticketCollection.add(t);
+                    } catch (RuntimeException e) {
+                        i++;
                     }
-                } finally {
-                    numberOfStatements.decrement();
-                    notifyAll();
                 }
-            } catch (SQLException throwables) {
-                log.debug(throwables);
+            } finally {
+                numberOfStatements.decrement();
+                notifyAll();
             }
+        } catch (SQLException throwables) {
+            log.debug(throwables);
         }
+
         if (i > 0)
             log.warn("В коллекции было нарушено " + i + " элементов.");
         if (ticketCollection.check() || i > 0)
@@ -348,7 +347,7 @@ public class DBManager implements DBTicketsI, DBUserI {
     /**
      * Удаляет все элементы пользователя
      *
-     * @param userId
+     * @param userId - id пользователя элементы, которого надо удалить
      */
     @Override
     public boolean clear(long userId) {

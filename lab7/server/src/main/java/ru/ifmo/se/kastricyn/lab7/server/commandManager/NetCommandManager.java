@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import ru.ifmo.se.kastricyn.lab7.lib.CommandManager;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
+import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.server.Client;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
@@ -15,6 +17,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
@@ -83,12 +87,14 @@ public class NetCommandManager extends CommandManager {
      */
     @Override
     public void run() {
-        ForkJoinPool executorService = new ForkJoinPool();
+        ForkJoinPool processingExecutorService = new ForkJoinPool();
+        ExecutorService writingExecutorService = Executors.newCachedThreadPool();
+        ExecutorService readingExecutorService = Executors.newFixedThreadPool(16);
         while (isWorkable()) {
             if (Thread.interrupted()) {
-                Client.getReader().shutdown();
-                Client.getWriter().shutdown();
-                executorService.shutdown();
+                readingExecutorService.shutdown();
+                processingExecutorService.shutdown();
+                writingExecutorService.shutdown();
                 return;
             }
             try {
@@ -106,15 +112,27 @@ public class NetCommandManager extends CommandManager {
                         if (key.isReadable()) {
                             NetCommandManager cm = this;
                             if (key.attachment() instanceof Client) {
-                                executorService.invoke(new RecursiveAction() {
-                                    @Override
-                                    protected void compute() {
-                                        try {
-                                            ((Client) key.attachment()).reply(cm);
-                                        } catch (InterruptedException | IOException e) {
-                                            log.warn(e.getStackTrace());
-                                        }
+                                Client client = (Client) key.attachment();
+                                readingExecutorService.submit(() -> {
+                                    try {
+                                        ServerRequest sr = client.read();
+                                        processingExecutorService.invoke(new RecursiveAction() {
+                                            @Override
+                                            protected void compute() {
+                                                ServerAnswer sa = client.processing(sr, cm);
+                                                writingExecutorService.submit(() -> {
+                                                    try {
+                                                        client.write(sa);
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    } catch (IOException | InterruptedException | ClassNotFoundException e) {
+                                        e.printStackTrace();
                                     }
+
                                 });
 
                             }
