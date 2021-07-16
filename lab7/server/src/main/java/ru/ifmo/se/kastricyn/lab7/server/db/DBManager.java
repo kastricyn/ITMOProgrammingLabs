@@ -113,8 +113,10 @@ public class DBManager implements DBTicketsI, DBUserI {
                     properties.getDBPass());
             log.info("Соединение установленно с: " + properties.getDBUrl());
             return connect;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException e) {
             log.error("Не найден класс с драйвером БД: " + e);
+        } catch (SQLException e) {
+            log.error(e);
         }
         throw new DBConnectionException();
     }

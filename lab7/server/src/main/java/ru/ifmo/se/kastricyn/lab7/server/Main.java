@@ -7,6 +7,7 @@ import ru.ifmo.se.kastricyn.lab7.lib.exception.DBConnectionException;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
@@ -20,6 +21,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         log.info("start");
+        try {
         Properties.getProperties().load(Paths.get("config"));
 
         DBManager dbManager = new DBManager();
@@ -28,9 +30,9 @@ public class Main {
 
         CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
         Thread netConnections = new Thread(netCommandManager);
+        netConnections.setName("ServerThread");
         try {
             netConnections.start();
-            System.out.println("Данные для подключения: " + netCommandManager);
 
             ru.ifmo.se.kastricyn.lab7.client.Main.main(new String[1]);
 
@@ -41,6 +43,9 @@ public class Main {
         } finally {
             netConnections.interrupt();
             log.info("stop");
+        }}
+        catch (FileNotFoundException e){
+            log.error("Не найден файл config");
         }
     }
 }

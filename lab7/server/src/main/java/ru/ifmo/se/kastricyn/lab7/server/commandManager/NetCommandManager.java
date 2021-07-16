@@ -87,6 +87,7 @@ public class NetCommandManager extends CommandManager {
      */
     @Override
     public void run() {
+        System.out.println("Данные для подключения: " + this);
         ForkJoinPool processingExecutorService = new ForkJoinPool();
         ExecutorService writingExecutorService = Executors.newCachedThreadPool();
         ExecutorService readingExecutorService = Executors.newFixedThreadPool(16);
