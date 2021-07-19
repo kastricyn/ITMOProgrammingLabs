@@ -19,12 +19,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class Client implements Closeable {
@@ -41,7 +37,7 @@ public class Client implements Closeable {
         if (sh == null)
             return;
         sh.configureBlocking(false);
-        sh.register(selector, SelectionKey.OP_READ, this);
+        registerAsReadable(selector);
         sh.finishConnect();
 //        System.out.println(sh.getRemoteAddress());
         ServerRequest request = read();
@@ -50,6 +46,9 @@ public class Client implements Closeable {
         log.info("Подключено " + sh.getRemoteAddress());
     }
 
+    public void registerAsReadable(Selector selector) throws ClosedChannelException {
+        sh.register(selector, SelectionKey.OP_READ, this);
+    }
 
     public @NotNull
     synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
@@ -63,7 +62,7 @@ public class Client implements Closeable {
                 return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
             command = command.getClass().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            log.error(e.getStackTrace());
+            log.error(e);
         }
         synchronized (command) {
 
@@ -96,8 +95,7 @@ public class Client implements Closeable {
         oos.flush();
         sh.write(ByteBuffer.wrap(bos.toByteArray()));
         bos.reset();
-        log.debug("Отправлено " + sh.getRemoteAddress() + ":");
-        log.debug(sa);
+        log.debug("Отправлено " + sh.getRemoteAddress() + ":" + sa);
     }
 
     @NotNull
@@ -111,8 +109,7 @@ public class Client implements Closeable {
         if (ois == null)
             ois = new ObjectInputStream(bis);
         ServerRequest request = (ServerRequest) ois.readObject();
-        log.debug("Принято " + sh.getRemoteAddress() + ":");
-        log.debug(request);
+        log.debug("Принято " + sh.getRemoteAddress() + ":" + request);
         return request;
     }
 

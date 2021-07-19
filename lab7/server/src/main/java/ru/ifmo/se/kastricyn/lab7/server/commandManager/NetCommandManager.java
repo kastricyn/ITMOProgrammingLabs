@@ -114,23 +114,33 @@ public class NetCommandManager extends CommandManager {
                             NetCommandManager cm = this;
                             if (key.attachment() instanceof Client) {
                                 Client client = (Client) key.attachment();
+                                key.channel().register(selector, SelectionKey.OP_WRITE);
                                 readingExecutorService.submit(() -> {
-                                    try {
-                                        ServerRequest sr = client.read();
-                                        processingExecutorService.invoke(new RecursiveAction() {
-                                            @Override
-                                            protected void compute() {
-                                                ServerAnswer sa = client.processing(sr, cm);
-                                                writingExecutorService.submit(() -> {
-                                                    try {
-                                                        client.write(sa);
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    } catch (IOException | InterruptedException | ClassNotFoundException e) {
+                                try {
+                                    ServerRequest sr = client.read();
+//                                        synchronized (sa) {
+                                    writingExecutorService.submit(() -> {
+                                        final ServerAnswer sa = client.processing(sr, cm);
+                                        client.write(sa);
+                                        key.channel().register(selector, SelectionKey.OP_READ);
+                                        key.attach(client);
+                                        return null;
+                                            });
+//                                        }
+//                                        processingExecutorService.invoke(new RecursiveAction() {
+//                                            @Override
+//                                            protected void compute() {
+//
+//                                            }
+//                                        });
+                                    } catch (IOException e) {
+                                        key.cancel();
+                                        try {
+                                            client.close();
+                                        } catch (IOException ioException) {
+                                            ioException.printStackTrace();
+                                        }
+                                    } catch (InterruptedException | ClassNotFoundException e) {
                                         e.printStackTrace();
                                     }
 

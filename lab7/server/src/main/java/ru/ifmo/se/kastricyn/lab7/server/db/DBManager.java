@@ -11,17 +11,19 @@ import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
+import java.io.Closeable;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Locale;
 import java.util.concurrent.atomic.LongAdder;
 
-public class DBManager implements DBTicketsI, DBUserI {
+public class DBManager implements DBTicketsI, DBUserI, Closeable {
     static final Logger log = LogManager.getLogger(DBManager.class);
     static final Properties properties = Properties.getProperties();
     private @NotNull
     final LongAdder numberOfStatements = new LongAdder();
-    private @NotNull volatile Connection connect = setConnection();
+    private @NotNull
+    volatile Connection connect = setConnection();
 
     @NotNull
     private static Ticket getTicket(@NotNull ResultSet rs) throws SQLException {
@@ -127,20 +129,12 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     protected @NotNull
     Connection getConnection() throws SQLException {
-        synchronized (connect) {
-            if (connect.isValid(500)) {
-                while (connect.isValid(500) && connect.getMetaData().getMaxStatements() >= numberOfStatements.sum()) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        System.err.println("Подавленно исключение: ");
-                        e.printStackTrace();
-                    }
-                }
-                return connect;
-            } else
-                return setConnection();
-        }
+        if (connect.isValid(500)) {
+            while (connect.isValid(500) && numberOfStatements.sum() >= 10) ;
+            //10 = connect.getMetaData().getMaxStatements()==0?
+            return connect;
+        } else
+            return connect = setConnection();
     }
 
     /**
@@ -167,7 +161,6 @@ public class DBManager implements DBTicketsI, DBUserI {
                 }
             } finally {
                 numberOfStatements.decrement();
-                notifyAll();
             }
         } catch (SQLException throwables) {
             log.debug(throwables);
@@ -196,9 +189,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public void createTablesIfNotExists() {
-        numberOfStatements.increment();
         try {
             Connection connect = getConnection();
+            numberOfStatements.increment();
             try (Statement stat = connect.createStatement()) {
                 String command = "CREATE TABLE IF NOT EXISTS s311734.users\n" +
                         "(\n" +
@@ -233,7 +226,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables.getStackTrace());
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
     }
@@ -245,9 +238,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public void deleteTables() {
-        numberOfStatements.increment();
         try {
             Connection dbConnection = getConnection();
+            numberOfStatements.increment();
             try (Statement stat = dbConnection.createStatement()) {
                 String command = "DROP TABLE IF EXISTS tickets, users CASCADE";
                 stat.executeUpdate(command);
@@ -257,7 +250,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
     }
@@ -271,9 +264,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public long addTicket(@NotNull Ticket t) {
-        numberOfStatements.increment();
         try {
             Connection dbConnection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement stat = getPreparedStatementForAddTicketToDB(dbConnection, t)) {
                 stat.executeUpdate();
                 ResultSet rs = stat.getGeneratedKeys();
@@ -284,7 +277,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return -1;
@@ -299,9 +292,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean updateTicket(long id, @NotNull Ticket t) {
-        numberOfStatements.increment();
         try {
             Connection dbConnection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement stat = getPreparedStatementForUpdateTicketInDB(dbConnection, t, id)) {
                 if (stat.executeUpdate() > 0)
                     return true;
@@ -311,7 +304,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return false;
@@ -325,9 +318,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean deleteTicket(long id) {
-        numberOfStatements.increment();
         try {
             Connection dbConnection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement stat =
                          dbConnection.prepareStatement("DELETE FROM tickets WHERE id=?")) {
                 stat.setLong(1, id);
@@ -339,7 +332,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return false;
@@ -353,9 +346,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean clear(long userId) {
-        numberOfStatements.increment();
         try {
             Connection dbConnection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement stat =
                          dbConnection.prepareStatement("DELETE FROM tickets WHERE userid=?")) {
                 stat.setLong(1, userId);
@@ -367,7 +360,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return false;
@@ -394,9 +387,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean registerUser(@NotNull User user) {
-        numberOfStatements.increment();
         try {
             Connection connection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement statement =
                          connection.prepareStatement("INSERT INTO users (name, password, passwordsalt) values (?, ?, " +
                                  "?)")) {
@@ -411,7 +404,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(e);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return false;
@@ -426,9 +419,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean checkPassword(@NotNull User user) {
-        numberOfStatements.increment();
         try {
             Connection connection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement statement =
                          connection.prepareStatement("SELECT password, passwordsalt FROM users WHERE name=?")) {
                 statement.setString(1, user.getName());
@@ -443,7 +436,7 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return false;
@@ -457,9 +450,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public long getId(@NotNull User user) {
-        numberOfStatements.increment();
         try {
             Connection connection = getConnection();
+            numberOfStatements.increment();
             try (PreparedStatement statement =
                          connection.prepareStatement("SELECT id FROM users WHERE name=?")) {
                 statement.setString(1, user.getName());
@@ -473,11 +466,20 @@ public class DBManager implements DBTicketsI, DBUserI {
             log.debug(throwables);
         } finally {
             numberOfStatements.decrement();
-            notifyAll();
+
         }
 
         return -1;
     }
 
 
+    @Override
+    public void close() {
+        try {
+            if (!connect.isClosed())
+                connect.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }

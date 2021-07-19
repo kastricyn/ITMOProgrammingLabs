@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 /**
  * Main-class
@@ -26,7 +25,6 @@ public class Main {
 
         DBManager dbManager = new DBManager();
         TicketCollection tickets = dbManager.getTicketCollection();
-        Scanner in = new Scanner(System.in);
 
         CommandManager netCommandManager = NetCommandManager.getStandards(tickets);
         Thread netConnections = new Thread(netCommandManager);
@@ -42,10 +40,14 @@ public class Main {
             System.out.println("Программа звершена пользователем.");
         } finally {
             netConnections.interrupt();
+            dbManager.close();
             log.info("stop");
         }}
         catch (FileNotFoundException e){
             log.error("Не найден файл config");
+        } catch (DBConnectionException e) {
+            // todo временная недоступность BD
+            log.error("Программа завершена из-за ошибки соединения с базой данных.");
         }
     }
 }
