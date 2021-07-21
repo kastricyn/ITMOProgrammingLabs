@@ -14,30 +14,29 @@ import ru.ifmo.se.kastricyn.lab7.lib.utility.ByteOutputStream;
 import ru.ifmo.se.kastricyn.lab7.server.commandManager.NetCommandManager;
 import ru.ifmo.se.kastricyn.lab7.server.commands.ServerAbstractCommand;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class Client {
+public class Client implements Closeable {
     final static Logger log = LogManager.getLogger();
-    private final static ExecutorService writer = Executors.newCachedThreadPool();
-    private final static ExecutorService reader = Executors.newFixedThreadPool(16);
+    private SocketAddress shRemoteAddress;
     private final ByteBuffer bf = ByteBuffer.wrap(new byte[10240]);
     private final ByteOutputStream bos = new ByteOutputStream();
     private final ByteInputStream bis = new ByteInputStream();
     private final SocketChannel sh;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
+
     public Client(@NotNull ServerSocketChannel ssc, Selector selector) throws IOException, InterruptedException, ClassNotFoundException {
         sh = ssc.accept();
         if (sh == null)
@@ -45,40 +44,15 @@ public class Client {
         sh.configureBlocking(false);
         sh.register(selector, SelectionKey.OP_READ, this);
         sh.finishConnect();
-//        System.out.println(sh.getRemoteAddress());
         ServerRequest request = read();
         if (ServerRequestType.INITIALIZATION.equals(request.getType()))
             write(new ServerAnswer(ServerAnswerType.OK));
-        log.info("Подключено " + sh.getRemoteAddress());
+        shRemoteAddress = sh.getRemoteAddress();
+        log.info("Подключено " + shRemoteAddress);
     }
 
-    public static ExecutorService getWriter() {
-        return writer;
-    }
 
-    public static ExecutorService getReader() {
-        return reader;
-    }
-
-    public void reply(@NotNull NetCommandManager cm) throws InterruptedException, IOException {
-        try {
-            ServerRequest sr = reader.submit(new ReadTask(this)).get();
-            writer.submit(() -> {
-                write(processing(sr, cm));
-                return null;
-            });
-        } catch (ExecutionException e) {
-
-            oos.close();
-            bos.close();
-            ois.close();
-            bis.close();
-            sh.close();
-            log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
-        }
-    }
-
-    protected @NotNull
+    public @NotNull
     synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
                                          @NotNull NetCommandManager cm) {
         ServerAbstractCommand command = null;
@@ -90,7 +64,7 @@ public class Client {
                 return new ServerAnswer(ServerAnswerType.NOT_FOUND_COMMAND);
             command = command.getClass().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            log.error(e.getStackTrace());
+            log.error(e);
         }
         synchronized (command) {
 
@@ -116,18 +90,18 @@ public class Client {
 
     //это сервер
     @SuppressWarnings("deprecation")
-    protected synchronized void write(ServerAnswer sa) throws IOException {
+    public synchronized void write(@NotNull ServerAnswer sa) throws IOException {
         if (oos == null)
             oos = new ObjectOutputStream(bos);
         oos.writeObject(sa);
         oos.flush();
         sh.write(ByteBuffer.wrap(bos.toByteArray()));
         bos.reset();
-        log.debug("Отправлено " + sh.getRemoteAddress() + ":");
-        log.debug(sa);
+        log.debug("Отправлено " + sh.getRemoteAddress() + ":" + sa);
     }
 
-    protected synchronized ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
+    @NotNull
+    public synchronized ServerRequest read() throws IOException, InterruptedException, ClassNotFoundException {
         bf.clear();
         do {
 //            System.out.println(bf.position());
@@ -137,10 +111,18 @@ public class Client {
         if (ois == null)
             ois = new ObjectInputStream(bis);
         ServerRequest request = (ServerRequest) ois.readObject();
-        log.debug("Принято " + sh.getRemoteAddress() + ":");
-        log.debug(request);
+        log.debug("Принято " + sh.getRemoteAddress() + ":" + request);
         return request;
     }
 
 
+    @Override
+    public void close() throws IOException {
+        oos.close();
+        bos.close();
+        ois.close();
+        bis.close();
+        sh.close();
+        log.info("соединение с " + shRemoteAddress + " закрыто");
+    }
 }

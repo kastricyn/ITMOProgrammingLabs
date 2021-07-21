@@ -11,14 +11,19 @@ import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.server.Properties;
 import ru.ifmo.se.kastricyn.lab7.server.TicketCollection;
 
+import java.io.Closeable;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Locale;
+import java.util.concurrent.atomic.LongAdder;
 
-public class DBManager implements DBTicketsI, DBUserI {
+public class DBManager implements DBTicketsI, DBUserI, Closeable {
     static final Logger log = LogManager.getLogger(DBManager.class);
     static final Properties properties = Properties.getProperties();
-    private @Nullable Connection connect;
+    private @NotNull
+    final LongAdder numberOfStatements = new LongAdder();
+    private @NotNull
+    volatile Connection connect = setConnection();
 
     @NotNull
     private static Ticket getTicket(@NotNull ResultSet rs) throws SQLException {
@@ -103,8 +108,7 @@ public class DBManager implements DBTicketsI, DBUserI {
      * Возвращает новое, только что созданное, соединение с БД по параметрам из конфигурационного файла
      */
     protected @NotNull
-    Connection setConnection() throws SQLException {
-        connect.close();
+    synchronized Connection setConnection() {
         try {
             Class.forName(properties.getDBDriver());
             connect = DriverManager.getConnection(properties.getDBUrl(), properties.getDBLogin(),
@@ -113,19 +117,24 @@ public class DBManager implements DBTicketsI, DBUserI {
             return connect;
         } catch (ClassNotFoundException e) {
             log.error("Не найден класс с драйвером БД: " + e);
+        } catch (SQLException e) {
+            log.error(e);
         }
         throw new DBConnectionException();
     }
 
     /**
      * Возвращает соединение с БД по параметрам из конфигурационного файла
+     * Может блокировать поток
      */
     protected @NotNull
     Connection getConnection() throws SQLException {
-        if (connect != null && connect.isValid(500))
+        if (connect.isValid(500)) {
+            while (connect.isValid(500) && numberOfStatements.sum() >= 100) ;
+            //10 = connect.getMetaData().getMaxStatements()==0?
             return connect;
-        else
-            return setConnection();
+        } else
+            return connect = setConnection();
     }
 
     /**
@@ -136,26 +145,27 @@ public class DBManager implements DBTicketsI, DBUserI {
         createTablesIfNotExists();
         TicketCollection ticketCollection = new TicketCollection(this); //check
         int i = 0;
-        synchronized (ticketCollection) {
-            try (Connection dbConnection = getConnection()) {
-                synchronized (dbConnection) {
-                    try (Statement stat = dbConnection.createStatement()) {
-                        String command = "SELECT * FROM tickets";
-                        ResultSet rs = stat.executeQuery(command);
-                        while (rs.next()) {
-                            try {
-                                Ticket t = getTicket(rs);
-                                ticketCollection.add(t);
-                            } catch (RuntimeException e) {
-                                i++;
-                            }
-                        }
+        try {
+            numberOfStatements.increment();
+            Connection dbConnection = getConnection();
+            try (Statement stat = dbConnection.createStatement()) {
+                String command = "SELECT * FROM tickets";
+                ResultSet rs = stat.executeQuery(command);
+                while (rs.next()) {
+                    try {
+                        Ticket t = getTicket(rs);
+                        ticketCollection.add(t);
+                    } catch (RuntimeException e) {
+                        i++;
                     }
                 }
-            } catch (SQLException throwables) {
-                log.debug(throwables);
+            } finally {
+                numberOfStatements.decrement();
             }
+        } catch (SQLException throwables) {
+            log.debug(throwables);
         }
+
         if (i > 0)
             log.warn("В коллекции было нарушено " + i + " элементов.");
         if (ticketCollection.check() || i > 0)
@@ -179,8 +189,9 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public void createTablesIfNotExists() {
-        synchronized (connect) {
-            assert connect != null;
+        try {
+            Connection connect = getConnection();
+            numberOfStatements.increment();
             try (Statement stat = connect.createStatement()) {
                 String command = "CREATE TABLE IF NOT EXISTS s311734.users\n" +
                         "(\n" +
@@ -210,12 +221,16 @@ public class DBManager implements DBTicketsI, DBUserI {
                         ");";
                 stat.executeUpdate(command);
                 log.info("Таблицы созданы или уже были");
-            } catch (SQLException throwables) {
-                log.debug(throwables.getStackTrace());
             }
+        } catch (SQLException throwables) {
+            log.debug(throwables.getStackTrace());
+        } finally {
+            numberOfStatements.decrement();
+
         }
 
     }
+
 
     /**
      * Удаляет таблицы, если существуют
@@ -223,18 +238,21 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public void deleteTables() {
-        try (Connection dbConnection = getConnection()) {
-            //todo ожидание по условия связанном с ДБ менеджером о доступности открытия еще одного статмент
-            synchronized (dbConnection) {
-                try (Statement stat = dbConnection.createStatement()) {
-                    String command = "DROP TABLE IF EXISTS tickets, users CASCADE";
-                    stat.executeUpdate(command);
-                    log.info("Таблицы удалены или их не было");
-                }
+        try {
+            Connection dbConnection = getConnection();
+            numberOfStatements.increment();
+            try (Statement stat = dbConnection.createStatement()) {
+                String command = "DROP TABLE IF EXISTS tickets, users CASCADE";
+                stat.executeUpdate(command);
+                log.info("Таблицы удалены или их не было");
             }
         } catch (SQLException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
     }
 
 
@@ -246,19 +264,22 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public long addTicket(@NotNull Ticket t) {
-        try (Connection dbConnection = getConnection()) {
-            synchronized (dbConnection) {
-                assert dbConnection != null;
-                try (PreparedStatement stat = getPreparedStatementForAddTicketToDB(dbConnection, t)) {
-                    stat.executeUpdate();
-                    ResultSet rs = stat.getGeneratedKeys();
-                    if (rs.next())
-                        return rs.getLong(1);
-                }
+        try {
+            Connection dbConnection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement stat = getPreparedStatementForAddTicketToDB(dbConnection, t)) {
+                stat.executeUpdate();
+                ResultSet rs = stat.getGeneratedKeys();
+                if (rs.next())
+                    return rs.getLong(1);
             }
         } catch (SQLException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return -1;
     }
 
@@ -271,17 +292,21 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean updateTicket(long id, @NotNull Ticket t) {
-        try (Connection dbConnection = getConnection()) {
-            synchronized (dbConnection) {
-                assert dbConnection != null;
-                try (PreparedStatement stat = getPreparedStatementForUpdateTicketInDB(dbConnection, t, id)) {
-                    if (stat.executeUpdate() > 0)
-                        return true;
-                }
+        try {
+            Connection dbConnection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement stat = getPreparedStatementForUpdateTicketInDB(dbConnection, t, id)) {
+                if (stat.executeUpdate() > 0)
+                    return true;
             }
+
         } catch (SQLException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return false;
     }
 
@@ -293,19 +318,23 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean deleteTicket(long id) {
-        try (Connection dbConnection = getConnection()) {
-            synchronized (dbConnection) {
-                assert dbConnection != null;
-                try (PreparedStatement stat =
-                             dbConnection.prepareStatement("DELETE FROM tickets WHERE id=?")) {
-                    stat.setLong(1, id);
-                    stat.executeUpdate();
-                    return true;
-                }
+        try {
+            Connection dbConnection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement stat =
+                         dbConnection.prepareStatement("DELETE FROM tickets WHERE id=?")) {
+                stat.setLong(1, id);
+                stat.executeUpdate();
+                return true;
             }
+
         } catch (SQLException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return false;
     }
 
@@ -313,23 +342,27 @@ public class DBManager implements DBTicketsI, DBUserI {
     /**
      * Удаляет все элементы пользователя
      *
-     * @param userId
+     * @param userId - id пользователя элементы, которого надо удалить
      */
     @Override
     public boolean clear(long userId) {
-        try (Connection dbConnection = getConnection()) {
-            synchronized (dbConnection) {
-                assert dbConnection != null;
-                try (PreparedStatement stat =
-                             dbConnection.prepareStatement("DELETE FROM tickets WHERE userid=?")) {
-                    stat.setLong(1, userId);
-                    stat.executeUpdate();
-                    return true;
-                }
+        try {
+            Connection dbConnection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement stat =
+                         dbConnection.prepareStatement("DELETE FROM tickets WHERE userid=?")) {
+                stat.setLong(1, userId);
+                stat.executeUpdate();
+                return true;
             }
+
         } catch (SQLException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return false;
     }
 
@@ -354,23 +387,26 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean registerUser(@NotNull User user) {
-        try (Connection connection = getConnection()) {
-            synchronized (connection) {
-                assert connection != null;
-                try (PreparedStatement statement =
-                             connection.prepareStatement("INSERT INTO users (name, password, passwordsalt) values (?, ?, " +
-                                     "?)")) {
-                    statement.setString(1, user.getName());
-                    String passwordsalt = String.valueOf((int) (Math.random() * 100000));
-                    statement.setString(2, getStringFromPassword(user.getPassword(), passwordsalt));
-                    statement.setString(3, passwordsalt);
-                    statement.executeUpdate();
-                    return true;
-                }
+        try {
+            Connection connection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement statement =
+                         connection.prepareStatement("INSERT INTO users (name, password, passwordsalt) values (?, ?, " +
+                                 "?)")) {
+                statement.setString(1, user.getName());
+                String passwordsalt = String.valueOf((int) (Math.random() * 100000));
+                statement.setString(2, getStringFromPassword(user.getPassword(), passwordsalt));
+                statement.setString(3, passwordsalt);
+                statement.executeUpdate();
+                return true;
             }
         } catch (SQLException | NoSuchAlgorithmException e) {
             log.debug(e);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return false;
     }
 
@@ -383,22 +419,26 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public boolean checkPassword(@NotNull User user) {
-        try (Connection connection = getConnection()) {
-            synchronized (connection) {
-                assert connection != null;
-                try (PreparedStatement statement =
-                             connection.prepareStatement("SELECT password, passwordsalt FROM users WHERE name=?")) {
-                    statement.setString(1, user.getName());
-                    ResultSet rs = statement.executeQuery();
-                    if (rs.next()) {
-                        return rs.getString("password").equals(getStringFromPassword(user.getPassword(),
-                                rs.getString("passwordsalt")));
-                    }
+        try {
+            Connection connection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement statement =
+                         connection.prepareStatement("SELECT password, passwordsalt FROM users WHERE name=?")) {
+                statement.setString(1, user.getName());
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("password").equals(getStringFromPassword(user.getPassword(),
+                            rs.getString("passwordsalt")));
+
                 }
             }
         } catch (SQLException | NoSuchAlgorithmException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return false;
     }
 
@@ -410,23 +450,36 @@ public class DBManager implements DBTicketsI, DBUserI {
      */
     @Override
     public long getId(@NotNull User user) {
-        try (Connection connection = getConnection()) {
-            synchronized (connection) {
-                assert connection != null;
-                try (PreparedStatement statement =
-                             connection.prepareStatement("SELECT id FROM users WHERE name=?")) {
-                    statement.setString(1, user.getName());
-                    ResultSet rs = statement.executeQuery();
-                    if (rs.next()) {
-                        return rs.getLong("id");
-                    }
+        try {
+            Connection connection = getConnection();
+            numberOfStatements.increment();
+            try (PreparedStatement statement =
+                         connection.prepareStatement("SELECT id FROM users WHERE name=?")) {
+                statement.setString(1, user.getName());
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    return rs.getLong("id");
                 }
             }
+
         } catch (SQLException throwables) {
             log.debug(throwables);
+        } finally {
+            numberOfStatements.decrement();
+
         }
+
         return -1;
     }
 
 
+    @Override
+    public void close() {
+        try {
+            if (!connect.isClosed())
+                connect.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }
