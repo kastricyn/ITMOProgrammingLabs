@@ -25,7 +25,8 @@ public class ClientCommandManager extends CommandManager {
         this.console = console;
     }
 
-    public static @NotNull ClientCommandManager getStandards(Connection connection, Console console) {
+    public static @NotNull
+    ClientCommandManager getStandards(Connection connection, Console console) {
         ClientCommandManager ccm = new ClientCommandManager(connection, console);
         ccm.addIfAbsent(new ExecuteScript());
         ccm.addIfAbsent(new Exit());
