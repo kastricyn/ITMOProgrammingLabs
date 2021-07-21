@@ -130,7 +130,7 @@ public class DBManager implements DBTicketsI, DBUserI, Closeable {
     protected @NotNull
     Connection getConnection() throws SQLException {
         if (connect.isValid(500)) {
-            while (connect.isValid(500) && numberOfStatements.sum() >= 10) ;
+            while (connect.isValid(500) && numberOfStatements.sum() >= 100) ;
             //10 = connect.getMetaData().getMaxStatements()==0?
             return connect;
         } else

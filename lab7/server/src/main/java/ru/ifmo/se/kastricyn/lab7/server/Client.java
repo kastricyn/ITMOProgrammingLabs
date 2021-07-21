@@ -18,13 +18,18 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class Client implements Closeable {
     final static Logger log = LogManager.getLogger();
+    private SocketAddress shRemoteAddress;
     private final ByteBuffer bf = ByteBuffer.wrap(new byte[10240]);
     private final ByteOutputStream bos = new ByteOutputStream();
     private final ByteInputStream bis = new ByteInputStream();
@@ -37,18 +42,15 @@ public class Client implements Closeable {
         if (sh == null)
             return;
         sh.configureBlocking(false);
-        registerAsReadable(selector);
+        sh.register(selector, SelectionKey.OP_READ, this);
         sh.finishConnect();
-//        System.out.println(sh.getRemoteAddress());
         ServerRequest request = read();
         if (ServerRequestType.INITIALIZATION.equals(request.getType()))
             write(new ServerAnswer(ServerAnswerType.OK));
-        log.info("Подключено " + sh.getRemoteAddress());
+        shRemoteAddress = sh.getRemoteAddress();
+        log.info("Подключено " + shRemoteAddress);
     }
 
-    public void registerAsReadable(Selector selector) throws ClosedChannelException {
-        sh.register(selector, SelectionKey.OP_READ, this);
-    }
 
     public @NotNull
     synchronized ServerAnswer processing(@NotNull ServerRequest serverRequest,
@@ -121,6 +123,6 @@ public class Client implements Closeable {
         ois.close();
         bis.close();
         sh.close();
-        log.info("соединение с " + sh.getRemoteAddress() + " закрыто");
+        log.info("соединение с " + shRemoteAddress + " закрыто");
     }
 }

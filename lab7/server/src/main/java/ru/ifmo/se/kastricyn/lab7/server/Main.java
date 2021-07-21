@@ -9,6 +9,7 @@ import ru.ifmo.se.kastricyn.lab7.server.db.DBManager;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.BindException;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
@@ -42,12 +43,14 @@ public class Main {
             netConnections.interrupt();
             dbManager.close();
             log.info("stop");
-        }}
-        catch (FileNotFoundException e){
+        }
+        } catch (FileNotFoundException e) {
             log.error("Не найден файл config");
         } catch (DBConnectionException e) {
             // todo временная недоступность BD
             log.error("Программа завершена из-за ошибки соединения с базой данных.");
+        } catch (BindException e) {
+            log.error("Address already in use: bind; Попробуйте использовать другой порт.");
         }
     }
 }

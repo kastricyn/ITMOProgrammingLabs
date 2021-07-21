@@ -116,23 +116,23 @@ public class NetCommandManager extends CommandManager {
                                 Client client = (Client) key.attachment();
                                 key.channel().register(selector, SelectionKey.OP_WRITE);
                                 readingExecutorService.submit(() -> {
-                                try {
-                                    ServerRequest sr = client.read();
+                                    try {
+                                        ServerRequest sr = client.read();
+                                        processingExecutorService.invoke(new RecursiveAction() {
+                                            @Override
+                                            protected void compute() {
 //                                        synchronized (sa) {
-                                    writingExecutorService.submit(() -> {
-                                        final ServerAnswer sa = client.processing(sr, cm);
-                                        client.write(sa);
-                                        key.channel().register(selector, SelectionKey.OP_READ);
-                                        key.attach(client);
-                                        return null;
-                                            });
+                                                final ServerAnswer sa = client.processing(sr, cm);
+                                                writingExecutorService.submit(() -> {
+                                                    client.write(sa);
+                                                    key.channel().register(selector, SelectionKey.OP_READ);
+                                                    key.attach(client);
+                                                    return null;
+                                                });
 //                                        }
-//                                        processingExecutorService.invoke(new RecursiveAction() {
-//                                            @Override
-//                                            protected void compute() {
 //
-//                                            }
-//                                        });
+                                            }
+                                        });
                                     } catch (IOException e) {
                                         key.cancel();
                                         try {
