@@ -21,6 +21,7 @@ PhysicalMove, SpecialMove и StatusMove реализовать свои клас
 
 Информацию о покемонах, цепочках эволюции и атаках можно найти на сайтах http://poke-universe.ru, http://pokemondb.net
 , http://veekun.com/dex/pokemon.
+![img.png](img.png)
 
 #### Building *.jar on Linux
 
