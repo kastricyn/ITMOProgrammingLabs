@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS s311734.users
+(
+    Id bigserial PRIMARY KEY,
+    Name varchar NOT NULL UNIQUE CHECK (Name <> ''),
+    Password varchar,
+    PasswordSalt varchar
+);
+
+CREATE INDEX IF NOT EXISTS Name ON s311734.users (Name);
+
+CREATE TABLE IF NOT EXISTS s311734.tickets (
+    Id bigserial PRIMARY KEY,
+    TicketName varchar NOT NULL CHECK (tickets.TicketName <> ''),
+    TicketCoordinateX bigint NOT NULL CHECK(tickets.TicketCoordinateX>-503),
+    TicketCoordinateY real NOT NULL,
+    TicketCreationDate date NOT NULL DEFAULT current_timestamp,
+    TicketPrice integer CHECK(tickets.TicketPrice >0),
+    TicketDiscount decimal NOT NULL CHECK(TicketDiscount>=0 AND TicketDiscount <=100),
+    TicketType varchar CHECK(TicketType in ('usual', 'budgetary', 'cheap')),
+    VenueName varchar NOT NULL CHECK (tickets.VenueName <> ''),
+    VenueCapacity int NOT NULL CHECK(VenueCapacity>0),
+    VenueType varchar NOT NULL CHECK ( VenueType in ('pub', 'loft', 'open_area', 'cinema', 'stadium') ),
+    VenueAddress varchar CHECK (VenueAddress <> ''),
+    UserId bigint NOT NULL,
+    FOREIGN KEY (UserId) References s311734.users (Id) ON DELETE CASCADE
+);

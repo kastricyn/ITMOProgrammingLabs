@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
+version '1.0'
+mainClassName = "ru.ifmo.se.kastricyn.lab8.server.Main"
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    compile project(":lib")
+    compile project(":client")
+    implementation 'org.jetbrains:annotations:20.1.0'
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
+    implementation 'org.postgresql:postgresql:42.2.19'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+test {
+    useJUnitPlatform()
+}
+jar {
+    manifest.attributes("Main-Class": mainClassName)
+}
+
+

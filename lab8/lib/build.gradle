@@ -1,0 +1,9 @@
+plugins {
+    id 'application'
+}
+version '1.0'
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+}
+
