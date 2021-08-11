@@ -10,6 +10,7 @@ import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.NotNeedAuth;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.HashSet;
@@ -55,7 +56,7 @@ public class Help extends ClientAbstractCommand implements NotNeedAuth {
             answer = Console.getStringFromStream("Доступны следующие команды:",
                     Stream.concat(strings.stream(),
                             ccm.getCommands().filter(x -> ccm.getUser() != null || x instanceof NotNeedAuth).map(AbstractCommand::toString)).distinct().sorted());
-        } catch (SocketException e) {
+        } catch (SocketException | EOFException e) {
             answer = "Соединение утеряно, попробуйте перезапустить программу.";
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
