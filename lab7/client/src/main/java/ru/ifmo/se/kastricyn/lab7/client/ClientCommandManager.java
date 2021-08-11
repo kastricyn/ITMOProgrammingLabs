@@ -11,6 +11,7 @@ import ru.ifmo.se.kastricyn.lab7.lib.data.Ticket;
 import ru.ifmo.se.kastricyn.lab7.lib.data.Venue;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.Console;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.Arrays;
@@ -129,7 +130,7 @@ public class ClientCommandManager extends CommandManager {
             String[] s = t.split("\\s", 2);
             try {
                 executeCommand(s[0], Arrays.copyOfRange(s, 1, s.length));
-            } catch (@NotNull SocketException | StringIndexOutOfBoundsException e) {
+            } catch (@NotNull SocketException | StringIndexOutOfBoundsException | EOFException e) {
                 console.println("Соеденение утеряно, запустите программу заново");
                 //todo delete
 //                e.printStackTrace();

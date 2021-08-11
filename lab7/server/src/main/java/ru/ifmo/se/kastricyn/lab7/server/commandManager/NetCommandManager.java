@@ -16,6 +16,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -151,7 +152,8 @@ public class NetCommandManager extends CommandManager {
                     }
                 }
             } catch (IOException | RuntimeException | InterruptedException e) {
-                log.warn(e.getStackTrace());
+                log.warn(e.getMessage());
+                Arrays.stream(e.getStackTrace()).forEachOrdered(log::debug);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

@@ -3,13 +3,8 @@ package ru.ifmo.se.kastricyn.lab8.lib.connection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ServerRequest implements Serializable {
     private String input = "";
     private @Nullable CommandArgument objArgs = new CommandArgument();

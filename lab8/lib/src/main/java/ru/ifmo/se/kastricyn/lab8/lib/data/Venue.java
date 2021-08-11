@@ -4,21 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.ifmo.se.kastricyn.lab8.lib.utility.Console;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Нужен для {@link Ticket}
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Venue implements Comparable<Venue>, Serializable {
     public static final int CAPACITY_MIN = 1;
     private static long nextId = 1; //id не может быть меньше 1
 
-    @XmlAttribute
     private volatile long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение
     // этого поля должно генерироваться автоматически
     private volatile @NotNull String name; //Поле не может быть null, Строка не может быть пустой

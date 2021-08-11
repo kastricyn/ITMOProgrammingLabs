@@ -1,4 +1,2 @@
 rootProject.name = 'lab8'
-include 'lib', 'server', 'client'
-include 'GUI-FX'
-
+include 'lib', 'server', 'client', 'GUI'
