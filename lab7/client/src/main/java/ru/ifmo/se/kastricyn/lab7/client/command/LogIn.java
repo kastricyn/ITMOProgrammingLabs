@@ -8,6 +8,7 @@ import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerAnswer;
 import ru.ifmo.se.kastricyn.lab7.lib.connection.ServerRequest;
 import ru.ifmo.se.kastricyn.lab7.lib.utility.NotNeedAuth;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketException;
 
@@ -32,7 +33,7 @@ public class LogIn extends ClientAbstractCommand implements NotNeedAuth {
             if (sa.getAnswer().contains("Вы авторизованы"))
                 ccm.setUser(objArgs.getUser());
             answer = sa.getAnswer();
-        } catch (SocketException e) {
+        } catch (SocketException | EOFException e) {
             answer = "Соединение утеряно, попробуйте перезапустить программу.";
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

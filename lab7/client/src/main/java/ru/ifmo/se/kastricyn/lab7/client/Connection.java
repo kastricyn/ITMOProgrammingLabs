@@ -55,8 +55,8 @@ public class Connection implements Closeable {
                     System.out.println("Connected");
                 else throw new IOException("Not connected");
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("подключение не установлено, слеудущаяя попытка через " + INTERVAL / 1000. + " с" +
-                        ".");
+                System.out.println("Сервер не доступен, попробуйте чуть позже");
+                System.exit(0);
             }
             if (socket.isConnected())
                 break;
