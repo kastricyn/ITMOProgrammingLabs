@@ -21,13 +21,14 @@
           <tabbedpane id="a9508" binding="tabbedPane1" default-binding="true">
             <constraints/>
             <properties>
+              <tabLayoutPolicy value="1"/>
               <tabPlacement value="1"/>
             </properties>
             <border type="none"/>
             <children>
               <grid id="cf4e" layout-manager="GridBagLayout">
                 <constraints>
-                  <tabbedpane title="Untitled"/>
+                  <tabbedpane title-resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" title-key="AuthTabbedPaneButtom"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -40,13 +41,13 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="4ecc3" class="javax.swing.JButton" binding="button1" default-binding="true">
+                      <component id="4ecc3" class="javax.swing.JButton" binding="войтиButton" default-binding="true">
                         <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="Button"/>
+                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" key="LogInButton"/>
                         </properties>
                       </component>
                       <component id="a1476" class="javax.swing.JTextField" binding="LogInLogIN">
@@ -73,7 +74,7 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="Log In"/>
+                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" key="LogInLabel"/>
                         </properties>
                       </component>
                       <component id="9622f" class="javax.swing.JLabel">
@@ -82,7 +83,7 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="Password"/>
+                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" key="PasswordLabel"/>
                         </properties>
                       </component>
                     </children>

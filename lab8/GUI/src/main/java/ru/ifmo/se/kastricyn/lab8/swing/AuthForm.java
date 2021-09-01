@@ -6,7 +6,7 @@ import java.awt.*;
 public class AuthForm {
     private JPanel LogInPanel;
     private JTabbedPane tabbedPane1;
-    private JButton button1;
+    private JButton войтиButton;
     private JTextField LogInLogIN;
     private JPasswordField PasswordLogIn;
     private JLabel LoginLabel;
@@ -53,13 +53,13 @@ public class AuthForm {
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         panel2.add(panel3, gbc);
-        button1 = new JButton();
-        button1.setText("Button");
+        войтиButton = new JButton();
+        войтиButton.setText("Button");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel3.add(button1, gbc);
+        panel3.add(войтиButton, gbc);
         LogInLogIN = new JTextField();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
