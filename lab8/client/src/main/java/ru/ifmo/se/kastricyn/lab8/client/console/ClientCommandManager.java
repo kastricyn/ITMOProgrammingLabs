@@ -1,7 +1,7 @@
-package ru.ifmo.se.kastricyn.lab8.client;
+package ru.ifmo.se.kastricyn.lab8.client.console;
 
 import org.jetbrains.annotations.NotNull;
-import ru.ifmo.se.kastricyn.lab8.client.command.*;
+import ru.ifmo.se.kastricyn.lab8.client.console.command.*;
 import ru.ifmo.se.kastricyn.lab8.lib.CommandManager;
 import ru.ifmo.se.kastricyn.lab8.lib.User;
 import ru.ifmo.se.kastricyn.lab8.lib.connection.CommandArgument;

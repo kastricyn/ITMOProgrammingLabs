@@ -1,8 +1,8 @@
-package ru.ifmo.se.kastricyn.lab8.client.command;
+package ru.ifmo.se.kastricyn.lab8.client.console.command;
 
 import org.jetbrains.annotations.NotNull;
-import ru.ifmo.se.kastricyn.lab8.client.ClientAbstractCommand;
-import ru.ifmo.se.kastricyn.lab8.client.ClientCommandManager;
+import ru.ifmo.se.kastricyn.lab8.client.console.ClientAbstractCommand;
+import ru.ifmo.se.kastricyn.lab8.client.console.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab8.lib.utility.Console;
 
 import java.io.IOException;

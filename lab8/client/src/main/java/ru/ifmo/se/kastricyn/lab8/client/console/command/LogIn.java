@@ -1,7 +1,7 @@
-package ru.ifmo.se.kastricyn.lab8.client.command;
+package ru.ifmo.se.kastricyn.lab8.client.console.command;
 
-import ru.ifmo.se.kastricyn.lab8.client.ClientAbstractCommand;
-import ru.ifmo.se.kastricyn.lab8.client.ClientCommandManager;
+import ru.ifmo.se.kastricyn.lab8.client.console.ClientAbstractCommand;
+import ru.ifmo.se.kastricyn.lab8.client.console.ClientCommandManager;
 import ru.ifmo.se.kastricyn.lab8.lib.User;
 import ru.ifmo.se.kastricyn.lab8.lib.connection.CommandArgument;
 import ru.ifmo.se.kastricyn.lab8.lib.connection.ServerAnswer;

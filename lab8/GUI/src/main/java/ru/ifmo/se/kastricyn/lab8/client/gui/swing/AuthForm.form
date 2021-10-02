@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.ifmo.se.kastricyn.lab8.swing.AuthForm">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ru.ifmo.se.kastricyn.lab8.client.gui.swing.AuthForm">
   <grid id="27dc6" binding="LogInPanel" layout-manager="GridBagLayout">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
@@ -28,7 +28,7 @@
             <children>
               <grid id="cf4e" layout-manager="GridBagLayout">
                 <constraints>
-                  <tabbedpane title-resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" title-key="AuthTabbedPaneButtom"/>
+                  <tabbedpane title-resource-bundle="ru/ifmo/se/kastricyn/lab8/swingGUIclient/AuthForm" title-key="AuthTabbedPaneButtom"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -47,7 +47,7 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" key="LogInButton"/>
+                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swingGUIclient/AuthForm" key="LogInButton"/>
                         </properties>
                       </component>
                       <component id="a1476" class="javax.swing.JTextField" binding="LogInLogIN">
@@ -74,7 +74,7 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" key="LogInLabel"/>
+                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swingGUIclient/AuthForm" key="LogInLabel"/>
                         </properties>
                       </component>
                       <component id="9622f" class="javax.swing.JLabel">
@@ -83,7 +83,7 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swing/AuthForm" key="PasswordLabel"/>
+                          <text resource-bundle="ru/ifmo/se/kastricyn/lab8/swingGUIclient/AuthForm" key="PasswordLabel"/>
                         </properties>
                       </component>
                     </children>

@@ -5,13 +5,16 @@ plugins {
 }
 
 version '1.0'
-//для javafx
-//mainClassName = 'ru.ifmo.se.kastricyn.lab8.javafx.Main'
-//для swing
 mainClassName = 'ru.ifmo.se.kastricyn.lab8.swing.Main'
 
+tasks.withType(JavaCompile) {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+    options.encoding = 'UTF-8'
+}
 dependencies {
     compile project(":lib")
+    compile project(":client")
 
     implementation 'org.jetbrains:annotations:20.1.0'
 }

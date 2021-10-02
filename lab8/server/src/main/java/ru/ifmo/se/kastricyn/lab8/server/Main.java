@@ -33,7 +33,7 @@ public class Main {
             try {
                 netConnections.start();
 
-                ru.ifmo.se.kastricyn.lab8.client.Main.main(new String[1]);
+                ru.ifmo.se.kastricyn.lab8.client.console.Main.main(new String[1]);
 
             } catch (DBConnectionException e) {
                 log.error("Не удаётся подключиться к БД, к сожалению, программа не может работать без БД.");

@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.lab8.client;
+package ru.ifmo.se.kastricyn.lab8.client.console;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

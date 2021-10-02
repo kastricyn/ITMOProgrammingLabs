@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Mon Aug 23 18:01:52 MSK 2021
  */
 
-package ru.ifmo.se.kastricyn.lab8.swing;
+package ru.ifmo.se.kastricyn.lab8.client.gui.swing;
 
 import javax.swing.*;
 import java.awt.*;

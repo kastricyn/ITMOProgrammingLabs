@@ -105,7 +105,7 @@ public class Client implements Closeable {
         bf.clear();
         do {
 //            System.out.println(bf.position());
-            Thread.sleep(50);
+            Thread.sleep(250);
         } while ((sh.read(bf) > 0));
         bis.setBuf(bf.array());
         if (ois == null)

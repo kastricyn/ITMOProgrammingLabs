@@ -1,4 +1,4 @@
-package ru.ifmo.se.kastricyn.lab8.swing;
+package ru.ifmo.se.kastricyn.lab8.client.gui.swing;
 
 import javax.swing.*;
 import java.awt.*;
